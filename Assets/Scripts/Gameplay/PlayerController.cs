@@ -28,7 +28,9 @@ namespace QFramework.Gameplay
 		void Start()
 		{
 			// 打开常驻玩家信息面板（显示 HP/EXP/LV，数据由 Model 驱动刷新）
-			UIKit.OpenPanel<PlayerInfoPanel>();
+			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync（同步 OpenPanel 首次加载 uiprefab 包必失败）；
+			// 协程挂自己身上：若面板打开前场景就被卸载（秒死回 GameStart），面板也无需再开
+			StartCoroutine(UIKit.OpenPanelAsync<PlayerInfoPanel>());
 		}
 
 		// 升级：从能力池随机抽 3 个能力，打开选择面板
@@ -40,10 +42,12 @@ namespace QFramework.Gameplay
 			var options = this.GetSystem<IAbilityPoolSystem>().RollOptions(3);
 
 			// 类名与预制体名一致（GameLevelUpPanel），无需传 prefabName
-			UIKit.OpenPanel<GameLevelUpPanel>(new GameLevelUpPanelData
-			{
-				Options = options
-			});
+			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync（同步 OpenPanel 首次加载 uiprefab 包必失败）
+			StartCoroutine(UIKit.OpenPanelAsync<GameLevelUpPanel>(
+				uiData: new GameLevelUpPanelData
+				{
+					Options = options
+				}));
 		}
 
 		void OnEnable()
@@ -62,6 +66,10 @@ namespace QFramework.Gameplay
 
 		void OnDestroy()
 		{
+			// 注意：这里不能调 UIKit.ClosePanel 关面板——编辑器停止 Play 时，部分析构帧里
+			// isPlaying 仍为 true（守卫不可靠），QF 惰性单例会在析构期重新 Instantiate UIRoot，
+			// 触发 "Some objects were not cleaned up" 警告。
+			// PlayerInfoPanel 的关闭改由 GameRoot.OnSceneLoaded(GameStart) 负责。
 			this.UnRegisterEvent<GameWinEvent>(OnGameWin);   // 取消订阅
 			this.UnRegisterEvent<LevelUpEvent>(OnLevelUp);  // 取消订阅
 			input.Dispose();
@@ -134,9 +142,11 @@ namespace QFramework.Gameplay
 
 		private void GameOver()
 		{
-			UIKit.OpenPanel<GameOverPanel>();
-			gameObject.SetActive(false); // 主角消失  
-			Time.timeScale = 0f;         // 暂停  
+			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync；
+			// 协程宿主用常驻 GameRoot（本对象马上 SetActive(false) 会杀掉自己身上的协程）
+			GameRoot.Instance.StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
+			gameObject.SetActive(false); // 主角消失
+			Time.timeScale = 0f;         // 暂停
 		}
 	}
 }

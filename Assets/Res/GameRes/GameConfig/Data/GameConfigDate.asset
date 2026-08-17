@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b54adfdd8cb74e74d8caba04b146e6df, type: 3}
   m_Name: GameConfigDate
   m_EditorClassIdentifier: Assembly-CSharp::GameConfig
-  MaxHp: 3
+  MaxHp: 112
   AttackDamage: 1
   MoveSpeed: 5
   AttackInterval: 1

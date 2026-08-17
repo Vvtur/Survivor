@@ -1,6 +1,6 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 2718592158
+CRC: 373600403
 HashAppended: 1
 AssetBundleManifest:
   AssetBundleInfos:
@@ -8,7 +8,7 @@ AssetBundleManifest:
       Name: unifiedraytracing_5a3c3f19b58e37ec7bc097628a36bd3f
       Dependencies: {}
     Info_1:
-      Name: maingame_unity_1dab35a0bd3af01a960f342c3252c31a
+      Name: maingame_unity_60b3b30585d03db7c8ddec8c68f8e93f
       Dependencies:
         Dependency_0: prefabs_15282f55b7aab93e2398db1b1800570b
     Info_2:
@@ -19,9 +19,8 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: font_02d7a1f0ca131c30b66decf68318d231
     Info_4:
-      Name: gamestart_unity_0afeb4e57820d932b71a68e3977028ba
-      Dependencies:
-        Dependency_0: uiprefab_0183a32c779d326e512c53fe9ebeab33
+      Name: gamestart_unity_5293698fd366407303dcb5e815ca0efc
+      Dependencies: {}
     Info_5:
       Name: data_dbb84b382beca2e507a0bb1bdd5964bd
       Dependencies: {}
