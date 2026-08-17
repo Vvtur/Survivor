@@ -1,0 +1,64 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.16f1
+CRC: 110199493
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1dab35a0bd3af01a960f342c3252c31a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea7563345f84d41c89ba21c2a79690a6
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: ee59180b46227a2a95b9335f5a82d605
+HashAppended: 1
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 89
+  Script: {instanceID: 0}
+- Class: 104
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 85d7c9f041f574943bed7ab1a5ce244d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4511ce4ffb2b74c4a9cd65351b91dd56, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 411e729afed24c62a04e2b99d9122e78, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 157
+  Script: {instanceID: 0}
+- Class: 196
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Scenes/MainGame.unity
+Dependencies:
+- E:/UN/Survivor/AssetBundles/WebGL/prefabs_15282f55b7aab93e2398db1b1800570b

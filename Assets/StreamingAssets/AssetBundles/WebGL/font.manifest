@@ -1,0 +1,46 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.16f1
+CRC: 4223152811
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 02d7a1f0ca131c30b66decf68318d231
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f64d3eeafec19dac535eb1503070a6d8
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 4525c3572f38f4a813207276d876afd7
+HashAppended: 1
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+Assets:
+- Assets/Res/Art/Font/FZSTK.TTF
+- Assets/Res/Art/Font/FZSTK SDF.asset
+Dependencies: []
