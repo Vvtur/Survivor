@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b54adfdd8cb74e74d8caba04b146e6df, type: 3}
   m_Name: GameConfigDate
   m_EditorClassIdentifier: Assembly-CSharp::GameConfig
-  MaxHp: 1
+  MaxHp: 5
   AttackDamage: 1
   MoveSpeed: 5
   AttackInterval: 1
   AttackRadius: 5
-  TotalWaves: 1
-  FirstWaveEnemies: 3
-  WaveEnemyIncrement: 0
   SpawnInterval: 3
   MaxAliveEnemies: 10
+  EnemyPowerPerSecond: 0.02
+  SurviveTimeToWin: 0

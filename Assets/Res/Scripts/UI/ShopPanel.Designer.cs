@@ -5,7 +5,7 @@ using QFramework;
 
 namespace QFramework.UI
 {
-	// Generate Id:7b8b96a4-4879-4fbb-a155-cec6efafab45
+	// Generate Id:da07416b-aeb1-45a2-bf4c-d2afef1441e4
 	public partial class ShopPanel
 	{
 		public const string Name = "ShopPanel";
@@ -14,6 +14,8 @@ namespace QFramework.UI
 		public UnityEngine.UI.Button Btn_AttackAdd;
 		[SerializeField]
 		public UnityEngine.UI.Button Btn_Close;
+		[SerializeField]
+		public TMPro.TextMeshProUGUI Txt_Money;
 		
 		private ShopPanelData mPrivateData = null;
 		
@@ -21,6 +23,7 @@ namespace QFramework.UI
 		{
 			Btn_AttackAdd = null;
 			Btn_Close = null;
+			Txt_Money = null;
 			
 			mData = null;
 		}

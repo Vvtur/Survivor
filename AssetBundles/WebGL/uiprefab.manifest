@@ -1,21 +1,23 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 1410499547
+CRC: 2337149788
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b7323964298260beee8321f6398ee150
+    Hash: 3570eb6a18d3a6ada02804f1aa994df0
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b110ce8642a8f1d1bd7ee3731473ea6b
+    Hash: b11633ef706b6d4d31d7e2b03ab011fd
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 091d30889255e41969c1115725d4c90a
+    Hash: 9ecb21a8c60da0a02b345460e43e0382
 HashAppended: 1
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 21
+  Script: {instanceID: 0}
+- Class: 23
   Script: {instanceID: 0}
 - Class: 28
   Script: {instanceID: 0}
@@ -37,6 +39,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 160076ae0a2b5804a89d5b679c9b13b0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
@@ -114,6 +118,7 @@ Assets:
 - Assets/Res/Art/UIPrefab/GameStartPanel.prefab
 - Assets/Res/Art/UIPrefab/GameOverPanel.prefab
 - Assets/Res/Art/UIPrefab/Cotent/Btn_Option.prefab
+- Assets/Res/Art/UIPrefab/Cotent/Txt_Damage.prefab
 - Assets/Res/Art/UIPrefab/PlayerInfoPanel.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/font_ceb621c40a01dd9ae1d88640d0b4c47b
+- E:/UN/Survivor/AssetBundles/WebGL/font_723004a0b6e8e393e1ead3ebb9696074

@@ -17,7 +17,7 @@ namespace QFramework.Gameplay
             }
             else return;
 
-            model.AttackDamage.Value += 1;
+            model.Attack.Value += 1;
         }
     }
 }

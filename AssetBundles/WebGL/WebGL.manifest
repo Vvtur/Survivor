@@ -1,6 +1,6 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 4064906256
+CRC: 957277601
 HashAppended: 1
 AssetBundleManifest:
   AssetBundleInfos:
@@ -8,30 +8,30 @@ AssetBundleManifest:
       Name: unifiedraytracing_5a3c3f19b58e37ec7bc097628a36bd3f
       Dependencies: {}
     Info_1:
-      Name: maingame_unity_b86b0b3afcfac923fe68a88633e8343e
+      Name: maingame_unity_adbaf2027feeb7635eca40f8f998371d
       Dependencies:
-        Dependency_0: prefabs_e2cb52b4431d9201610f327bcd59ac85
-        Dependency_1: uiprefab_b7323964298260beee8321f6398ee150
-        Dependency_2: font_ceb621c40a01dd9ae1d88640d0b4c47b
-        Dependency_3: character_8f75a06597e37a56b90d4ac8b18a4100
+        Dependency_0: prefabs_4b13351e02af76ea492319369a1f2d61
+        Dependency_1: uiprefab_3570eb6a18d3a6ada02804f1aa994df0
+        Dependency_2: font_723004a0b6e8e393e1ead3ebb9696074
+        Dependency_3: character_bcd567d7fee9041ee68d13ce1ec3aa84
     Info_2:
-      Name: prefabs_e2cb52b4431d9201610f327bcd59ac85
+      Name: prefabs_4b13351e02af76ea492319369a1f2d61
       Dependencies:
-        Dependency_0: character_8f75a06597e37a56b90d4ac8b18a4100
+        Dependency_0: character_bcd567d7fee9041ee68d13ce1ec3aa84
     Info_3:
-      Name: uiprefab_b7323964298260beee8321f6398ee150
+      Name: uiprefab_3570eb6a18d3a6ada02804f1aa994df0
       Dependencies:
-        Dependency_0: font_ceb621c40a01dd9ae1d88640d0b4c47b
+        Dependency_0: font_723004a0b6e8e393e1ead3ebb9696074
     Info_4:
       Name: gamestart_unity_21b0a9c339de602ff7ebb9af7ff7496d
       Dependencies:
-        Dependency_0: uiprefab_b7323964298260beee8321f6398ee150
+        Dependency_0: uiprefab_3570eb6a18d3a6ada02804f1aa994df0
     Info_5:
-      Name: data_5f0e2dcb0aaf3b8f105d8039ad2294a0
+      Name: data_4a0a5113e7402ef5e53cefbd1d8071e8
       Dependencies: {}
     Info_6:
-      Name: font_ceb621c40a01dd9ae1d88640d0b4c47b
+      Name: font_723004a0b6e8e393e1ead3ebb9696074
       Dependencies: {}
     Info_7:
-      Name: character_8f75a06597e37a56b90d4ac8b18a4100
+      Name: character_bcd567d7fee9041ee68d13ce1ec3aa84
       Dependencies: {}

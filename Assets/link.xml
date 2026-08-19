@@ -1,0 +1,8 @@
+<linker>
+  <!-- WebGL Strip Engine Code 裁剪说明：
+       AnimationClip 等类型只被 AssetBundle 内的序列化数据引用（.anim/.controller），
+       C# 代码从未直接引用，链接器静态分析判定"未使用"而裁掉，
+       运行时反序列化 AB 报 "Could not produce class with ID 74"。
+       这里保留整个动画模块，托管包装类与对应引擎原生代码都会保留。 -->
+  <assembly fullname="UnityEngine.AnimationModule" preserve="all"/>
+</linker>

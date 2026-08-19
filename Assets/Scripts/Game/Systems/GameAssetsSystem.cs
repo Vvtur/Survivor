@@ -9,11 +9,12 @@ namespace QFramework.Gameplay
     public interface IGameAssetsSystem : ISystem
     {
         GameObject SpawnGem(Vector3 position);
+        GameObject SpawnGold(Vector3 position);
         GameObject SpawnEnemy(Vector3 position);
     }
 
     /// <summary>
-    /// 游戏资源系统：统一加载并长期持有战斗中高频复用的预制体（Gem、Enemy 等）。
+    /// 游戏资源系统：统一加载并长期持有战斗中高频复用的预制体（Gem、Gold、Enemy 等）。
     /// WebGL 平台必须用异步加载（Add2Load + LoadAsync），加载完成后持有引用。
     /// </summary>
     public class GameAssetsSystem : AbstractSystem, IGameAssetsSystem
@@ -21,6 +22,7 @@ namespace QFramework.Gameplay
         private ResLoader mResLoader;
 
         private GameObject mGemPrefab;
+        private GameObject mGoldPrefab;
         private GameObject mEnemyPrefab;
 
         protected override void OnInit()
@@ -32,6 +34,11 @@ namespace QFramework.Gameplay
             {
                 if (b) mGemPrefab = res.Asset.As<GameObject>();
                 else LogKit.E("[GameAssetsSystem] 加载 Gem 预制体失败！请确认已标记 AB（资源名 Gem）");
+            });
+            mResLoader.Add2Load<GameObject>("Gold", (b, res) =>
+            {
+                if (b) mGoldPrefab = res.Asset.As<GameObject>();
+                else LogKit.E("[GameAssetsSystem] 加载 Gold 预制体失败！请确认已标记 AB（资源名 Gold）");
             });
             mResLoader.Add2Load<GameObject>("Enemy", (b, res) =>
             {
@@ -47,6 +54,12 @@ namespace QFramework.Gameplay
             return mGemPrefab != null ? Object.Instantiate(mGemPrefab, position, Quaternion.identity) : null;
         }
 
+        /// <summary>在指定位置生成一个金币</summary>
+        public GameObject SpawnGold(Vector3 position)
+        {
+            return mGoldPrefab != null ? Object.Instantiate(mGoldPrefab, position, Quaternion.identity) : null;
+        }
+
         /// <summary>在指定位置生成一个敌人</summary>
         public GameObject SpawnEnemy(Vector3 position)
         {
@@ -58,6 +71,7 @@ namespace QFramework.Gameplay
             mResLoader?.Recycle2Cache(); // 系统卸载时才释放资源引用
             mResLoader = null;
             mGemPrefab = null;
+            mGoldPrefab = null;
             mEnemyPrefab = null;
             base.OnDeinit();
         }

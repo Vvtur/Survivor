@@ -59,7 +59,7 @@ namespace QFramework.UI
 
 		private void RefreshAttack()
 		{
-			Txt_Attack.text = $"Attack: {mModel.AttackDamage.Value}";
+			Txt_Attack.text = $"Attack: {mModel.AttackDamage.Value + mModel.Attack.Value}";
 		}
 
 		protected override void OnOpen(IUIData uiData = null)

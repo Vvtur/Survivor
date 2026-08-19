@@ -17,14 +17,20 @@ namespace QFramework.Gameplay
 
 		public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
-		// 玩家属性统一从 GameModel 读取，能力系统通过 Command 修改后即时生效
-		float Speed => this.GetModel<GameModel>().MoveSpeed.Value;
-		float AttackDamage => this.GetModel<GameModel>().AttackDamage.Value;
-		float AttackInterval => this.GetModel<GameModel>().AttackInterval.Value;
-		float AttackRadius => this.GetModel<GameModel>().AttackRadius.Value;
+		// 缓存的 GameModel 引用（避免每次 GetModel 走字典查找）
+		GameModel mModel;
+
+		// 玩家属性统一从缓存的 GameModel 读取，能力系统通过 Command 修改后即时生效
+		float Speed => mModel.MoveSpeed.Value;
+		// 实际攻击力 = 商店升级攻击（跨局）+ 局内升级攻击（每局）
+		float AttackDamage => mModel.Attack.Value + mModel.AttackDamage.Value;
+		float AttackInterval => mModel.AttackInterval.Value;
+		float AttackRadius => mModel.AttackRadius.Value;
 
 		InputSystem_Actions input;
 		FSM<PlayerAnimState> mAnimFSM;   // QF 状态机：驱动待机/移动动画
+		Camera mMainCam;                 // 跟随的摄像机
+		Vector3 mCamVelocity;            // SmoothDamp 内部速度（消除抖动）
 		float lastAttackTime = -99f;  // 上次攻击时间
 		float lastHitTime = -99f;     // 上次主角受击时间
 
@@ -32,9 +38,10 @@ namespace QFramework.Gameplay
 
 		void Awake()
 		{
+			mModel = this.GetModel<GameModel>();   // 缓存 Model，避免每帧 GetModel
 			input = new();
-			this.RegisterEvent<GameWinEvent>(OnGameWin);   // 订阅胜利事件（架构事件系统）
-			this.RegisterEvent<LevelUpEvent>(OnLevelUp);  // 订阅升级事件
+			this.RegisterEvent<GameWinEvent>(OnGameWin).UnRegisterWhenGameObjectDestroyed(this);   // 订阅胜利事件（架构事件系统）
+			this.RegisterEvent<LevelUpEvent>(OnLevelUp).UnRegisterWhenGameObjectDestroyed(this);  // 订阅升级事件
 
 			InitAnimFSM();
 		}
@@ -59,10 +66,32 @@ namespace QFramework.Gameplay
 
 		void Start()
 		{
+			// 每局开局重置局内数据（死亡重开也生效）：HP/Exp/Level/局内攻击力归零
+			mModel.ResetRunData();
+
+			// 缓存主摄像机引用（带 MainCamera 标签）
+			mMainCam = Camera.main;
+
 			// 打开常驻玩家信息面板（显示 HP/EXP/LV，数据由 Model 驱动刷新）
 			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync（同步 OpenPanel 首次加载 uiprefab 包必失败）；
 			// 协程挂自己身上：若面板打开前场景就被卸载（秒死回 GameStart），面板也无需再开
 			// StartCoroutine(UIKit.OpenPanelAsync<PlayerInfoPanel>());
+		}
+
+		// 摄像机跟随：LateUpdate 在物理/动画更新后、渲染前执行。
+		// 用 SmoothDamp（平滑阻尼）替代 Lerp——帧率无关，消除一卡一卡的抖动。
+		void LateUpdate()
+		{
+			if (mMainCam == null) return;
+
+			// 只跟随 X/Y，保持 Z（2D 摄像机在 -10）
+			var targetPos = new Vector3(
+				transform.position.x,
+				transform.position.y,
+				mMainCam.transform.position.z
+			);
+			mMainCam.transform.position = Vector3.SmoothDamp(
+				mMainCam.transform.position, targetPos, ref mCamVelocity, 0.2f);
 		}
 
 		// 升级：从能力池随机抽 3 个能力，打开选择面板
@@ -102,8 +131,6 @@ namespace QFramework.Gameplay
 			// isPlaying 仍为 true（守卫不可靠），QF 惰性单例会在析构期重新 Instantiate UIRoot，
 			// 触发 "Some objects were not cleaned up" 警告。
 			// PlayerInfoPanel 的关闭改由 GameRoot.OnSceneLoaded(GameStart) 负责。
-			this.UnRegisterEvent<GameWinEvent>(OnGameWin);   // 取消订阅
-			this.UnRegisterEvent<LevelUpEvent>(OnLevelUp);  // 取消订阅
 			mAnimFSM?.Clear();   // 清理状态机
 			input.Dispose();
 		}
@@ -182,9 +209,8 @@ namespace QFramework.Gameplay
 			if (Time.time - lastHitTime < 1f) return;
 			lastHitTime = Time.time;
 
-			var model = this.GetModel<GameModel>();
-			model.HP.Value--;
-			if (model.HP.Value <= 0)
+			mModel.HP.Value--;
+			if (mModel.HP.Value <= 0)
 			{
 				GameOver();
 			}

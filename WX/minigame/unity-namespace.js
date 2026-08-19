@@ -18,7 +18,7 @@ const unityNamespace = {
     unityVersion: '6000.3.16f1',
     // Color Space: Gamma、Linear、Uninitialized(未初始化的颜色空间)
     unityColorSpace: 'Linear',
-    convertPluginVersion: '202608110518',
+    convertPluginVersion: '202608180352',
     // 拼在StreamingAssets前面的path，DATA_CDN + streamingUrlPrefixPath + StreamingAssets
     streamingUrlPrefixPath: '',
     // DATA_CDN + dataFileSubPrefix + datafilename

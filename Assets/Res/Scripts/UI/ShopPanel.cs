@@ -10,9 +10,11 @@ namespace QFramework.UI
 	}
 	public partial class ShopPanel : UIPanel
 	{
+		GameModel model;
 		protected override void OnInit(IUIData uiData = null)
 		{
 			mData = uiData as ShopPanelData ?? new ShopPanelData();
+			model = GameArchitecture.Interface.GetModel<GameModel>();
 			// please add init code here
 			Btn_AttackAdd.onClick.AddListener(() =>
 			{
@@ -22,6 +24,8 @@ namespace QFramework.UI
 			{
 				Hide();
 			});
+
+			model.Money.RegisterWithInitValue(_ => RefreshMoney()).UnRegisterWhenGameObjectDestroyed(this);
 		}
 		
 		protected override void OnOpen(IUIData uiData = null)
@@ -38,6 +42,11 @@ namespace QFramework.UI
 		
 		protected override void OnClose()
 		{
+		}
+
+		private void RefreshMoney()
+		{
+			Txt_Money.text = "Gold:" + model.Money.Value;
 		}
 	}
 }

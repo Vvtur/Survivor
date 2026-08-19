@@ -3,9 +3,9 @@
   <Project Path="ResKit.csproj" />
   <Project Path="QFramework.CoreKit.csproj" />
   <Project Path="SupportOldQF.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="AudioKit.csproj" />
   <Project Path="UIKit.Editor.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="ResKit.Editor.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="QFramework.csproj" />

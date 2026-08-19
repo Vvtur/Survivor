@@ -10,21 +10,14 @@ namespace QFramework.Gameplay
     }
 
     /// <summary>
-    /// 系统层：只管规则，不存数据（数据在 GameModel）
+    /// 系统层：只管规则，不存数据（数据在 GameModel）。
+    /// 胜利由 WaveSystem 按存活时间触发（无限刷怪模式），本系统不再监听波次。
     /// </summary>
     public class GameManagerSystem : AbstractSystem, IGameManagerSystem
     {
         protected override void OnInit()
         {
-            // 监听击杀事件，检查胜利条件：所有波次打完且场上没有敌人
-            this.RegisterEvent<EnemyKilledEvent>(e =>
-            {
-                var model = this.GetModel<GameModel>();
-                if (model.CurrentWave.Value > model.TotalWaves.Value && model.AliveEnemies.Value <= 0)
-                {
-                    this.SendEvent(new GameWinEvent()); // 通知表现层：胜利
-                }
-            });
+            // 无限刷怪模式下胜利判定已移至 WaveSystem（存活时间到即胜利），此处无需逻辑
         }
     }
 

@@ -5,9 +5,14 @@ namespace QFramework.Gameplay
 {
 	public partial class Gold : ViewController
 	{
-		void Start()
+		private void OnTriggerEnter2D(Collider2D collision)
 		{
-			// Code Here
+			if (collision.CompareTag("Player"))
+			{
+				// 拾取金币：Money +1（自动存档，跨局保留）
+				GameArchitecture.Interface.SendCommand(new PickupGoldCommand());
+				Destroy(gameObject);
+			}
 		}
 	}
 }

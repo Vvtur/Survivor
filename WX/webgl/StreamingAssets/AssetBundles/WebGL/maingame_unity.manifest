@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 2154203111
+CRC: 395075930
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b86b0b3afcfac923fe68a88633e8343e
+    Hash: adbaf2027feeb7635eca40f8f998371d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8b816b7b356e0e2d284bf7660545ee76
+    Hash: 4d4e4812136298f5ef9c468c0ab9e804
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 10a1d248f8bffa26133b025b395b6df6
+    Hash: f6e9d2ed46e0ad2ca86a1278bdfea435
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -46,6 +46,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 22e919fa0eba1764c82e7a7db789e421, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4511ce4ffb2b74c4a9cd65351b91dd56, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f411cda511293fe4993d00b743dc14c2, type: 3}
@@ -64,6 +66,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
@@ -71,6 +75,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -93,7 +99,7 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Scenes/MainGame.unity
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/character_8f75a06597e37a56b90d4ac8b18a4100
-- E:/UN/Survivor/AssetBundles/WebGL/font_ceb621c40a01dd9ae1d88640d0b4c47b
-- E:/UN/Survivor/AssetBundles/WebGL/prefabs_e2cb52b4431d9201610f327bcd59ac85
-- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_b7323964298260beee8321f6398ee150
+- E:/UN/Survivor/AssetBundles/WebGL/character_bcd567d7fee9041ee68d13ce1ec3aa84
+- E:/UN/Survivor/AssetBundles/WebGL/font_723004a0b6e8e393e1ead3ebb9696074
+- E:/UN/Survivor/AssetBundles/WebGL/prefabs_4b13351e02af76ea492319369a1f2d61
+- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_3570eb6a18d3a6ada02804f1aa994df0

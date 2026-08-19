@@ -4,7 +4,7 @@ using UnityEngine;
 namespace QFramework.Gameplay
 {
     /// <summary>
-    /// 波次系统接口（依赖倒置：外部通过接口访问）
+    /// 无限刷怪系统接口（依赖倒置：外部通过接口访问）
     /// </summary>
     public interface IWaveSystem : ISystem
     {
@@ -13,67 +13,62 @@ namespace QFramework.Gameplay
     }
 
     /// <summary>
-    /// 系统层：波次生成系统。
-    /// 由 MainGame 场景中的 WaveDriver 每帧驱动，管理波次推进、波内生成节奏；
-    /// 所有波次打完后发胜利事件。
+    /// 系统层：无限刷怪系统。
+    /// 由 MainGame 场景中的 WaveDriver 每帧驱动，按固定间隔无限生成敌人；
+    /// 敌人强度（血量）随游戏时间递增——越到后面越强。
     /// </summary>
     public class WaveSystem : AbstractSystem, IWaveSystem
     {
         private float mSpawnTimer;
-        GameModel model;
+        private float mElapsedTime;   // 本局已进行时间（秒），用于计算敌人强度和胜利判定
+        private GameModel mModel;
 
         protected override void OnInit()
         {
             mSpawnTimer = 0f;
-            model = this.GetModel<GameModel>();
+            mElapsedTime = 0f;
+            mModel = this.GetModel<GameModel>();
 
-            // 初始化第一波（数量从配置读取）
-            
-            model.CurrentWave.Value = 1;
-            model.WaveEnemiesLeft.Value = GetWaveEnemyCount(1);
-            model.AliveEnemies.Value = 0;
+            mModel.AliveEnemies.Value = 0;
         }
 
         public void OnUpdate()
         {
-            var spawnInterval = model.SpawnInterval.Value;
-            var maxAliveEnemies = model.MaxAliveEnemies.Value;
+            var spawnInterval = mModel.SpawnInterval.Value;
+            var maxAliveEnemies = mModel.MaxAliveEnemies.Value;
 
-            // 所有波次已打完：不再生成，检查胜利
-            if (model.CurrentWave.Value > model.TotalWaves.Value)
-            {
-                TryCheckWin();
-                return;
-            }
+            mElapsedTime += Time.deltaTime;
+            mSpawnTimer += Time.deltaTime;
 
-            // 本波敌人已全部生成：等待场上清空后再推进下一波
-            if (model.WaveEnemiesLeft.Value <= 0)
+            // 存活时间到即胜利（配置为 0 则不设胜利）
+            var winTime = mModel.SurviveTimeToWin.Value;
+            if (winTime > 0f && mElapsedTime >= winTime)
             {
-                TryAdvanceWave();
+                this.SendEvent(new GameWinEvent());
                 return;
             }
 
             // 场上达到上限则暂停生成
-            if (maxAliveEnemies > 0 && model.AliveEnemies.Value >= maxAliveEnemies)
+            if (maxAliveEnemies > 0 && mModel.AliveEnemies.Value >= maxAliveEnemies)
             {
                 return;
             }
 
-            mSpawnTimer += Time.deltaTime;
             if (mSpawnTimer >= spawnInterval)
             {
                 mSpawnTimer = 0f;
-                model.WaveEnemiesLeft.Value--;
                 SpawnEnemy();
             }
         }
 
         /// <summary>
-        /// 生成一个敌人到屏幕外随机位置（System 不能直接发 Command，走架构入口）
+        /// 生成一个敌人，强度（血量）随游戏时间递增
         /// </summary>
         private void SpawnEnemy()
         {
-            GameArchitecture.Interface.SendCommand(new SpawnEnemyCommand(GetSpawnPosition()));
+            // 强度系数：随时间线性增长，系数从配置读取（如 0.02/s → 1 分钟 2.2 倍血量）
+            var power = 1f + mElapsedTime * mModel.EnemyPowerPerSecond.Value;
+            GameArchitecture.Interface.SendCommand(new SpawnEnemyCommand(GetSpawnPosition(), power));
         }
 
         private Vector3 GetSpawnPosition()
@@ -100,51 +95,6 @@ namespace QFramework.Gameplay
                 case 2: return new Vector3(Random.Range(minX, maxX), maxY, 0); // 上
                 default: return new Vector3(Random.Range(minX, maxX), minY, 0); // 下
             }
-        }
-
-        /// <summary>
-        /// 尝试推进到下一波：本波生成完毕且场上清空时进入下一波
-        /// </summary>
-        private void TryAdvanceWave()
-        {
-            // 本波还有敌人没生成完，或场上还有敌人存活 → 不推进
-            if (model.WaveEnemiesLeft.Value > 0) return;
-            if (model.AliveEnemies.Value > 0) return;
-
-            // 进入下一波
-            model.CurrentWave.Value++;
-
-            // 还有下一波则初始化本波待生成数
-            if (model.CurrentWave.Value <= model.TotalWaves.Value)
-            {
-                model.WaveEnemiesLeft.Value = GetWaveEnemyCount(model.CurrentWave.Value);
-            }
-            else
-            {
-                // 所有波次打完
-                TryCheckWin();
-            }
-        }
-
-        /// <summary>
-        /// 胜利判定：所有波次打完且场上没有敌人
-        /// </summary>
-        private void TryCheckWin()
-        {
-            var model = this.GetModel<GameModel>();
-            if (model.CurrentWave.Value > model.TotalWaves.Value && model.AliveEnemies.Value <= 0)
-            {
-                this.SendEvent(new GameWinEvent());
-            }
-        }
-
-        /// <summary>
-        /// 每波敌人数（从 Model 读取，按波次递增）
-        /// </summary>
-        private int GetWaveEnemyCount(int wave)
-        {
-            var model = this.GetModel<GameModel>();
-            return model.FirstWaveEnemies.Value + (wave - 1) * model.WaveEnemyIncrement.Value;
         }
     }
 }
