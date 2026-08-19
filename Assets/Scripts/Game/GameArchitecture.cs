@@ -17,6 +17,8 @@ namespace QFramework.Gameplay
     		RegisterSystem<IWaveSystem>(new WaveSystem());
 			
     		RegisterModel(new GameModel());
+
+			RegisterUtility<Storage>(new Storage());
     	}
     }
 }

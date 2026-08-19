@@ -1,6 +1,5 @@
 using QFramework;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace QFramework.Gameplay
 {
@@ -9,60 +8,34 @@ namespace QFramework.Gameplay
     /// </summary>
     public interface IWaveSystem : ISystem
     {
+        /// <summary>每帧驱动（由 MainGame 场景的 WaveDriver MonoBehaviour 调用）</summary>
+        void OnUpdate();
     }
 
     /// <summary>
     /// 系统层：波次生成系统。
-    /// 通过 CommonMono 全局宿主自驱动，管理波次推进、波内生成节奏；
+    /// 由 MainGame 场景中的 WaveDriver 每帧驱动，管理波次推进、波内生成节奏；
     /// 所有波次打完后发胜利事件。
-    /// 只在 MainGame 场景激活生成（开始界面等其他场景不生成敌人）。
     /// </summary>
     public class WaveSystem : AbstractSystem, IWaveSystem
     {
-        private const string MainGameSceneName = "MainGame";
-
         private float mSpawnTimer;
-        private bool mActive; // 是否处于激活场景
+        GameModel model;
 
         protected override void OnInit()
         {
             mSpawnTimer = 0f;
-            mActive = false;
+            model = this.GetModel<GameModel>();
 
-            // 监听场景切换：只在 MainGame 场景注册每帧驱动
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            // 初始化第一波（数量从配置读取）
+            
+            model.CurrentWave.Value = 1;
+            model.WaveEnemiesLeft.Value = GetWaveEnemyCount(1);
+            model.AliveEnemies.Value = 0;
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        public void OnUpdate()
         {
-            if (scene.name == MainGameSceneName)
-            {
-                // 进入 MainGame：重置波次并激活生成
-                var model = this.GetModel<GameModel>();
-                model.CurrentWave.Value = 1;
-                model.WaveEnemiesLeft.Value = GetWaveEnemyCount(1);
-                model.AliveEnemies.Value = 0;
-
-                if (!mActive)
-                {
-                    CommonMono.AddUpdateAction(OnUpdate);
-                    mActive = true;
-                }
-            }
-            else
-            {
-                // 离开 MainGame：暂停生成
-                if (mActive)
-                {
-                    CommonMono.RemoveUpdateAction(OnUpdate);
-                    mActive = false;
-                }
-            }
-        }
-
-        private void OnUpdate()
-        {
-            var model = this.GetModel<GameModel>();
             var spawnInterval = model.SpawnInterval.Value;
             var maxAliveEnemies = model.MaxAliveEnemies.Value;
 
@@ -134,8 +107,6 @@ namespace QFramework.Gameplay
         /// </summary>
         private void TryAdvanceWave()
         {
-            var model = this.GetModel<GameModel>();
-
             // 本波还有敌人没生成完，或场上还有敌人存活 → 不推进
             if (model.WaveEnemiesLeft.Value > 0) return;
             if (model.AliveEnemies.Value > 0) return;
@@ -174,17 +145,6 @@ namespace QFramework.Gameplay
         {
             var model = this.GetModel<GameModel>();
             return model.FirstWaveEnemies.Value + (wave - 1) * model.WaveEnemyIncrement.Value;
-        }
-
-        protected override void OnDeinit()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            if (mActive)
-            {
-                CommonMono.RemoveUpdateAction(OnUpdate);
-                mActive = false;
-            }
-            base.OnDeinit();
         }
     }
 }

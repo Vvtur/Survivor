@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 1938736700
+CRC: 1315632913
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d0223b68083b4375ed91fb24a1b53cb8
+    Hash: 5f0e2dcb0aaf3b8f105d8039ad2294a0
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3584c1a548973daa9144fc27ce3ef6b8
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7b0375d907cc1c935cbff17036fc3f30
+    Hash: 0c88441dee9b86cb58046048b930a7b6
 HashAppended: 1
 ClassTypes:
 - Class: 114
@@ -23,10 +23,10 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Res/GameRes/Ability/Data/AttackAdd.asset
-- Assets/Res/GameRes/GameConfig/Data/GameConfigDate.asset
-- Assets/Res/GameRes/Ability/Data/SpeedAdd.asset
-- Assets/Res/GameRes/Ability/Data/AbilityDatabase.asset
-- Assets/Res/GameRes/Ability/Data/MaxHpUp.asset
-- Assets/Res/GameRes/Ability/Data/AttackSpeedUp.asset
+- Assets/Res/GameRes/Data/AttackAdd.asset
+- Assets/Res/GameRes/Data/GameConfigDate.asset
+- Assets/Res/GameRes/Data/SpeedAdd.asset
+- Assets/Res/GameRes/Data/AbilityDatabase.asset
+- Assets/Res/GameRes/Data/MaxHpUp.asset
+- Assets/Res/GameRes/Data/AttackSpeedUp.asset
 Dependencies: []

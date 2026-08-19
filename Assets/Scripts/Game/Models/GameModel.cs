@@ -21,6 +21,7 @@ namespace QFramework.Gameplay
         public BindableProperty<int> HP { get; } = new(3);   // 当前血量，初始等于 MaxHp
         public BindableProperty<float> AttackInterval { get; } = new(1f); // 玩家攻击间隔（秒），能力可缩短
         public BindableProperty<float> AttackRadius { get; } = new(5f);   // 攻击范围半径，能力可扩大
+        public BindableProperty<int> Money { get; } = new(0);
 
         // 波次数据
         public BindableProperty<int> CurrentWave { get; } = new(1);          // 当前波次
@@ -34,6 +35,7 @@ namespace QFramework.Gameplay
 
         protected override void OnInit()
         {
+            var storage = this.GetUtility<Storage>();  // Storage 需注册为 Utility
             // 从配置资产读取初始值（WebGL 平台必须异步加载）
             // GameConfigDate.asset 位于 GameConfig/Data 子文件夹（AB 名 data）
             var resLoader = ResLoader.Allocate();
@@ -46,9 +48,10 @@ namespace QFramework.Gameplay
                 }
 
                 var config = res.Asset.As<GameConfig>();
+                Money.Value = storage.GetInt("Money", 0);
                 MaxHp.Value = config.MaxHp;
                 HP.Value = config.MaxHp;
-                AttackDamage.Value = config.AttackDamage;
+                AttackDamage.Value = storage.GetFloat("AttackDamage", config.AttackDamage);
                 MoveSpeed.Value = config.MoveSpeed;
                 AttackInterval.Value = config.AttackInterval;
                 AttackRadius.Value = config.AttackRadius;

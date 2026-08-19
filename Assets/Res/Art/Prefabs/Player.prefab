@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 7952152309554939646}
   - component: {fileID: 5484837038203283542}
   - component: {fileID: 4767120173800762567}
+  - component: {fileID: -6703517860315797256}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -171,7 +172,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 8389548112878146391, guid: 379d854154b58dc4591f465769839af2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -203,10 +204,6 @@ MonoBehaviour:
   AttackRange: {fileID: 456673858868415097}
   SelfBoxCollider2D: {fileID: 4767120173800762567}
   SelfRigidbody2D: {fileID: 5484837038203283542}
-  Speed: 5
-  HP: 3
-  AttackDamage: 1
-  HitCooldown: 0.5
 --- !u!114 &7952152309554939646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +221,8 @@ MonoBehaviour:
     Object: {fileID: 4767120173800762567}
   - MemberName: SelfRigidbody2D
     Object: {fileID: 5484837038203283542}
+  - MemberName: SelfAnimator
+    Object: {fileID: -6703517860315797256}
 --- !u!50 &5484837038203283542
 Rigidbody2D:
   serializedVersion: 5
@@ -289,7 +288,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -297,3 +296,25 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!95 &-6703517860315797256
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541538309864405159}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 93e743e659edb0e4180890473e560d1e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

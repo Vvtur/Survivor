@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 3152096053
+CRC: 2154203111
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 60b3b30585d03db7c8ddec8c68f8e93f
+    Hash: b86b0b3afcfac923fe68a88633e8343e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6d94ff34c43dadd546f4baa84bcaa04a
+    Hash: 8b816b7b356e0e2d284bf7660545ee76
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 950e29544c6d3c95a553deac78e6f27d
+    Hash: 10a1d248f8bffa26133b025b395b6df6
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -31,9 +31,15 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 61
   Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
 - Class: 81
   Script: {instanceID: 0}
 - Class: 89
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
   Script: {instanceID: 0}
 - Class: 104
   Script: {instanceID: 0}
@@ -42,10 +48,32 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 4511ce4ffb2b74c4a9cd65351b91dd56, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: f411cda511293fe4993d00b743dc14c2, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 411e729afed24c62a04e2b99d9122e78, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: f62ca0f27612d334b9f9c01b8e812699, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 39fa3d8997a24136984ca6e2c99902bc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 128
   Script: {instanceID: 0}
 - Class: 157
   Script: {instanceID: 0}
@@ -55,8 +83,17 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Scenes/MainGame.unity
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/prefabs_15282f55b7aab93e2398db1b1800570b
+- E:/UN/Survivor/AssetBundles/WebGL/character_8f75a06597e37a56b90d4ac8b18a4100
+- E:/UN/Survivor/AssetBundles/WebGL/font_ceb621c40a01dd9ae1d88640d0b4c47b
+- E:/UN/Survivor/AssetBundles/WebGL/prefabs_e2cb52b4431d9201610f327bcd59ac85
+- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_b7323964298260beee8321f6398ee150

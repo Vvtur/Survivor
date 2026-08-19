@@ -1,4 +1,4 @@
-// Generate Id:2420ae11-0887-44f7-ab6d-c1dbd1cec320
+// Generate Id:056f36f2-1c5f-41f9-90bd-bd79968fb2ac
 using UnityEngine;
 
 namespace QFramework.Gameplay
@@ -10,6 +10,8 @@ namespace QFramework.Gameplay
 		public UnityEngine.BoxCollider2D SelfBoxCollider2D;
 		
 		public UnityEngine.Rigidbody2D SelfRigidbody2D;
+		
+		public UnityEngine.Animator SelfAnimator;
 		
 	}
 }

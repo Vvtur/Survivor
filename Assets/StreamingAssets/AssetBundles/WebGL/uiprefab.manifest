@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 1920894334
+CRC: 1410499547
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0183a32c779d326e512c53fe9ebeab33
+    Hash: b7323964298260beee8321f6398ee150
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 945899085298633ed0a7cc3c505adaf4
+    Hash: b110ce8642a8f1d1bd7ee3731473ea6b
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 77335a52e7890e779cc7da8fb8548d50
+    Hash: 091d30889255e41969c1115725d4c90a
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -34,13 +34,21 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f62ca0f27612d334b9f9c01b8e812699, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 160076ae0a2b5804a89d5b679c9b13b0, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 115
@@ -97,12 +105,15 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.Navigation
 - AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
+- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
+- Assets/Res/Art/UIPrefab/ShopPanel.prefab
 - Assets/Res/Art/UIPrefab/GameLevelUpPanel.prefab
 - Assets/Res/Art/UIPrefab/GameStartPanel.prefab
 - Assets/Res/Art/UIPrefab/GameOverPanel.prefab
 - Assets/Res/Art/UIPrefab/Cotent/Btn_Option.prefab
 - Assets/Res/Art/UIPrefab/PlayerInfoPanel.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/font_02d7a1f0ca131c30b66decf68318d231
+- E:/UN/Survivor/AssetBundles/WebGL/font_ceb621c40a01dd9ae1d88640d0b4c47b

@@ -18,15 +18,9 @@ MonoBehaviour:
     GameObject: {fileID: 0}
     From: 0
     NameToFullName: []
-    BindInfos:
-    - TypeName: TMPro.TextMeshProUGUI
-      PathToRoot: Txt_Des
-      MemberName: Txt_Des
-    - TypeName: UnityEngine.UI.Image
-      PathToRoot: Img_Icon
-      MemberName: Img_Icon
-    ScriptsFolder: Assets\Scripts\UI
-    ClassName: AbilityOptionItem
-    Namespace: QFramework.UI
+    BindInfos: []
+    ScriptsFolder: Assets/Scripts/Gameplay
+    ClassName: Shop
+    Namespace: QFramework.Gameplay
     MainCode: 
     DesignerCode: 

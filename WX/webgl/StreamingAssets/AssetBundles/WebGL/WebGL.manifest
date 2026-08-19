@@ -1,6 +1,6 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 373600403
+CRC: 4064906256
 HashAppended: 1
 AssetBundleManifest:
   AssetBundleInfos:
@@ -8,22 +8,30 @@ AssetBundleManifest:
       Name: unifiedraytracing_5a3c3f19b58e37ec7bc097628a36bd3f
       Dependencies: {}
     Info_1:
-      Name: maingame_unity_60b3b30585d03db7c8ddec8c68f8e93f
+      Name: maingame_unity_b86b0b3afcfac923fe68a88633e8343e
       Dependencies:
-        Dependency_0: prefabs_15282f55b7aab93e2398db1b1800570b
+        Dependency_0: prefabs_e2cb52b4431d9201610f327bcd59ac85
+        Dependency_1: uiprefab_b7323964298260beee8321f6398ee150
+        Dependency_2: font_ceb621c40a01dd9ae1d88640d0b4c47b
+        Dependency_3: character_8f75a06597e37a56b90d4ac8b18a4100
     Info_2:
-      Name: prefabs_15282f55b7aab93e2398db1b1800570b
-      Dependencies: {}
-    Info_3:
-      Name: uiprefab_0183a32c779d326e512c53fe9ebeab33
+      Name: prefabs_e2cb52b4431d9201610f327bcd59ac85
       Dependencies:
-        Dependency_0: font_02d7a1f0ca131c30b66decf68318d231
+        Dependency_0: character_8f75a06597e37a56b90d4ac8b18a4100
+    Info_3:
+      Name: uiprefab_b7323964298260beee8321f6398ee150
+      Dependencies:
+        Dependency_0: font_ceb621c40a01dd9ae1d88640d0b4c47b
     Info_4:
-      Name: gamestart_unity_5293698fd366407303dcb5e815ca0efc
-      Dependencies: {}
+      Name: gamestart_unity_21b0a9c339de602ff7ebb9af7ff7496d
+      Dependencies:
+        Dependency_0: uiprefab_b7323964298260beee8321f6398ee150
     Info_5:
-      Name: data_dbb84b382beca2e507a0bb1bdd5964bd
+      Name: data_5f0e2dcb0aaf3b8f105d8039ad2294a0
       Dependencies: {}
     Info_6:
-      Name: font_02d7a1f0ca131c30b66decf68318d231
+      Name: font_ceb621c40a01dd9ae1d88640d0b4c47b
+      Dependencies: {}
+    Info_7:
+      Name: character_8f75a06597e37a56b90d4ac8b18a4100
       Dependencies: {}

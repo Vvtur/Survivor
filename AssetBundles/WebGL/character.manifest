@@ -1,0 +1,31 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.16f1
+CRC: 1841084557
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8f75a06597e37a56b90d4ac8b18a4100
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0606395053909d370c1245e368d09f00
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 321694b58bc97f915c219d615239021f
+HashAppended: 1
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Res/Art/Character/Sprite-0004.png
+- Assets/Res/Art/Character/Player/Idle.anim
+- Assets/Res/Art/Character/Player/Walk.anim
+- Assets/Res/Art/Character/Player/Player.controller
+- Assets/Res/Art/Character/Player/kitty-Sheet.png
+Dependencies: []

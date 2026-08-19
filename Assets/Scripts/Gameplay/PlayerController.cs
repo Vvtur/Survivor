@@ -6,6 +6,15 @@ namespace QFramework.Gameplay
 {
 	public partial class PlayerController : ViewController, IController
 	{
+		/// <summary>
+		/// 玩家动画状态（QF FSM）
+		/// </summary>
+		public enum PlayerAnimState
+		{
+			Idle,
+			Walk,
+		}
+
 		public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
 		// 玩家属性统一从 GameModel 读取，能力系统通过 Command 修改后即时生效
@@ -15,14 +24,37 @@ namespace QFramework.Gameplay
 		float AttackRadius => this.GetModel<GameModel>().AttackRadius.Value;
 
 		InputSystem_Actions input;
+		FSM<PlayerAnimState> mAnimFSM;   // QF 状态机：驱动待机/移动动画
 		float lastAttackTime = -99f;  // 上次攻击时间
 		float lastHitTime = -99f;     // 上次主角受击时间
+
+		bool isOver = false;
 
 		void Awake()
 		{
 			input = new();
 			this.RegisterEvent<GameWinEvent>(OnGameWin);   // 订阅胜利事件（架构事件系统）
 			this.RegisterEvent<LevelUpEvent>(OnLevelUp);  // 订阅升级事件
+
+			InitAnimFSM();
+		}
+
+		// 动画名哈希（Animator.Play 用 hash 避免字符串查找）
+		readonly int IdleHash = Animator.StringToHash("Idle");
+		readonly int WalkHash = Animator.StringToHash("Walk");
+
+		// 初始化动画状态机：Idle 播放 Idle，Walk 播放 Walk（无需 Animator Controller 连线）
+		void InitAnimFSM()
+		{
+			mAnimFSM = new FSM<PlayerAnimState>();
+
+			mAnimFSM.State(PlayerAnimState.Idle)
+				.OnEnter(() => SelfAnimator.Play(IdleHash));
+
+			mAnimFSM.State(PlayerAnimState.Walk)
+				.OnEnter(() => SelfAnimator.Play(WalkHash));
+
+			mAnimFSM.StartState(PlayerAnimState.Idle);
 		}
 
 		void Start()
@@ -30,7 +62,7 @@ namespace QFramework.Gameplay
 			// 打开常驻玩家信息面板（显示 HP/EXP/LV，数据由 Model 驱动刷新）
 			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync（同步 OpenPanel 首次加载 uiprefab 包必失败）；
 			// 协程挂自己身上：若面板打开前场景就被卸载（秒死回 GameStart），面板也无需再开
-			StartCoroutine(UIKit.OpenPanelAsync<PlayerInfoPanel>());
+			// StartCoroutine(UIKit.OpenPanelAsync<PlayerInfoPanel>());
 		}
 
 		// 升级：从能力池随机抽 3 个能力，打开选择面板
@@ -72,6 +104,7 @@ namespace QFramework.Gameplay
 			// PlayerInfoPanel 的关闭改由 GameRoot.OnSceneLoaded(GameStart) 负责。
 			this.UnRegisterEvent<GameWinEvent>(OnGameWin);   // 取消订阅
 			this.UnRegisterEvent<LevelUpEvent>(OnLevelUp);  // 取消订阅
+			mAnimFSM?.Clear();   // 清理状态机
 			input.Dispose();
 		}
 
@@ -83,7 +116,24 @@ namespace QFramework.Gameplay
 
 		void Update()
 		{
-			SelfRigidbody2D.linearVelocity = input.Player.Move.ReadValue<Vector2>() * Speed;
+			var move = input.Player.Move.ReadValue<Vector2>();
+			SelfRigidbody2D.linearVelocity = move * Speed;
+
+			// 角色翻转：朝左翻转（scale.x 为负），朝右恢复
+			if (move.x < -0.01f)
+			{
+				var s = SelfRigidbody2D.transform.localScale;
+				if (s.x > 0) SelfRigidbody2D.transform.localScale = new Vector3(-s.x, s.y, s.z);
+			}
+			else if (move.x > 0.01f)
+			{
+				var s = SelfRigidbody2D.transform.localScale;
+				if (s.x < 0) SelfRigidbody2D.transform.localScale = new Vector3(-s.x, s.y, s.z);
+			}
+
+			// 根据是否有移动输入切换动画状态（QF FSM）
+			mAnimFSM.ChangeState(move.magnitude > 0.01f ? PlayerAnimState.Walk : PlayerAnimState.Idle);
+
 			TryAttackAllInRange();
 		}
 
@@ -142,9 +192,12 @@ namespace QFramework.Gameplay
 
 		private void GameOver()
 		{
+			if(isOver) return;
 			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync；
 			// 协程宿主用常驻 GameRoot（本对象马上 SetActive(false) 会杀掉自己身上的协程）
-			GameRoot.Instance.StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
+			Debug.Log("GameOver");
+			isOver = true;
+			StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
 			gameObject.SetActive(false); // 主角消失
 			Time.timeScale = 0f;         // 暂停
 		}
