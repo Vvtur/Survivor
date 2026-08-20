@@ -19,6 +19,8 @@ namespace QFramework.Gameplay
 
 		// 缓存的 GameModel 引用（避免每次 GetModel 走字典查找）
 		GameModel mModel;
+		// 缓存的资源系统引用（生成武器等）
+		IGameAssetsSystem mAssetsSystem;
 
 		// 玩家属性统一从缓存的 GameModel 读取，能力系统通过 Command 修改后即时生效
 		float Speed => mModel.MoveSpeed.Value;
@@ -39,6 +41,7 @@ namespace QFramework.Gameplay
 		void Awake()
 		{
 			mModel = this.GetModel<GameModel>();   // 缓存 Model，避免每帧 GetModel
+			mAssetsSystem = this.GetSystem<IGameAssetsSystem>();   // 缓存资源系统，生成武器用
 			input = new();
 			this.RegisterEvent<GameWinEvent>(OnGameWin).UnRegisterWhenGameObjectDestroyed(this);   // 订阅胜利事件（架构事件系统）
 			this.RegisterEvent<LevelUpEvent>(OnLevelUp).UnRegisterWhenGameObjectDestroyed(this);  // 订阅升级事件
@@ -167,35 +170,44 @@ namespace QFramework.Gameplay
 		// 无 GC 分配的碰撞检测结果缓冲（复用避免每帧分配）
 		private readonly Collider2D[] mAttackHits = new Collider2D[16];
 		private ContactFilter2D mAttackFilter;
+		// 攻击目标临时缓冲：按距玩家距离排序后，取前 WeaponCount 个生成剑
+		private readonly System.Collections.Generic.List<Enemy> mAttackTargets = new(8);
 
-		// 攻击范围内所有敌人（一次 CD 打全部，符合割草游戏群攻）
+		// 攻击范围内检测到敌人 → 按距离排序后取前 N 个，各生成一把剑
 		private void TryAttackAllInRange()
 		{
 			// 攻击 CD
 			if (Time.time - lastAttackTime < AttackInterval) return;
 
 			// Unity 6 无 GC 版本：结果写入预分配的缓冲数组，返回实际命中数量
-			// 圆心用玩家自身位置，半径用 AttackRadius 配置
 			var hitCount = Physics2D.OverlapCircle(transform.position, AttackRadius, mAttackFilter, mAttackHits);
 
-			bool hitAny = false;
+			// 收集范围内的敌人 + 计算距离（避免每帧 new，复用 List）
+			mAttackTargets.Clear();
 			for (int i = 0; i < hitCount; i++)
 			{
-				var col = mAttackHits[i];
-				if (!col.gameObject.CompareTag("Enemy")) continue;
-
-				var enemy = col.gameObject.GetComponent<Enemy>();
-				if (enemy != null)
+				if (mAttackHits[i].gameObject.CompareTag("Enemy") &&
+					mAttackHits[i].TryGetComponent<Enemy>(out var enemy))
 				{
-					enemy.TakeDamage(AttackDamage);
-					hitAny = true;
+					mAttackTargets.Add(enemy);
 				}
 			}
 
-			// 只要打到至少一个，就消耗本次攻击
-			if (hitAny)
+			if (mAttackTargets.Count == 0) return;
+
+			// 按距玩家距离升序：近的优先打
+			var playerPos = transform.position;
+			mAttackTargets.Sort((a, b) =>
+				(a.transform.position - playerPos).sqrMagnitude
+					.CompareTo((b.transform.position - playerPos).sqrMagnitude));
+
+			// 取前 WeaponCount 个（未来升级可大于 1），每个生成一把剑
+			lastAttackTime = Time.time;
+			var n = Mathf.Min(mModel.WeaponCount.Value, mAttackTargets.Count);
+			for (int i = 0; i < n; i++)
 			{
-				lastAttackTime = Time.time;
+				var enemy = mAttackTargets[i];
+				mAssetsSystem.SpawnWeapon(enemy.transform.position, AttackDamage, enemy);
 			}
 		}
 

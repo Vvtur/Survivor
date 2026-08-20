@@ -20,7 +20,7 @@ MonoBehaviour:
     NameToFullName: []
     BindInfos: []
     ScriptsFolder: Assets/Scripts/Gameplay
-    ClassName: Shop
+    ClassName: PlayerController
     Namespace: QFramework.Gameplay
     MainCode: 
     DesignerCode: 

@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 1841430160
+CRC: 908392274
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4b13351e02af76ea492319369a1f2d61
+    Hash: 92684b9b6a5e32b4c7ca0e5054979cbd
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 058a7e78df96e722c27c7ab0f5d8653f
+    Hash: 43ebf8ce14420dffc7257d65903b8828
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ed3f3b40b6cda3462473c520bf5094eb
+    Hash: 6dd7e611752e49929d623184b5811f19
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -34,8 +34,6 @@ ClassTypes:
 - Class: 95
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 0190efad2ae7d304a877c05cc0fcaead, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: ba18c4b75dd00414a8f02b63c57918f9, type: 3}
@@ -43,6 +41,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 2b0f14b9c7e806f4ea60390f9af54bf4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4511ce4ffb2b74c4a9cd65351b91dd56, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 884aa0ccb71b3694487311845796f5e7, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 411e729afed24c62a04e2b99d9122e78, type: 3}
 - Class: 115
@@ -57,7 +57,8 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Res/Art/Prefabs/Gold.prefab
 - Assets/Res/Art/Prefabs/Gem.prefab
+- Assets/Res/Art/Prefabs/Weapon.prefab
 - Assets/Res/Art/Prefabs/Enemy.prefab
 - Assets/Res/Art/Prefabs/Player.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/character_bcd567d7fee9041ee68d13ce1ec3aa84
+- E:/UN/Survivor/AssetBundles/WebGL/character_a4e1319682e23c34f229a134bdece32e

@@ -11,6 +11,7 @@ namespace QFramework.Gameplay
         GameObject SpawnGem(Vector3 position);
         GameObject SpawnGold(Vector3 position);
         GameObject SpawnEnemy(Vector3 position);
+        Weapon SpawnWeapon(Vector3 targetEnemyPos, float damage, Enemy target);
     }
 
     /// <summary>
@@ -24,6 +25,7 @@ namespace QFramework.Gameplay
         private GameObject mGemPrefab;
         private GameObject mGoldPrefab;
         private GameObject mEnemyPrefab;
+        private GameObject mWeaponPrefab;
 
         protected override void OnInit()
         {
@@ -44,6 +46,20 @@ namespace QFramework.Gameplay
             {
                 if (b) mEnemyPrefab = res.Asset.As<GameObject>();
                 else LogKit.E("[GameAssetsSystem] 加载 Enemy 预制体失败！请确认已标记 AB（资源名 Enemy）");
+            });
+            mResLoader.Add2Load<GameObject>("Weapon", (b, res) =>
+            {
+                if (b)
+                {
+                    mWeaponPrefab = res.Asset.As<GameObject>();
+                    // 配置对象池工厂：MonoBehaviour 不能 new，从预制体实例化
+                    SafeObjectPool<Weapon>.Instance.SetFactoryMethod(() =>
+                        Object.Instantiate(mWeaponPrefab).GetComponent<Weapon>());
+                }
+                else
+                {
+                    LogKit.E("[GameAssetsSystem] 加载 Weapon 预制体失败！请确认已标记 AB（资源名 Weapon）");
+                }
             });
             mResLoader.LoadAsync();
         }
@@ -66,6 +82,23 @@ namespace QFramework.Gameplay
             return mEnemyPrefab != null ? Object.Instantiate(mEnemyPrefab, position, Quaternion.identity) : null;
         }
 
+        /// <summary>
+        /// 在目标敌人位置附近生成一个近战武器（对象池复用）：
+        /// 武器播放挥砍动画，动画事件触发 Attack() 对目标敌人造成伤害。
+        /// </summary>
+        public Weapon SpawnWeapon(Vector3 targetEnemyPos, float damage, Enemy target)
+        {
+            if (mWeaponPrefab == null)
+            {
+                LogKit.E("[GameAssetsSystem] Weapon 预制体未加载，无法生成武器");
+                return null;
+            }
+
+            var weapon = Weapon.Allocate();
+            weapon.Init(targetEnemyPos, damage, target);
+            return weapon;
+        }
+
         protected override void OnDeinit()
         {
             mResLoader?.Recycle2Cache(); // 系统卸载时才释放资源引用
@@ -73,6 +106,8 @@ namespace QFramework.Gameplay
             mGemPrefab = null;
             mGoldPrefab = null;
             mEnemyPrefab = null;
+            mWeaponPrefab = null;
+            SafeObjectPool<Weapon>.Instance.Clear();
             base.OnDeinit();
         }
     }

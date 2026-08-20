@@ -13,6 +13,7 @@ public class GameConfig : ScriptableObject
     public float MoveSpeed = 5f;
     public float AttackInterval = 1f;
     public float AttackRadius = 5f;
+    public int WeaponCount = 1;       // 同时挥出的剑数（升级可加）
 
     [Header("无限刷怪配置")]
     public float SpawnInterval = 3f;    // 生成间隔（秒）

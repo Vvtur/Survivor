@@ -45,6 +45,11 @@ namespace QFramework.Gameplay
                     model.AttackRadius.Value += mAbility.Value;
                     break;
 
+                case AbilityEffect.MoreWeapon:
+                    // 攻击范围扩大（加法累加，如每级 +1）
+                    model.WeaponCount.Value += (int)mAbility.Value;
+                    break;
+
                 default:
                     LogKit.E($"[ChooseAbilityCommand] 未处理的能力效果: {mAbility.Effect}");
                     break;

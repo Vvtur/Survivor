@@ -15,7 +15,7 @@ MonoBehaviour:
   ProjectConf:
     projectName: Survivor
     Appid: wxd833d7def98f6c77
-    CDN: http://127.0.0.1:8080/webgl
+    CDN: https://prod-d7gyi1dp0b59c9faa-1471697242.tcloudbaseapp.com
     assetLoadType: 0
     compressDataPackage: 0
     VideoUrl: 

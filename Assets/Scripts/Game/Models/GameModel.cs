@@ -23,7 +23,8 @@ namespace QFramework.Gameplay
         public BindableProperty<float> AttackInterval { get; } = new(1f); // 玩家攻击间隔（秒），能力可缩短
         public BindableProperty<float> AttackRadius { get; } = new(5f);   // 攻击范围半径，能力可扩大
         public BindableProperty<int> Money { get; } = new(0);   // 金币（跨局保留）
-        public BindableProperty<float> Attack { get; } = new(0);   
+        public BindableProperty<float> Attack { get; } = new(0);
+        public BindableProperty<int> WeaponCount { get; } = new(1); // 同时生成的剑数（升级可加，默认 1）   
 
         // 无限刷怪参数（从配置复制，运行中固定）
         public BindableProperty<float> SpawnInterval { get; } = new(3f);      // 生成间隔（秒）
@@ -37,6 +38,7 @@ namespace QFramework.Gameplay
         private float mConfigMoveSpeed;
         private float mConfigAttackInterval;
         private float mConfigAttackRadius;
+        private int mConfigWeaponCount;
 
         /// <summary>
         /// 重置局内数据（每局开始时调用）：
@@ -52,6 +54,7 @@ namespace QFramework.Gameplay
             MoveSpeed.Value = mConfigMoveSpeed;
             AttackInterval.Value = mConfigAttackInterval;
             AttackRadius.Value = mConfigAttackRadius;
+            WeaponCount.Value = mConfigWeaponCount;
             AliveEnemies.Value = 0;
         }
 
@@ -77,6 +80,7 @@ namespace QFramework.Gameplay
                 mConfigMoveSpeed = config.MoveSpeed;
                 mConfigAttackInterval = config.AttackInterval;
                 mConfigAttackRadius = config.AttackRadius;
+                mConfigWeaponCount = config.WeaponCount;
 
                 // 金币：跨局保留的长期货币，从存档读取
                 Money.Value = storage.GetInt("Money", 0);

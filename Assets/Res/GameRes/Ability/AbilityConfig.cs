@@ -18,4 +18,5 @@ public enum AbilityEffect
     MaxHpUp,       // 最大血量提升
     AttackSpeedUp, // 攻击速度提升（缩短攻击间隔）
     AttackRangeUp, // 攻击范围扩大
+    MoreWeapon, 
 }

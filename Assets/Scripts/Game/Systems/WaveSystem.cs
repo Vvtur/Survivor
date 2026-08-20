@@ -22,6 +22,7 @@ namespace QFramework.Gameplay
         private float mSpawnTimer;
         private float mElapsedTime;   // 本局已进行时间（秒），用于计算敌人强度和胜利判定
         private GameModel mModel;
+        private float spawnInterval;
 
         protected override void OnInit()
         {
@@ -30,11 +31,11 @@ namespace QFramework.Gameplay
             mModel = this.GetModel<GameModel>();
 
             mModel.AliveEnemies.Value = 0;
+            spawnInterval = mModel.SpawnInterval.Value;
         }
 
         public void OnUpdate()
         {
-            var spawnInterval = mModel.SpawnInterval.Value;
             var maxAliveEnemies = mModel.MaxAliveEnemies.Value;
 
             mElapsedTime += Time.deltaTime;
@@ -57,6 +58,8 @@ namespace QFramework.Gameplay
             if (mSpawnTimer >= spawnInterval)
             {
                 mSpawnTimer = 0f;
+                if(spawnInterval > .1f && Random.Range(1, 10) >= 8)
+                    spawnInterval *= .95f;
                 SpawnEnemy();
             }
         }

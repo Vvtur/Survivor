@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 802907093
+CRC: 2787575515
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4a0a5113e7402ef5e53cefbd1d8071e8
+    Hash: a61fcfb3f2fc00ae4f97750796cf09f4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 645bd3e887b9545ed9a6d4ca4a1397a1
+    Hash: a0c0fa5a6ebc5c8db4a6fa9b942dd8b8
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7a0ccea5baede0dce5b5679415397e26
+    Hash: e3b98f8f4583f7e86c6257dec893b6d0
 HashAppended: 1
 ClassTypes:
 - Class: 114
@@ -26,6 +26,7 @@ Assets:
 - Assets/Res/GameRes/Data/AttackAdd.asset
 - Assets/Res/GameRes/Data/GameConfigDate.asset
 - Assets/Res/GameRes/Data/SpeedAdd.asset
+- Assets/Res/GameRes/Data/MoreWeapon.asset
 - Assets/Res/GameRes/Data/AbilityDatabase.asset
 - Assets/Res/GameRes/Data/MaxHpUp.asset
 - Assets/Res/GameRes/Data/AttackSpeedUp.asset

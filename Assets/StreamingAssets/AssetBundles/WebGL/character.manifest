@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 2096427009
+CRC: 1896520541
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bcd567d7fee9041ee68d13ce1ec3aa84
+    Hash: a4e1319682e23c34f229a134bdece32e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 0606395053909d370c1245e368d09f00
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 321694b58bc97f915c219d615239021f
+    Hash: 9ec87ec85f31444f3e2fa45646aed669
 HashAppended: 1
 ClassTypes:
 - Class: 28
@@ -23,9 +23,11 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Res/Art/Character/Sprite-0004.png
+- Assets/Res/Art/Character/Enemy/Sprite-0004.png
 - Assets/Res/Art/Character/Player/Idle.anim
+- Assets/Res/Art/Character/Weapon/Attack.anim
 - Assets/Res/Art/Character/Player/Walk.anim
 - Assets/Res/Art/Character/Player/Player.controller
+- Assets/Res/Art/Character/Weapon/Weapon.controller
 - Assets/Res/Art/Character/Player/kitty-Sheet.png
 Dependencies: []
