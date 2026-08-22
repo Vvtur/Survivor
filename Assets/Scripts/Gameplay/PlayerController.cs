@@ -71,6 +71,9 @@ namespace QFramework.Gameplay
 		{
 			// 每局开局重置局内数据（死亡重开也生效）：HP/Exp/Level/局内攻击力归零
 			mModel.ResetRunData();
+			// 刷怪系统局内状态归零（System 只初始化一次，不随场景重载重跑：
+			// 不重置则上一局的累计时间会带到下一局——敌人强度沿用、胜利判定提前）
+			this.GetSystem<IWaveSystem>().ResetRun();
 
 			// 缓存主摄像机引用（带 MainCamera 标签）
 			mMainCam = Camera.main;
@@ -235,6 +238,8 @@ namespace QFramework.Gameplay
 			// 协程宿主用常驻 GameRoot（本对象马上 SetActive(false) 会杀掉自己身上的协程）
 			Debug.Log("GameOver");
 			isOver = true;
+			// 死亡/胜利结算：上报本局存活时间到微信好友排行榜（未破纪录时内部静默跳过）
+			WXLeaderboard.ReportSurviveTime(Mathf.CeilToInt(this.GetSystem<IWaveSystem>().ElapsedTime));
 			StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
 			gameObject.SetActive(false); // 主角消失
 			Time.timeScale = 0f;         // 暂停

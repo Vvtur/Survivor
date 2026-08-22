@@ -19,6 +19,10 @@ namespace QFramework.Gameplay
     		RegisterModel(new GameModel());
 
 			RegisterUtility<Storage>(new Storage());
+
+    		// 云存档系统放最后注册：OnInit 会同步 GetModel/GetUtility，
+    		// 必须等 GameModel 和 Storage 都已注册（QF 注册即触发 OnInit）
+    		RegisterSystem<ICloudSaveSystem>(new CloudSaveSystem());
     	}
     }
 }

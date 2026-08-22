@@ -58,6 +58,29 @@ namespace QFramework.Gameplay
             AliveEnemies.Value = 0;
         }
 
+        /// <summary>
+        /// 应用云端存档（由 CloudSaveSystem 启动拉取后调用）。
+        /// Last-Write-Win：云端时间戳较新才覆盖本地长期数据（金币/商店攻击）；
+        /// 赋值会自动触发本地持久化回调（Money/Attack 的 Register），本地随之更新。
+        /// SaveTs 的语义 = "本地数据已同步到的云端版本"，推送成功时由 CloudSaveSystem 写入。
+        /// </summary>
+        public void ApplyCloudSave(SaveData cloud, long cloudTsSec)
+        {
+            var storage = this.GetUtility<Storage>();
+            int localTs = storage.GetInt("SaveTs", 0);
+
+            if (cloudTsSec <= localTs)
+            {
+                LogKit.I($"[云存档] 本地已是最新(SaveTs={localTs} >= 云端{cloudTsSec})，跳过覆盖");
+                return;
+            }
+
+            Money.Value = cloud.Money;
+            Attack.Value = cloud.Attack;
+            storage.SaveInt("SaveTs", (int)cloudTsSec);
+            LogKit.I($"[云存档] 已应用云端存档: Money={cloud.Money} Attack={cloud.Attack} ts={cloudTsSec}");
+        }
+
         protected override void OnInit()
         {
             var storage = this.GetUtility<Storage>();  // Storage 需注册为 Utility

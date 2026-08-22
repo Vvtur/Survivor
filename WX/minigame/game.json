@@ -1,6 +1,7 @@
 
 {
   "deviceOrientation" : "landscape",
+  "openDataContext" : "open-data",
   "iOSHighPerformance" : true,
   "iOSHighPerformance+" : false,
   "subpackages"         : [

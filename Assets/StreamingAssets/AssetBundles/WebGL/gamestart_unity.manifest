@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 1687854591
+CRC: 1084246211
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 572b39572ba7dae37efaa38725cedb45
+    Hash: 84d7994dce700754bdb86adaba41b088
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 4294ab5e9897940bd0c145b9a078c1ad
+    Hash: 035b2fa93837bc07c33f0b0f5db18065
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b1cb13dabbd37a82da80040516c43b1f
+    Hash: b09927510697eec793618655809bac31
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -83,6 +83,6 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Scenes/GameStart.unity
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/character_a4e1319682e23c34f229a134bdece32e
-- E:/UN/Survivor/AssetBundles/WebGL/font_a9055060327e13fbebedd9782aae5ec4
-- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_7704251e5a89191f0f386dead67b55a2
+- E:/UN/Survivor/AssetBundles/WebGL/character_3b2e9d8a40f4457ff4c19123d0c0f689
+- E:/UN/Survivor/AssetBundles/WebGL/font_964819dc294663a46ec197638ec873e5
+- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_e6cbdb014bcc1b634fa4d79be4e338b6

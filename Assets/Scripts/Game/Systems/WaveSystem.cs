@@ -10,6 +10,12 @@ namespace QFramework.Gameplay
     {
         /// <summary>每帧驱动（由 MainGame 场景的 WaveDriver MonoBehaviour 调用）</summary>
         void OnUpdate();
+
+        /// <summary>本局已进行时间（秒），结算上报排行榜用</summary>
+        float ElapsedTime { get; }
+
+        /// <summary>重置局内状态（每局开始调用，防止跨局残留）</summary>
+        void ResetRun();
     }
 
     /// <summary>
@@ -26,10 +32,23 @@ namespace QFramework.Gameplay
 
         protected override void OnInit()
         {
+            mModel = this.GetModel<GameModel>();
+            ResetRun();
+        }
+
+        /// <summary>本局已进行时间（秒）</summary>
+        public float ElapsedTime => mElapsedTime;
+
+        /// <summary>
+        /// 重置局内状态：计时、刷怪间隔归零。
+        /// System 只随架构初始化一次（OnInit 不会在重开局时重跑），
+        /// 必须由每局开始的场景侧（PlayerController.Start）显式调用，
+        /// 否则上一局的累计时间和衰减过的刷怪间隔会带到下一局（敌人强度沿用、胜利判定提前）。
+        /// </summary>
+        public void ResetRun()
+        {
             mSpawnTimer = 0f;
             mElapsedTime = 0f;
-            mModel = this.GetModel<GameModel>();
-
             mModel.AliveEnemies.Value = 0;
             spawnInterval = mModel.SpawnInterval.Value;
         }

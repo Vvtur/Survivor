@@ -34,6 +34,7 @@
   },
   "compileType": "game",
   "libVersion": "latest",
+  "cloudfunctionRoot": "cloudfunctions/",
   "appid": "wxd833d7def98f6c77",
   "projectname": "Survivor",
   "simulatorType": "wechat",

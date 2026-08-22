@@ -12,13 +12,17 @@ namespace QFramework.UI
 		
 		[SerializeField]
 		public UnityEngine.UI.Button Btn_Start;
-		
+
+		[SerializeField]
+		public UnityEngine.UI.Button Btn_Board;
+
 		private GameStartPanelData mPrivateData = null;
-		
+
 		protected override void ClearUIComponents()
 		{
 			Btn_Start = null;
-			
+			Btn_Board = null;
+
 			mData = null;
 		}
 		
