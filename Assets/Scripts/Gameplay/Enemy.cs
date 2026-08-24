@@ -54,6 +54,7 @@ namespace QFramework.Gameplay
 		private void Die()
 		{
 			mIsDying = true;
+			AudioKit.PlaySound(AudioNames.EnemyDie); // 死亡音效
 			SelfRigidbody2D.linearVelocity = Vector2.zero; // 速度归零
 			SelfBoxCollider2D.enabled = false;
 

@@ -75,6 +75,9 @@ namespace QFramework.Gameplay
 			// 不重置则上一局的累计时间会带到下一局——敌人强度沿用、胜利判定提前）
 			this.GetSystem<IWaveSystem>().ResetRun();
 
+			// 战斗 BGM（AudioKit 经 ResKit 从 AB 异步加载，进入战斗循环播放）
+			AudioKit.PlayMusic(AudioNames.BgmBattle);
+
 			// 缓存主摄像机引用（带 MainCamera 标签）
 			mMainCam = Camera.main;
 
@@ -103,6 +106,7 @@ namespace QFramework.Gameplay
 		// 升级：从能力池随机抽 3 个能力，打开选择面板
 		private void OnLevelUp(LevelUpEvent e)
 		{
+			AudioKit.PlaySound(AudioNames.LevelUp); // 升级音效
 			Time.timeScale = 0f; // 升级暂停游戏
 
 			// 随机抽取 3 个不重复的能力
@@ -144,6 +148,7 @@ namespace QFramework.Gameplay
 		// 游戏胜利：由 GameManagerSystem 发送 GameWinEvent 触发
 		private void OnGameWin(GameWinEvent e)
 		{
+			AudioKit.PlaySound(AudioNames.Victory); // 胜利音效
 			GameOver();
 		}
 
@@ -206,6 +211,7 @@ namespace QFramework.Gameplay
 
 			// 取前 WeaponCount 个（未来升级可大于 1），每个生成一把剑
 			lastAttackTime = Time.time;
+			AudioKit.PlaySound(AudioNames.Attack); // 挥砍音效
 			var n = Mathf.Min(mModel.WeaponCount.Value, mAttackTargets.Count);
 			for (int i = 0; i < n; i++)
 			{
@@ -225,8 +231,10 @@ namespace QFramework.Gameplay
 			lastHitTime = Time.time;
 
 			mModel.HP.Value--;
+			AudioKit.PlaySound(AudioNames.PlayerHurt); // 受击音效
 			if (mModel.HP.Value <= 0)
 			{
+				AudioKit.PlaySound(AudioNames.GameOver); // 失败音效
 				GameOver();
 			}
 		}
@@ -238,6 +246,7 @@ namespace QFramework.Gameplay
 			// 协程宿主用常驻 GameRoot（本对象马上 SetActive(false) 会杀掉自己身上的协程）
 			Debug.Log("GameOver");
 			isOver = true;
+			AudioKit.StopMusic(); // 死亡/胜利结算，停止战斗 BGM
 			// 死亡/胜利结算：上报本局存活时间到微信好友排行榜（未破纪录时内部静默跳过）
 			this.GetSystem<IWXPlatformSystem>().ReportSurviveTime(Mathf.CeilToInt(this.GetSystem<IWaveSystem>().ElapsedTime));
 			StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());

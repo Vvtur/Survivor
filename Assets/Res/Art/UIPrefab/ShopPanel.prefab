@@ -344,7 +344,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "AttackAdd \nCost 1"
+  m_text: "攻击+1\n消耗 1 金币"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
@@ -619,7 +619,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Close
+  m_text: 关闭
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
@@ -847,7 +847,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Shop
+  m_text: 商店
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}

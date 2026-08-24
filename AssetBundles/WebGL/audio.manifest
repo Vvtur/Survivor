@@ -1,0 +1,36 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.16f1
+CRC: 3287206949
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a692a86048356e6c8e7fafc6b39a7c93
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 62494970f952b37849906122e1665a61
+HashAppended: 1
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Res/Art/Audio/Sounds/enemy_die.wav
+- Assets/Res/Art/Audio/Sounds/pause.wav
+- Assets/Res/Art/Audio/Sounds/panel_close.wav
+- Assets/Res/Art/Audio/Sounds/skill.wav
+- Assets/Res/Art/Audio/Sounds/pickup.wav
+- Assets/Res/Art/Audio/Sounds/game_over.wav
+- Assets/Res/Art/Audio/Sounds/panel_open.wav
+- Assets/Res/Art/Audio/Music/bgm_battle.wav
+- Assets/Res/Art/Audio/Sounds/hit.wav
+- Assets/Res/Art/Audio/Sounds/player_hurt.wav
+- Assets/Res/Art/Audio/Sounds/level_up.wav
+- Assets/Res/Art/Audio/Sounds/victory.wav
+- Assets/Res/Art/Audio/Sounds/option_switch.wav
+- Assets/Res/Art/Audio/Sounds/button_click.wav
+- Assets/Res/Art/Audio/Sounds/attack.wav
+- Assets/Res/Art/Audio/Sounds/game_start.wav
+Dependencies: []

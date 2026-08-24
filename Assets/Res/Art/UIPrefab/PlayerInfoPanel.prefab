@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 生命: 0/0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 等级: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 经验: 0/1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
@@ -593,7 +593,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 攻击: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}

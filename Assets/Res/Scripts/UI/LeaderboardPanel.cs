@@ -22,17 +22,25 @@ namespace QFramework.UI
 		{
 			mData = uiData as LeaderboardPanelData ?? new LeaderboardPanelData();
 
-			Btn_Close.onClick.AddListener(CloseSelf);
+			Btn_Close.onClick.AddListener(() =>
+			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
+				CloseSelf();
+			});
 			// 分享按钮：统一走邀请链路（query 带 inviter）——所有分享入口都能带来邀请奖励，
 			// 避免玩家从排行榜分享导致好友进入后不计入 invite_events
 			Btn_Share.onClick.AddListener(() =>
-				GameArchitecture.Interface.GetSystem<IInviteSystem>().ShareWithInvite(null));
+			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
+				GameArchitecture.Interface.GetSystem<IInviteSystem>().ShareWithInvite(null);
+			});
 		}
 
 		Texture2D mBoardTex; // 占位纹理（复用，避免每次打开泄漏一张）
 
 		protected override void OnOpen(IUIData uiData = null)
 		{
+			AudioKit.PlaySound(AudioNames.PanelOpen); // 面板打开音效
 #if UNITY_WEBGL && !UNITY_EDITOR
 			// 占位纹理：尺寸无所谓，SDK 会按传入的屏幕矩形把 GL 纹理重设为沙盒画布大小并逐帧刷新
 			if (mBoardTex == null)
@@ -69,6 +77,7 @@ namespace QFramework.UI
 
 		protected override void OnClose()
 		{
+			AudioKit.PlaySound(AudioNames.PanelClose); // 面板关闭音效
 #if UNITY_WEBGL && !UNITY_EDITOR
 			WeChatWASM.WX.HideOpenData();
 #endif

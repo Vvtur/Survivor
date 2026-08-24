@@ -361,7 +361,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start
+  m_text: 开始游戏
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Rank
+  m_text: 排行榜
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
   m_sharedMaterial: {fileID: -9186138327807689033, guid: 1e0457e1dfbb35f4f9f571fab1c79b56, type: 2}
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Shop
+  m_text: '商店
 
 '
   m_isRightToLeft: 0
@@ -912,7 +912,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Invite
+  m_text: '邀请有礼
 
 '
   m_isRightToLeft: 0

@@ -13,10 +13,18 @@ namespace QFramework.UI
 		ResLoader mSceneLoader;   // 场景 loader 由面板自己持有
 		private void Awake()
 		{
+			// 防误触：从"游戏结束→重新开始"切回本场景时，点"重新开始"那一下的指针事件
+			// 可能被 EventSystem 重新派发到本场景按钮上（开始按钮铺满全屏，正好接住残留点击），
+			// 导致刚回到开始界面就误触发"开始游戏"直接进 MainGame。场景出现后 0.5 秒内忽略点击。
+			var clickableAt = Time.unscaledTime + 0.5f;
+
 			// 注意：Btn_Start 的绑定只在 OnInit 做一次。
 			// （旧代码在 Awake 里也绑过一次 → 点击后 LoadSceneAsync 被调用两次，已移除）
 			Btn_Start.onClick.AddListener(() =>
 			{
+				if (Time.unscaledTime < clickableAt) return;
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
+				AudioKit.PlaySound(AudioNames.GameStart);   // 开始游戏音效
 				// 场景切换统一走常驻 GameRoot 的 loader（单参写法，见 GameRoot.SwitchScene 注释）
 				// GameRoot.SwitchScene("MainGame");
 				mSceneLoader ??= ResLoader.Allocate();
@@ -32,12 +40,16 @@ namespace QFramework.UI
 			// 好友排行榜入口：打开面板（面板内部把开放数据域画布贴到 RawImage 上）
 			Btn_Board.onClick.AddListener(() =>
 			{
+				if (Time.unscaledTime < clickableAt) return;
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				StartCoroutine(UIKit.OpenPanelAsync<LeaderboardPanel>());
 			});
 
 			// 邀请有礼入口：打开面板（分享带 inviter / 领取好友进入奖励）
 			Btn_Invite.onClick.AddListener(() =>
 			{
+				if (Time.unscaledTime < clickableAt) return;
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				StartCoroutine(UIKit.OpenPanelAsync<InvitePanel>());
 			});
 		}

@@ -19,26 +19,38 @@ namespace QFramework.UI
 		{
 			mData = uiData as InvitePanelData ?? new InvitePanelData();
 
-			Btn_Close.onClick.AddListener(CloseSelf);
+			Btn_Close.onClick.AddListener(() =>
+			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
+				CloseSelf();
+			});
 
 			// 分享：拉起微信转发面板（query 带 inviter）；微信拿不到分享成功回调，提示文案按"已发起分享"表述
 			Btn_Share.onClick.AddListener(() =>
+			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				GameArchitecture.Interface.GetSystem<IInviteSystem>()
-					.ShareWithInvite(() => SetTip("已发起分享！好友进入游戏后即可领取金币")));
+					.ShareWithInvite(() => SetTip("已发起分享！好友进入游戏后即可领取金币"));
+			});
 
 			// 领取：云端校验（防自邀/防重复），code=0 时 InviteSystem 内部已加金币
 			Btn_Claim.onClick.AddListener(() =>
+			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				GameArchitecture.Interface.GetSystem<IInviteSystem>()
-					.ClaimReward(OnClaimResult));
+					.ClaimReward(OnClaimResult);
+			});
 		}
 
 		protected override void OnOpen(IUIData uiData = null)
 		{
+			AudioKit.PlaySound(AudioNames.PanelOpen); // 面板打开音效
 			RefreshStatus();
 		}
 
 		protected override void OnClose()
 		{
+			AudioKit.PlaySound(AudioNames.PanelClose); // 面板关闭音效
 		}
 
 		// 打开面板即查云端状态：刷新领取按钮可用性与文案

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08afe00f82644e94ebd691f6e33d4008, type: 3}
   m_Name: MaxHpUp
   m_EditorClassIdentifier: Assembly-CSharp::AbilityConfig
-  AbilityName: MaxHpUp
-  Description: MaxHpUp
+  AbilityName: 生命强化
+  Description: 最大生命 +1
   Icon: {fileID: 0}
   Effect: 2
   Value: 1

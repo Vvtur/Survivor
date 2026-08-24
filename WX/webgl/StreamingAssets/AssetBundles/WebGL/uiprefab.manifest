@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 943922117
+CRC: 2805097588
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c4486a83717d564841d6448c80882130
+    Hash: 80dc4df4a77c9cd03902b0d5cd61bf73
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a42a41783a14885f57a7f4a4075fab7b
+    Hash: e5690103f4955e3e43b799936637260d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2356926318394bd27b1dc8a0b0af1c75
+    Hash: b4274ed98dcf405baeb9271e5dbe2fce
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -20,8 +20,6 @@ ClassTypes:
 - Class: 23
   Script: {instanceID: 0}
 - Class: 28
-  Script: {instanceID: 0}
-- Class: 48
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
@@ -67,8 +65,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 115
   Script: {instanceID: 0}
-- Class: 128
-  Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
 - Class: 222
@@ -79,37 +75,11 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: QFramework.CoreKit
   ClassName: QFramework.OtherBind
 - AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.FaceInfo_Legacy
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.FontAssetCreationSettings
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.KerningTable
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_Character
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_FontFeatureTable
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_FontWeightPair
-- AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.RectOffset
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.FaceInfo
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.Glyph
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.GlyphMetrics
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.GlyphRect
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.LowLevel.GlyphAdjustmentRecord
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.LowLevel.GlyphPairAdjustmentRecord
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.LowLevel.GlyphValueRecord
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.AnimationTriggers
 - AssemblyName: UnityEngine.UI
@@ -135,4 +105,4 @@ Assets:
 - Assets/Res/Art/UIPrefab/Cotent/Txt_Damage.prefab
 - Assets/Res/Art/UIPrefab/PlayerInfoPanel.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/font_79541153ebb09ca53829f1fa9562f187
+- E:/UN/Survivor/AssetBundles/WebGL/font_7ba3665a6fbedfc26759edc077ede9c0

@@ -43,23 +43,23 @@ namespace QFramework.UI
 
 		private void RefreshHP()
 		{
-			Txt_HP.text = $"HP: {mModel.HP.Value}/{mModel.MaxHp.Value}";
+			Txt_HP.text = $"生命: {mModel.HP.Value}/{mModel.MaxHp.Value}";
 		}
 
 		private void RefreshExp()
 		{
 			var need = mModel.Level.Value * 2 + 1; // 与 LevelUpSystem 的升级公式一致
-			Txt_Exp.text = $"EXP: {mModel.Exp.Value}/{need}";
+			Txt_Exp.text = $"经验: {mModel.Exp.Value}/{need}";
 		}
 
 		private void RefreshLevel()
 		{
-			Txt_Lv.text = $"LV: {mModel.Level.Value}";
+			Txt_Lv.text = $"等级: {mModel.Level.Value}";
 		}
 
 		private void RefreshAttack()
 		{
-			Txt_Attack.text = $"Attack: {mModel.AttackDamage.Value + mModel.Attack.Value}";
+			Txt_Attack.text = $"攻击: {mModel.AttackDamage.Value + mModel.Attack.Value}";
 		}
 
 		protected override void OnOpen(IUIData uiData = null)

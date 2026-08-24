@@ -16,6 +16,7 @@ namespace QFramework.UI
 
 			Btn_ReStart.onClick.AddListener(() =>
 			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				Time.timeScale = 1f; // 恢复时间缩放，否则刚体物理仍被暂停
 
 				// 场景切换统一走常驻 GameRoot 的 loader（单参写法，见 GameRoot.SwitchScene 注释）

@@ -18,10 +18,12 @@ namespace QFramework.UI
 			// please add init code here
 			Btn_AttackAdd.onClick.AddListener(() =>
 			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				GameArchitecture.Interface.SendCommand(new BuyCommand(1));
 			});
 			Btn_Close.onClick.AddListener(() =>
 			{
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				Hide();
 			});
 
@@ -30,6 +32,7 @@ namespace QFramework.UI
 		
 		protected override void OnOpen(IUIData uiData = null)
 		{
+			AudioKit.PlaySound(AudioNames.PanelOpen); // 面板打开音效
 		}
 		
 		protected override void OnShow()
@@ -42,11 +45,12 @@ namespace QFramework.UI
 		
 		protected override void OnClose()
 		{
+			AudioKit.PlaySound(AudioNames.PanelClose); // 面板关闭音效
 		}
 
 		private void RefreshMoney()
 		{
-			Txt_Money.text = "Gold:" + model.Money.Value;
+			Txt_Money.text = "金币:" + model.Money.Value;
 		}
 	}
 }

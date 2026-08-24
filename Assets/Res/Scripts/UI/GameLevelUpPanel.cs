@@ -21,6 +21,7 @@ namespace QFramework.UI
 		protected override void OnOpen(IUIData uiData = null)
 		{
 			mData = uiData as GameLevelUpPanelData ?? new GameLevelUpPanelData();
+			AudioKit.PlaySound(AudioNames.PanelOpen); // 面板打开音效
 
 			// 先清空容器（面板可能被复用）
 			foreach (Transform child in Panel.rectTransform) Destroy(child.gameObject);
@@ -51,6 +52,7 @@ namespace QFramework.UI
 					item.SetData(ability);
 					item.GetComponent<Button>().onClick.AddListener(() =>
 					{
+						AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 						// 选择能力 → 通过 Command 修改 Model 属性
 						GameArchitecture.Interface.SendCommand(new ChooseAbilityCommand(ability));
 						Time.timeScale = 1f; // 恢复游戏
@@ -71,6 +73,7 @@ namespace QFramework.UI
 
 		protected override void OnClose()
 		{
+			AudioKit.PlaySound(AudioNames.PanelClose); // 面板关闭音效
 			// 面板关闭（被 UIKit 移除）时清理
 		}
 

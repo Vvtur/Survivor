@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 2284180601076729746}
   - component: {fileID: 1719994827352003592}
   - component: {fileID: 4338817361822772132}
-  - component: {fileID: 7976811499834386689}
-  - component: {fileID: 5135289060135831094}
+  - component: {fileID: 4315096351019729034}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -77,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7976811499834386689
+--- !u!114 &4315096351019729034
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,10 +91,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 200
+    m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
-  m_Spacing: 5
+  m_ChildAlignment: 4
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -103,22 +102,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &5135289060135831094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7799438855092646284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: QFramework.CoreKit::QFramework.Bind
-  MarkType: 0
-  CustomComponentName: Panel
-  CustomComment: 
-  mComponentName: UnityEngine.UI.Image
 --- !u!1 &9073723909262189386
 GameObject:
   m_ObjectHideFlags: 0

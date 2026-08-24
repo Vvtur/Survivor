@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08afe00f82644e94ebd691f6e33d4008, type: 3}
   m_Name: MoreWeapon
   m_EditorClassIdentifier: Assembly-CSharp::AbilityConfig
-  AbilityName: MoreWeapon
-  Description: MoreWeapon
+  AbilityName: "\u66F4\u591A\u6B66\u5668"
+  Description: "\u540C\u65F6\u653B\u51FB\u7684\u5251\u6570\u91CF\u52A01"
   Icon: {fileID: 0}
   Effect: 5
   Value: 1

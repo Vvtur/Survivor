@@ -15,6 +15,7 @@ namespace QFramework.Gameplay
 			if (collision.CompareTag("Player"))
 			{
 				this.SendCommand<PlayerGetGemCommand>(); // 经验 +1（写 Model）
+				AudioKit.PlaySound(AudioNames.Pickup);   // 拾取音效
 				Destroy(gameObject);                     // 宝石消失
 			}
 		}
