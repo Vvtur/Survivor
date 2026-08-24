@@ -14,6 +14,9 @@ namespace QFramework.UI
 		public UnityEngine.UI.Button Btn_Close;
 
 		[SerializeField]
+		public UnityEngine.UI.Button Btn_Share;
+
+		[SerializeField]
 		public UnityEngine.UI.RawImage RawImage_Board;
 
 		private LeaderboardPanelData mPrivateData = null;
@@ -21,6 +24,7 @@ namespace QFramework.UI
 		protected override void ClearUIComponents()
 		{
 			Btn_Close = null;
+			Btn_Share = null;
 			RawImage_Board = null;
 
 			mData = null;

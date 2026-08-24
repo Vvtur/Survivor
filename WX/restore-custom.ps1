@@ -22,15 +22,34 @@ if (-not (Test-Path $dst)) {
     exit 1
 }
 
-# 1. restore cloud functions (save / load)
+# 1. restore cloud functions (save / load / invite)
 Copy-Item -Path (Join-Path $custom 'cloudfunctions') -Destination $dst -Recurse -Force
-Write-Host '[1/3] cloudfunctions/ restored (save + load)'
+Write-Host '[1/4] cloudfunctions/ restored (save + load + invite)'
 
 # 2. restore open-data (remove tool-generated official template, then copy ours)
 $openDataDst = Join-Path $dst 'open-data'
 if (Test-Path $openDataDst) { Remove-Item $openDataDst -Recurse -Force }
 Copy-Item -Path (Join-Path $custom 'open-data') -Destination $dst -Recurse -Force
-Write-Host '[2/3] open-data/ restored (custom friend leaderboard)'
+Write-Host '[2/4] open-data/ restored (custom friend leaderboard)'
+
+# 2b. invite query stash patch:
+#     the transform plugin loses wx.onShow res.query (Dictionary) when
+#     dispatching to C#; invite-query.js stashes it via native wx APIs
+#     at game.js import time, C# reads it from storage instead.
+$iqSrc = Join-Path $custom 'invite-query.js'
+if (Test-Path $iqSrc) {
+    Copy-Item $iqSrc $dst -Force
+    $gameJsPath = Join-Path $dst 'game.js'
+    $gameJs = [System.IO.File]::ReadAllText($gameJsPath)
+    if ($gameJs -notmatch 'invite-query') {
+        [System.IO.File]::WriteAllText($gameJsPath, $gameJs + "`nimport './invite-query'; // restore-custom: invite query stash patch`n")
+        Write-Host '       game.js: invite-query import appended'
+    } else {
+        Write-Host '       game.js: invite-query already present, skip'
+    }
+} else {
+    Write-Host '       [WARN] custom/invite-query.js not found, skip patch' -ForegroundColor Yellow
+}
 
 # 3. patch configs (tool regenerates both files every conversion)
 # 3a. project.config.json -> cloudfunctionRoot (for DevTools cloud function panel)
@@ -39,10 +58,10 @@ $proj = [System.IO.File]::ReadAllText($projPath)
 if ($proj -notmatch '"cloudfunctionRoot"') {
     $proj = $proj -replace '("appid"\s*:)', ('"cloudfunctionRoot": "cloudfunctions/",' + "`n" + '  $1')
     [System.IO.File]::WriteAllText($projPath, $proj)
-    Write-Host '[3/3] project.config.json: cloudfunctionRoot added'
+    Write-Host '[3/4] project.config.json: cloudfunctionRoot added'
 }
 else {
-    Write-Host '[3/3] project.config.json: cloudfunctionRoot already present, skip'
+    Write-Host '[3/4] project.config.json: cloudfunctionRoot already present, skip'
 }
 
 # 3b. game.json patches:
@@ -65,6 +84,7 @@ if ($newGame -ne $game) {
 }
 [System.IO.File]::WriteAllText($gamePath, $game)
 
+Write-Host '[4/4] configs patched'
 Write-Host ''
 Write-Host 'DONE. You can open WeChat DevTools now.' -ForegroundColor Green
-Write-Host 'NOTE: if cloud function logic changed, right-click save/load in DevTools -> upload & deploy'
+Write-Host 'NOTE: if cloud function logic changed, right-click save/load/invite in DevTools -> upload & deploy'

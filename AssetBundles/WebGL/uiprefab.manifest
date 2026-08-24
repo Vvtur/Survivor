@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 185617646
+CRC: 943922117
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e6cbdb014bcc1b634fa4d79be4e338b6
+    Hash: c4486a83717d564841d6448c80882130
   TypeTreeHash:
     serializedVersion: 2
-    Hash: cee0646c8bb4cf4a66f77d388343f80b
+    Hash: a42a41783a14885f57a7f4a4075fab7b
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 400e2774b3387fe3b100720d51e1e03e
+    Hash: 2356926318394bd27b1dc8a0b0af1c75
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -37,6 +37,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 4ee038ec13fe810468018c8046eac476, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d2e648c9b289e1d46b483526f2bd52d5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 02f4ab2616504d541aa87f4526525b18, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 3908063c435e8ff4c9711e9eae25fb46, type: 3}
 - Class: 114
@@ -129,7 +131,8 @@ Assets:
 - Assets/Res/Art/UIPrefab/GameStartPanel.prefab
 - Assets/Res/Art/UIPrefab/GameOverPanel.prefab
 - Assets/Res/Art/UIPrefab/Cotent/Btn_Option.prefab
+- Assets/Res/Art/UIPrefab/InvitePanel.prefab
 - Assets/Res/Art/UIPrefab/Cotent/Txt_Damage.prefab
 - Assets/Res/Art/UIPrefab/PlayerInfoPanel.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/font_964819dc294663a46ec197638ec873e5
+- E:/UN/Survivor/AssetBundles/WebGL/font_79541153ebb09ca53829f1fa9562f187

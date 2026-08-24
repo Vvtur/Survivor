@@ -21,7 +21,7 @@ const ctx = sharedCanvas.getContext('2d');
 const RANK_KEY = 'bestTime';
 
 let lastList = [];      // 最近一次拉到的好友数据（头像异步加载完成后用它重绘，不重复拉接口）
-let avatarCache = {};   // openId -> Image（头像缓存，整局生命周期复用）
+let avatarCache = {};   // avatarUrl -> Image（头像缓存，整局生命周期复用）
 
 console.log('[open-data] booted, canvas default size:', sharedCanvas.width, 'x', sharedCanvas.height);
 
@@ -37,10 +37,16 @@ wx.onMessage((msg) => {
 
 // 拉取"也玩本游戏的好友"的托管数据（自己也在返回列表里）
 function fetchAndDraw() {
+    avatarCache = {}; // 每次拉取重建头像缓存：授权后 avatarUrl 会变成真实的，避免一直画旧的脱敏头像
     wx.getFriendCloudStorage({
         keyList: [RANK_KEY],
         success: (res) => {
-            lastList = parseAndSort(res.data || []);
+            const raw = res.data || [];
+            // 诊断：打印接口原始返回的身份字段（vConsole 按 [open-data] 过滤）
+            //   o=openId, n=nickName, a=avatarUrl 前24字符
+            //   若两行 o 相同/为空 → 缓存 key 冲突；若 a 相同 → 接口返回同一头像（平台数据问题）
+            console.log('[open-data] raw identities:', raw.map(i => ({ o: i.openId, n: i.nickName, a: (i.avatarUrl || '').slice(0, 24) })));
+            lastList = parseAndSort(raw);
             console.log('[open-data] friends with record:', lastList.length);
             draw(lastList);
         },
@@ -145,9 +151,12 @@ function drawRow(item, rank, y, rowH, unit, W) {
     ctx.fillText(formatTime(item.score), W - unit * 8, y + rowH / 2);
 }
 
-// 头像：已加载则圆形裁剪绘制；未加载先画占位圆并触发加载，加载完成后整榜重绘
+// 头像：已加载则圆形裁剪绘制；未加载先画占位圆并触发加载，加载完成后整榜重绘。
+// 缓存 key 用 avatarUrl 而不是 openId：匿名/隐私状态下 openId 可能为空或重复，
+// 用 openId 做 key 会让不同玩家挤进同一缓存槽，画出同一张头像。
 function drawAvatar(item, x, y, size) {
-    const img = avatarCache[item.openId];
+    const cacheKey = item.avatarUrl;
+    const img = cacheKey ? avatarCache[cacheKey] : null;
     if (img && img.__loaded) {
         ctx.save();
         ctx.beginPath();
@@ -165,15 +174,15 @@ function drawAvatar(item, x, y, size) {
     ctx.fill();
 
     // 只触发一次加载，完成后用已缓存的数据重绘（不重复调 getFriendCloudStorage）
-    if (!img && item.avatarUrl) {
+    if (!img && cacheKey) {
         const image = wx.createImage();
         image.__loaded = false;
         image.onload = () => {
             image.__loaded = true;
             draw(lastList);
         };
-        image.src = item.avatarUrl;
-        avatarCache[item.openId] = image;
+        image.src = cacheKey;
+        avatarCache[cacheKey] = image;
     }
 }
 

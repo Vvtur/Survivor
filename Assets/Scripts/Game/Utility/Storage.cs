@@ -45,4 +45,22 @@ public class Storage : IUtility
         return PlayerPrefs.GetFloat(key, defaultValue);
 #endif
     }
+
+    public void SaveString(string key, string value)
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WeChatWASM.WX.StorageSetStringSync(key, value);
+#else
+        PlayerPrefs.SetString(key, value);
+#endif
+    }
+
+    public string GetString(string key, string defaultValue = "")
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        return WeChatWASM.WX.StorageGetStringSync(key, defaultValue);
+#else
+        return PlayerPrefs.GetString(key, defaultValue);
+#endif
+    }
 }

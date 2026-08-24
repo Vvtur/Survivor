@@ -23,6 +23,10 @@ namespace QFramework.UI
 			mData = uiData as LeaderboardPanelData ?? new LeaderboardPanelData();
 
 			Btn_Close.onClick.AddListener(CloseSelf);
+			// 分享按钮：统一走邀请链路（query 带 inviter）——所有分享入口都能带来邀请奖励，
+			// 避免玩家从排行榜分享导致好友进入后不计入 invite_events
+			Btn_Share.onClick.AddListener(() =>
+				GameArchitecture.Interface.GetSystem<IInviteSystem>().ShareWithInvite(null));
 		}
 
 		Texture2D mBoardTex; // 占位纹理（复用，避免每次打开泄漏一张）
@@ -42,8 +46,16 @@ namespace QFramework.UI
 			// 整块 RawImage 只显示画布第一行像素的拉伸（纯色背景可见、画面中部的文字永远不可见）。
 			RawImage_Board.uvRect = new Rect(0, 1, 1, -1);
 
-			// RawImage 屏幕矩形 → 微信要求的"左上角原点"屏幕坐标
-			// （UIRoot 为 ScreenSpaceOverlay：worldCorners 直接就是屏幕像素）
+			// 显示开放数据域画布（头像昵称授权已在开始界面前置处理，见 GameStartPanel）
+			ShowBoard();
+#endif
+			// 编辑器：无微信运行时，面板显示占位纹理（全白/无内容属正常）
+		}
+
+		// RawImage 屏幕矩形 → 微信要求的"左上角原点"屏幕坐标
+		// （UIRoot 为 ScreenSpaceOverlay：worldCorners 直接就是屏幕像素）
+		void ShowBoard()
+		{
 			var corners = new Vector3[4];
 			RawImage_Board.rectTransform.GetWorldCorners(corners); // [0]左下 [1]左上 [2]右上
 			float x = corners[0].x;
@@ -53,8 +65,6 @@ namespace QFramework.UI
 
 			WeChatWASM.WX.GetOpenDataContext(); // 首次调用会初始化沙盒（可重复调，内部有缓存）
 			WeChatWASM.WX.ShowOpenData(mBoardTex, (int)x, (int)y, (int)w, (int)h);
-#endif
-			// 编辑器：无微信运行时，面板显示占位纹理（全白/无内容属正常）
 		}
 
 		protected override void OnClose()

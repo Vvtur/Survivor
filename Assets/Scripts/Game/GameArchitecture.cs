@@ -21,8 +21,15 @@ namespace QFramework.Gameplay
 			RegisterUtility<Storage>(new Storage());
 
     		// 云存档系统放最后注册：OnInit 会同步 GetModel/GetUtility，
-    		// 必须等 GameModel 和 Storage 都已注册（QF 注册即触发 OnInit）
-    		RegisterSystem<ICloudSaveSystem>(new CloudSaveSystem());
+			// 必须等 GameModel 和 Storage 都已注册（QF 注册即触发 OnInit）
+			RegisterSystem<ICloudSaveSystem>(new CloudSaveSystem());
+
+			// 微信平台能力（分享/头像昵称授权/排行榜上报）：OnInit 为空，方法调用时才取 Utility，顺序无要求
+			RegisterSystem<IWXPlatformSystem>(new WXPlatformSystem());
+
+			// 邀请有礼（分享带 inviter / 好友进入上报 / 领奖校验）：
+			// OnInit 注册 OnShow 并取 openid，须在 CloudSaveSystem（cloud.Init）之后
+			RegisterSystem<IInviteSystem>(new InviteSystem());
     	}
     }
 }

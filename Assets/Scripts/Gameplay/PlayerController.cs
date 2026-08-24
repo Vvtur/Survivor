@@ -239,7 +239,7 @@ namespace QFramework.Gameplay
 			Debug.Log("GameOver");
 			isOver = true;
 			// 死亡/胜利结算：上报本局存活时间到微信好友排行榜（未破纪录时内部静默跳过）
-			WXLeaderboard.ReportSurviveTime(Mathf.CeilToInt(this.GetSystem<IWaveSystem>().ElapsedTime));
+			this.GetSystem<IWXPlatformSystem>().ReportSurviveTime(Mathf.CeilToInt(this.GetSystem<IWaveSystem>().ElapsedTime));
 			StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
 			gameObject.SetActive(false); // 主角消失
 			Time.timeScale = 0f;         // 暂停
