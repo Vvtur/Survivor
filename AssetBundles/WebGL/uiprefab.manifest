@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 2805097588
+CRC: 2657924611
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 80dc4df4a77c9cd03902b0d5cd61bf73
+    Hash: fd23ab8284583c370a38fc902a08e590
   TypeTreeHash:
     serializedVersion: 2
     Hash: e5690103f4955e3e43b799936637260d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b4274ed98dcf405baeb9271e5dbe2fce
+    Hash: 70fd38e16ed1c3f2dc1d1b3bf067f8ce
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -105,4 +105,4 @@ Assets:
 - Assets/Res/Art/UIPrefab/Cotent/Txt_Damage.prefab
 - Assets/Res/Art/UIPrefab/PlayerInfoPanel.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/font_7ba3665a6fbedfc26759edc077ede9c0
+- E:/UN/Survivor/AssetBundles/WebGL/font_b4abd401755f1b5a4825b7bf8508ddea

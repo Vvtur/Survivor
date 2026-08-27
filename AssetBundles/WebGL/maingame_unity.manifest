@@ -101,7 +101,7 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Scenes/MainGame.unity
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/character_c8bfed174e1ebf59c14b5120288d8d63
-- E:/UN/Survivor/AssetBundles/WebGL/font_7ba3665a6fbedfc26759edc077ede9c0
-- E:/UN/Survivor/AssetBundles/WebGL/prefabs_92684b9b6a5e32b4c7ca0e5054979cbd
-- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_80dc4df4a77c9cd03902b0d5cd61bf73
+- E:/UN/Survivor/AssetBundles/WebGL/character_d64e45230ab55d92876065398a4bb6d6
+- E:/UN/Survivor/AssetBundles/WebGL/font_b4abd401755f1b5a4825b7bf8508ddea
+- E:/UN/Survivor/AssetBundles/WebGL/prefabs_1e02ef927dcd643c976fa1fccabb8f2c
+- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_fd23ab8284583c370a38fc902a08e590

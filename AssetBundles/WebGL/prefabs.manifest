@@ -1,10 +1,10 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 908392274
+CRC: 18844431
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 92684b9b6a5e32b4c7ca0e5054979cbd
+    Hash: 1e02ef927dcd643c976fa1fccabb8f2c
   TypeTreeHash:
     serializedVersion: 2
     Hash: 43ebf8ce14420dffc7257d65903b8828
@@ -61,4 +61,4 @@ Assets:
 - Assets/Res/Art/Prefabs/Enemy.prefab
 - Assets/Res/Art/Prefabs/Player.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/character_c8bfed174e1ebf59c14b5120288d8d63
+- E:/UN/Survivor/AssetBundles/WebGL/character_d64e45230ab55d92876065398a4bb6d6
