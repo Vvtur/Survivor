@@ -26,6 +26,7 @@ namespace QFramework.UI
 			});
 
 			// 分享：拉起微信转发面板（query 带 inviter）；微信拿不到分享成功回调，提示文案按"已发起分享"表述
+			// 注：UIPanel 基类不实现 IController，无法用 this.GetSystem<> 扩展方法
 			Btn_Share.onClick.AddListener(() =>
 			{
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效

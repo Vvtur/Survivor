@@ -145,7 +145,7 @@ namespace QFramework.Gameplay
 			input.Dispose();
 		}
 
-		// 游戏胜利：由 GameManagerSystem 发送 GameWinEvent 触发
+		// 游戏胜利：由 WaveSystem 发送 GameWinEvent 触发
 		private void OnGameWin(GameWinEvent e)
 		{
 			AudioKit.PlaySound(AudioNames.Victory); // 胜利音效

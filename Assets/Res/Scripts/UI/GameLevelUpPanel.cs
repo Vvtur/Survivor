@@ -54,6 +54,8 @@ namespace QFramework.UI
 					{
 						AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 						// 选择能力 → 通过 Command 修改 Model 属性
+						// 注：UIPanel 基类不实现 IController，无法用 this.SendCommand 扩展方法，
+						// 只能通过 GameArchitecture.Interface 静态单例访问
 						GameArchitecture.Interface.SendCommand(new ChooseAbilityCommand(ability));
 						Time.timeScale = 1f; // 恢复游戏
 						UIKit.ClosePanel<GameLevelUpPanel>();

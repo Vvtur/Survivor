@@ -29,6 +29,7 @@ namespace QFramework.UI
 			});
 			// 分享按钮：统一走邀请链路（query 带 inviter）——所有分享入口都能带来邀请奖励，
 			// 避免玩家从排行榜分享导致好友进入后不计入 invite_events
+			// 注：UIPanel 基类不实现 IController，无法用 this.GetSystem<> 扩展方法
 			Btn_Share.onClick.AddListener(() =>
 			{
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效

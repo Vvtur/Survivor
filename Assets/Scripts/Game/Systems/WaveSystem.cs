@@ -84,13 +84,19 @@ namespace QFramework.Gameplay
         }
 
         /// <summary>
-        /// 生成一个敌人，强度（血量）随游戏时间递增
+        /// 生成一个敌人，强度（血量）随游戏时间递增。
+        /// QF 规范：System 不能 SendCommand（只有 IController 能），改为发送事件，
+        /// 由 IController 层（WaveDriver）接收后用 Command 执行。
         /// </summary>
         private void SpawnEnemy()
         {
             // 强度系数：随时间线性增长，系数从配置读取（如 0.02/s → 1 分钟 2.2 倍血量）
             var power = 1f + mElapsedTime * mModel.EnemyPowerPerSecond.Value;
-            GameArchitecture.Interface.SendCommand(new SpawnEnemyCommand(GetSpawnPosition(), power));
+            this.SendEvent(new SpawnEnemyRequestEvent
+            {
+                SpawnPosition = GetSpawnPosition(),
+                Power = power,
+            });
         }
 
         private Vector3 GetSpawnPosition()

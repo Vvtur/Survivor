@@ -14,6 +14,7 @@ namespace QFramework.UI
 		protected override void OnInit(IUIData uiData = null)
 		{
 			mData = uiData as ShopPanelData ?? new ShopPanelData();
+			// 注：UIPanel 基类不实现 IController，无法用 this.GetModel / this.SendCommand 扩展方法
 			model = GameArchitecture.Interface.GetModel<GameModel>();
 			// please add init code here
 			Btn_AttackAdd.onClick.AddListener(() =>

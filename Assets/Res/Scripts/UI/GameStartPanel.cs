@@ -85,6 +85,7 @@ namespace QFramework.UI
 #if UNITY_WEBGL && !UNITY_EDITOR
 			// 邀请有礼（被邀请方）：冷启动参数里带 inviter 则上报（幂等，一人只计一次；无效参数云端静默跳过）
 			// 热启动（游戏开着时从分享卡片再进入）由 InviteSystem.OnInit 注册的 WX.OnShow 处理
+			// 注：UIPanel 基类不实现 IController，无法用 this.GetSystem<> 扩展方法
 			GameArchitecture.Interface.GetSystem<IInviteSystem>().TrackInviteFromLaunch();
 
 			// 进游戏即处理"头像昵称"授权（避免开榜时才弹、新玩家看到脱敏数据）：
