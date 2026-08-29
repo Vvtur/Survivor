@@ -230,7 +230,8 @@ namespace QFramework.Gameplay
 			if (Time.time - lastHitTime < 1f) return;
 			lastHitTime = Time.time;
 
-			mModel.HP.Value--;
+			// 扣血走 Command（QF 规范：改数据必须经过 Command，表现层不得直写 Model）
+			this.SendCommand(new DamagePlayerCommand());
 			AudioKit.PlaySound(AudioNames.PlayerHurt); // 受击音效
 			if (mModel.HP.Value <= 0)
 			{
@@ -249,7 +250,19 @@ namespace QFramework.Gameplay
 			AudioKit.StopMusic(); // 死亡/胜利结算，停止战斗 BGM
 			// 死亡/胜利结算：上报本局存活时间到微信好友排行榜（未破纪录时内部静默跳过）
 			this.GetSystem<IWXPlatformSystem>().ReportSurviveTime(Mathf.CeilToInt(this.GetSystem<IWaveSystem>().ElapsedTime));
-			StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
+			// 面板打开的协程必须挂在常驻 GameRoot 上：下面一行本对象就 SetActive(false)，
+			// 挂在自己身上的协程会被杀——首次死亡时 GameOverPanel 的 AB 还没缓存，
+			// OpenPanelAsync 还在异步等待 → 协程被杀后面板永远打不开（且 timeScale=0 卡死）。
+			// 第二次起 AB 已缓存、回调同步完成才"看起来正常"。
+			var host = FindFirstObjectByType<GameRoot>();
+			if (host != null)
+			{
+				host.StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
+			}
+			else
+			{
+				StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>()); // 兜底：找不到 GameRoot 只能挂自己
+			}
 			gameObject.SetActive(false); // 主角消失
 			Time.timeScale = 0f;         // 暂停
 		}

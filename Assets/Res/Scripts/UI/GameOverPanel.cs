@@ -37,6 +37,8 @@ namespace QFramework.UI
 
 		protected override void OnShow()
 		{
+			// 弹窗打开动画（OnShow 时物体已激活，可安全启动 tween）
+			this.PlayOpen();
 		}
 
 		protected override void OnHide()

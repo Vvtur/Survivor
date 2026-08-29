@@ -22,7 +22,7 @@ namespace QFramework.UI
 			Btn_Close.onClick.AddListener(() =>
 			{
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-				CloseSelf();
+				this.PlayClose(CloseSelf); // 先播收缩动画，动画完成后再真正关面板
 			});
 
 			// 分享：拉起微信转发面板（query 带 inviter）；微信拿不到分享成功回调，提示文案按"已发起分享"表述
@@ -47,6 +47,12 @@ namespace QFramework.UI
 		{
 			AudioKit.PlaySound(AudioNames.PanelOpen); // 面板打开音效
 			RefreshStatus();
+		}
+
+		protected override void OnShow()
+		{
+			// 弹窗打开动画（OnShow 时物体已 SetActive(true)，可安全启动 tween）
+			this.PlayOpen();
 		}
 
 		protected override void OnClose()

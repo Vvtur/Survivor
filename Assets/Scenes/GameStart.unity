@@ -127,6 +127,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1604892159}
     m_Modifications:
+    - target: {fileID: 1838927293734730721, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
+      propertyPath: m_text
+      value: "\u72D7\u732B\u732B\u5927\u5192\u9669"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1838927293734730721, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 6258130927028078606, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_Name
       value: GameStartPanel
@@ -141,27 +149,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 231.7758
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -197,7 +205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6779586163008400124, guid: 369024315f18fc04088201b5dacb6a9d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -631,6 +639,7 @@ GameObject:
   - component: {fileID: 1604892158}
   - component: {fileID: 1604892157}
   - component: {fileID: 1604892156}
+  - component: {fileID: 1604892160}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -721,6 +730,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1604892160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604892155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5905531f0827a4496b1650dbae7895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QFramework.UI.UICanvasAdapter
 --- !u!1 &2036201274
 GameObject:
   m_ObjectHideFlags: 0

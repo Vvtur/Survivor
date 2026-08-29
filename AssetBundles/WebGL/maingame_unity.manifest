@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 1675545593
+CRC: 2456756111
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a1c3277d16e8c9884b963570ed55f35d
+    Hash: 3beee78eccdc26624ba604f627761bfc
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 40393f7a0028914a8841ccf694f75d64
+    Hash: 8db615abd70d5feb51c0728d6fec50ae
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f27ee6cd3cd04f0f09d84e89e9b4cdbc
+    Hash: 54ceea24547d70e4f555532a03a8402f
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -58,6 +58,10 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f62ca0f27612d334b9f9c01b8e812699, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 3d5905531f0827a4496b1650dbae7895, type: 3}
+- Class: 114
+  Script: {instanceID: 0}
+- Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -102,6 +106,6 @@ Assets:
 - Assets/Scenes/MainGame.unity
 Dependencies:
 - E:/UN/Survivor/AssetBundles/WebGL/character_d64e45230ab55d92876065398a4bb6d6
-- E:/UN/Survivor/AssetBundles/WebGL/font_b4abd401755f1b5a4825b7bf8508ddea
+- E:/UN/Survivor/AssetBundles/WebGL/font_dc5faa7134f7028fb58a3cc0922e5642
 - E:/UN/Survivor/AssetBundles/WebGL/prefabs_1e02ef927dcd643c976fa1fccabb8f2c
-- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_fd23ab8284583c370a38fc902a08e590
+- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_ea6734c99d43dd45f8affc7451821984

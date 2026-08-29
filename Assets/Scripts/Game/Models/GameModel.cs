@@ -13,9 +13,18 @@ namespace QFramework.Gameplay
         /// <summary>场上剩余敌人数</summary>
         public BindableProperty<int> AliveEnemies { get; } = new BindableProperty<int>();
         public BindableProperty<int> PlayerGem { get; } = new BindableProperty<int>();
+        /// <summary>本局击杀数（主游戏 HUD 显示用，每局重置）</summary>
+        public BindableProperty<int> KillCount { get; } = new(0);
         // 玩家成长属性（供能力系统修改）
         public BindableProperty<int> Level { get; } = new(1);
         public BindableProperty<int> Exp { get; } = new(0);
+
+        /// <summary>
+        /// 升级所需经验（公式唯一出处）。
+        /// LevelUpSystem 判断升级与 PlayerInfoPanel 显示经验条共用，
+        /// 勿在别处重写 "Level * 2 + 1"。
+        /// </summary>
+        public int ExpToNextLevel => Level.Value * 2 + 1;
         public BindableProperty<float> AttackDamage { get; } = new(1f);
         public BindableProperty<float> MoveSpeed { get; } = new(5f);
         public BindableProperty<int> MaxHp { get; } = new(3);
@@ -56,6 +65,7 @@ namespace QFramework.Gameplay
             AttackRadius.Value = mConfigAttackRadius;
             WeaponCount.Value = mConfigWeaponCount;
             AliveEnemies.Value = 0;
+            KillCount.Value = 0;
         }
 
         /// <summary>

@@ -40,33 +40,47 @@ namespace QFramework.UI
 
 				var itemPrefab = res.Asset.As<GameObject>();
 
-				// 传进来几个能力，就生成几个按钮
-				foreach (var ability in mData.Options)
+			// 传进来几个能力，就生成几个按钮
+			int optionIndex = 0;
+			foreach (var ability in mData.Options)
+			{
+				var item = Instantiate(itemPrefab, Panel.rectTransform).GetComponent<AbilityOptionItem>();
+				if (item == null)
 				{
-					var item = Instantiate(itemPrefab, Panel.rectTransform).GetComponent<AbilityOptionItem>();
-					if (item == null)
+					Debug.LogError("Btn_Option 预制体根节点缺少 AbilityOptionItem 组件，请在预制体上手动添加");
+					continue;
+				}
+				item.SetData(ability);
+				// 选项错峰弹出（动画内部 SetUpdate(true)，timeScale=0 也能播）
+				item.GetComponent<RectTransform>().PlayIntro(optionIndex * 0.06f);
+				optionIndex++;
+				item.GetComponent<Button>().onClick.AddListener(() =>
+				{
+					AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
+					// 选择能力 → 通过 Command 修改 Model 属性（数据立即生效）
+					// 注：UIPanel 基类不实现 IController，无法用 this.SendCommand 扩展方法，
+					// 只能通过 GameArchitecture.Interface 静态单例访问
+					GameArchitecture.Interface.SendCommand(new ChooseAbilityCommand(ability));
+
+					// 先播收缩动画（期间禁用所有按钮防连点），动画完成后才恢复时间缩放并真正关面板。
+					// timeScale=1 挪到动画后：避免收缩动画还没播完敌人就恢复移动。
+					foreach (var btn in GetComponentsInChildren<Button>(true)) btn.interactable = false;
+					this.PlayClose(() =>
 					{
-						Debug.LogError("Btn_Option 预制体根节点缺少 AbilityOptionItem 组件，请在预制体上手动添加");
-						continue;
-					}
-					item.SetData(ability);
-					item.GetComponent<Button>().onClick.AddListener(() =>
-					{
-						AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-						// 选择能力 → 通过 Command 修改 Model 属性
-						// 注：UIPanel 基类不实现 IController，无法用 this.SendCommand 扩展方法，
-						// 只能通过 GameArchitecture.Interface 静态单例访问
-						GameArchitecture.Interface.SendCommand(new ChooseAbilityCommand(ability));
 						Time.timeScale = 1f; // 恢复游戏
 						UIKit.ClosePanel<GameLevelUpPanel>();
 					});
-				}
+				});
+			}
 			});
 			mResLoader.LoadAsync();
 		}
 
 		protected override void OnShow()
 		{
+			// 弹窗打开动画（OnShow 时物体已 SetActive(true)，可安全启动 tween；
+			// OnOpen 运行在 SetActive 之前，不能在那里播动画）
+			this.PlayOpen();
 		}
 
 		protected override void OnHide()

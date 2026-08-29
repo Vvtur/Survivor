@@ -16,15 +16,21 @@ namespace QFramework.UI
 		public UnityEngine.UI.Button Btn_Board;
 		[SerializeField]
 		public UnityEngine.UI.Button Btn_Invite;
-		
+		[SerializeField]
+		public UnityEngine.UI.Button Btn_Shop;
+		[SerializeField]
+		public TMPro.TextMeshProUGUI Txt_Title;
+
 		private GameStartPanelData mPrivateData = null;
-		
+
 		protected override void ClearUIComponents()
 		{
 			Btn_Start = null;
 			Btn_Board = null;
 			Btn_Invite = null;
-			
+			Btn_Shop = null;
+			Txt_Title = null;
+
 			mData = null;
 		}
 		

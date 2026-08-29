@@ -21,7 +21,7 @@ namespace QFramework.Gameplay
             // 监听经验变化，够阈值就升级并广播
             model.Exp.Register(newExp =>
             {
-                var need = model.Level.Value * 2 + 1;   // 升级所需经验公式
+                var need = model.ExpToNextLevel;   // 升级所需经验（公式唯一出处：GameModel）
                 if (newExp >= need)
                 {
                     model.Exp.Value -= need;

@@ -9,7 +9,9 @@ namespace QFramework.Gameplay
     {
         protected override void OnExecute()
         {
-            this.GetModel<GameModel>().AliveEnemies.Value--;
+            var model = this.GetModel<GameModel>();
+            model.AliveEnemies.Value--;
+            model.KillCount.Value++;   // 本局击杀数（HUD 显示用）
             this.SendEvent(new EnemyKilledEvent()); // 数据变更通知
         }
     }
