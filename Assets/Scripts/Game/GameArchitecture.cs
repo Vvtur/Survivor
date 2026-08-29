@@ -13,6 +13,9 @@ namespace QFramework.Gameplay
     		RegisterSystem<IAbilityPoolSystem>(new AbilityPoolSystem());
     		RegisterSystem<IGameAssetsSystem>(new GameAssetsSystem());
     		RegisterSystem<IWaveSystem>(new WaveSystem());
+
+    		// 掉落系统：监听 EnemyKilledEvent 按权重掷点，依赖 GameAssetsSystem 生成掉落物（惰性解析）
+    		RegisterSystem<IDropSystem>(new DropSystem());
 			
     		RegisterModel(new GameModel());
 

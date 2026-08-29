@@ -1,7 +1,15 @@
+using UnityEngine;
+
 namespace QFramework.Gameplay
 {
-    /// <summary>敌人数变更事件（由 KillEnemyCommand 发出）</summary>
-    public struct EnemyKilledEvent { }
+    /// <summary>
+    /// 敌人数变更事件（由 KillEnemyCommand 发出）。
+    /// Position = 敌人死亡位置，DropSystem 据此在原地生成掉落物。
+    /// </summary>
+    public struct EnemyKilledEvent
+    {
+        public Vector3 Position;
+    }
     /// <summary>游戏胜利事件（由 WaveSystem 发出，存活时间到触发）</summary>
     public struct GameWinEvent { }
     /// <summary>主角升级事件（由 LevelUpSystem 发出，表现层监听后打开升级面板）</summary>

@@ -74,6 +74,8 @@ namespace QFramework.Gameplay
 			// 刷怪系统局内状态归零（System 只初始化一次，不随场景重载重跑：
 			// 不重置则上一局的累计时间会带到下一局——敌人强度沿用、胜利判定提前）
 			this.GetSystem<IWaveSystem>().ResetRun();
+			// 掉落乘区归位重置（局内掉率升级不跨局残留，与 WaveSystem.ResetRun 同理）
+			this.GetSystem<IDropSystem>().ResetRun();
 
 			// 战斗 BGM（AudioKit 经 ResKit 从 AB 异步加载，进入战斗循环播放）
 			AudioKit.PlayMusic(AudioNames.BgmBattle);
@@ -217,6 +219,19 @@ namespace QFramework.Gameplay
 			{
 				var enemy = mAttackTargets[i];
 				mAssetsSystem.SpawnWeapon(enemy.transform.position, AttackDamage, enemy);
+			}
+
+			// 穿透剑（解锁后随攻击齐发）：朝最近的敌人发射一把固定弹道的飞剑。
+			// 方向按发射瞬间锁定、飞行中不追踪（怪物可走位躲开）；穿透数随等级成长，
+			// 数值换算全部在 GameAssetsSystem 内按 PierceSwordConfig 完成。
+			var pierceLevel = mModel.PierceSwordLevel.Value;
+			if (pierceLevel > 0)
+			{
+				var toNearest = mAttackTargets[0].transform.position - transform.position; // 首个即最近
+				var dir = toNearest.sqrMagnitude > 0.0001f
+					? (Vector2)toNearest.normalized
+					: Vector2.right; // 敌人与玩家重叠时的退化保护
+				mAssetsSystem.SpawnPierceSword(transform.position, dir, pierceLevel);
 			}
 		}
 

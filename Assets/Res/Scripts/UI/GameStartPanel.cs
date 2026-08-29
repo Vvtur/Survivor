@@ -26,7 +26,7 @@ namespace QFramework.UI
 			{
 				if (Time.unscaledTime < clickableAt) return;
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-				AudioKit.PlaySound(AudioNames.GameStart);   // 开始游戏音效
+				AudioKit.PlaySound(AudioNames.GameStart, volume: 0.05f);  // 一半音量// 开始游戏音效
 				// 场景切换统一走常驻 GameRoot 的 loader（单参写法，见 GameRoot.SwitchScene 注释）
 				// GameRoot.SwitchScene("MainGame");
 				mSceneLoader ??= ResLoader.Allocate();
@@ -54,6 +54,14 @@ namespace QFramework.UI
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				StartCoroutine(UIKit.OpenPanelAsync<InvitePanel>());
 			});
+
+			// 设置入口（音乐/音效）：打开设置面板，数据源 AudioKit.Settings（自带 PlayerPrefs 持久化）
+			Btn_Settings.onClick.AddListener(() =>
+			{
+				if (Time.unscaledTime < clickableAt) return;
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
+				StartCoroutine(UIKit.OpenPanelAsync<SettingsPanel>());
+			});
 		}
 
 		private void Start()
@@ -66,6 +74,8 @@ namespace QFramework.UI
 			if (Btn_Board != null) Btn_Board.GetComponent<RectTransform>().PlayIntro(0.24f);
 			if (Btn_Shop != null) Btn_Shop.GetComponent<RectTransform>().PlayIntro(0.30f);
 			if (Btn_Invite != null) Btn_Invite.GetComponent<RectTransform>().PlayIntro(0.36f);
+			// 设置按钮也加入错峰队列：齿轮通常在右上角，与底部按钮分组时序：标题之后最先
+			if (Btn_Settings != null) Btn_Settings.GetComponent<RectTransform>().PlayIntro(0.18f);
 		}
 
 		protected override void OnInit(IUIData uiData = null)

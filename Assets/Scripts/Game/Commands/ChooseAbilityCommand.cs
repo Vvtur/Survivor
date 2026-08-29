@@ -50,6 +50,12 @@ namespace QFramework.Gameplay
                     model.WeaponCount.Value += (int)mAbility.Value;
                     break;
 
+                case AbilityEffect.PierceSword:
+                    // 穿透剑：首次选中 = 解锁（等级 1），再次选中 = 等级 +1（穿透数随等级 +1）。
+                    // 等级即升级框架：能力可重复抽取，数值成长由 PierceSwordConfig + 等级换算。
+                    model.PierceSwordLevel.Value += 1;
+                    break;
+
                 default:
                     LogKit.E($"[ChooseAbilityCommand] 未处理的能力效果: {mAbility.Effect}");
                     break;

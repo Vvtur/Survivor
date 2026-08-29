@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 18844431
+CRC: 1190728090
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1e02ef927dcd643c976fa1fccabb8f2c
+    Hash: 126992025ebff0f0454c6fea8036e2c3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 43ebf8ce14420dffc7257d65903b8828
+    Hash: 171defe121109372ff57a2aefece218a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6dd7e611752e49929d623184b5811f19
+    Hash: 6bbc65c92ede0502615b902d48580b4a
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -40,6 +40,12 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 2b0f14b9c7e806f4ea60390f9af54bf4, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 6c3e6805a1bb91749969304557a0092e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c137a24d5bcca78438222d9cb371a975, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 88eb1e70a71e40cba6cffd6cb10759d4, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4511ce4ffb2b74c4a9cd65351b91dd56, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 884aa0ccb71b3694487311845796f5e7, type: 3}
@@ -56,8 +62,11 @@ SerializeReferenceClassIdentifiers:
   ClassName: QFramework.OtherBind
 Assets:
 - Assets/Res/Art/Prefabs/Gold.prefab
+- Assets/Res/Art/Prefabs/Magnet.prefab
+- Assets/Res/Art/Prefabs/PierceSword.prefab
 - Assets/Res/Art/Prefabs/Gem.prefab
 - Assets/Res/Art/Prefabs/Weapon.prefab
+- Assets/Res/Art/Prefabs/HealthPack.prefab
 - Assets/Res/Art/Prefabs/Enemy.prefab
 - Assets/Res/Art/Prefabs/Player.prefab
 Dependencies:

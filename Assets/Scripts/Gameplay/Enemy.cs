@@ -58,7 +58,8 @@ namespace QFramework.Gameplay
 			SelfRigidbody2D.linearVelocity = Vector2.zero; // 速度归零
 			SelfBoxCollider2D.enabled = false;
 
-			this.SendCommand<KillEnemyCommand>(); // 通知系统：敌人被击杀
+			// 通知系统：敌人被击杀（携带死亡位置，DropSystem 收到事件后决定掉落什么）
+			this.SendCommand(new KillEnemyCommand(transform.position));
 
 			// 1 秒内透明度渐变到 0，完成后销毁（ActionKit 链式）
 			var originalColor = SelfSpriteRenderer.color;
@@ -74,29 +75,10 @@ namespace QFramework.Gameplay
 					{
 						SelfSpriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
 					}
-					DropLoot(); // 死亡掉落：50% 金币 / 50% 经验
 					Destroy(gameObject);
 				})
 				.Start(this);
 				// .IgnoreTimeScale(); // 不受 timeScale=0 影响
-		}
-
-		/// <summary>
-		/// 死亡掉落：一半概率掉金币（Gold），一半概率掉经验宝石（Gem）
-		/// </summary>
-		private void DropLoot()
-		{
-			// 50/50 概率决定掉落类型
-			var isCoin = UnityEngine.Random.value < 0.5f;
-
-			if (isCoin)
-			{
-				this.GetSystem<IGameAssetsSystem>().SpawnGold(transform.position);
-			}
-			else
-			{
-				this.GetSystem<IGameAssetsSystem>().SpawnGem(transform.position);
-			}
 		}
 
 		/// <summary>

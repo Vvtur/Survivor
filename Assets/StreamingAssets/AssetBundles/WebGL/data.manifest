@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 3840642355
+CRC: 82205307
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 42e9cf2d9c4db69fd0186ae18f1f98a5
+    Hash: cddd514a05d85331bc55ff9ba27d12b3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a0c0fa5a6ebc5c8db4a6fa9b942dd8b8
+    Hash: 19f61df1a876a7ee5c5afa0e3a06b303
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 0499c538e3f55fcf05a14f9e09fb7ac8
+    Hash: 50cf4461d87633c86a3a1341dfa18cb4
 HashAppended: 1
 ClassTypes:
 - Class: 114
@@ -18,16 +18,25 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ecfb39e6d98b8ba4c85adfae53e9fe5a, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 6fc568c235b66ad45ad63cdec80f0460, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: b54adfdd8cb74e74d8caba04b146e6df, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 37285b6ebdf543dcad71ea5f8bc644b2, type: 3}
 - Class: 115
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: DropConfig/DropEntry
 Assets:
 - Assets/Res/GameRes/Data/AttackAdd.asset
 - Assets/Res/GameRes/Data/GameConfigDate.asset
 - Assets/Res/GameRes/Data/SpeedAdd.asset
 - Assets/Res/GameRes/Data/MoreWeapon.asset
+- Assets/Res/GameRes/Data/DropConfig.asset
 - Assets/Res/GameRes/Data/AbilityDatabase.asset
 - Assets/Res/GameRes/Data/MaxHpUp.asset
+- Assets/Res/GameRes/Data/PierceSwordConfig.asset
 - Assets/Res/GameRes/Data/AttackSpeedUp.asset
+- Assets/Res/GameRes/Data/PierceSword.asset
 Dependencies: []

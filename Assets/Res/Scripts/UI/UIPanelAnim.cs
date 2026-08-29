@@ -84,6 +84,65 @@ namespace QFramework.UI
 			target.DOScale(1f, duration).SetDelay(delay).SetUpdate(true).SetEase(Ease.OutBack);
 		}
 
+		/// <summary>
+		/// 右侧滑入动画：透明度 0→1 + 面板根从屏外右侧（+rect.width）滑到 x=0。
+		/// 位移量 = 面板根 RectTransform 宽度（面板全屏 stretch 时即为 Screen.width）。
+		/// 动画期间开交互，收尾到位才允许背景接住点击。
+		/// 用于"侧边抽屉式"面板（如设置面板从右滑入）。
+		/// </summary>
+		public static void PlaySlideIn(this MonoBehaviour panel, float duration = 0.25f)
+		{
+			if (panel == null) return;
+			var root = (RectTransform)panel.transform;
+			var cg = GetOrAddCanvasGroup(panel.gameObject);
+
+			root.DOKill();
+			cg.DOKill();
+
+			// 位移量取面板根当前宽度：stretch 全屏时 = 屏幕宽；非全屏时也按自己宽度，
+			// 看起来仍然是"从屏外右侧进入"的视觉效果
+			float offRight = root.rect.width;
+			cg.alpha = 0f;
+			cg.blocksRaycasts = false;   // 动画期间不允许点（避免"点中正在飞入的半透明面板"）
+			cg.interactable = false;
+			root.localPosition = new Vector3(offRight, root.localPosition.y, root.localPosition.z);
+
+			cg.DOFade(1f, duration).SetUpdate(true).SetEase(Ease.OutQuad);
+			root.DOLocalMoveX(0f, duration).SetUpdate(true).SetEase(Ease.OutCubic)
+				.OnComplete(() =>
+				{
+					// 收尾开交互（如果面板自身要求能接住点击，例如背景的 Img_BG）
+					cg.blocksRaycasts = true;
+					cg.interactable = true;
+				});
+		}
+
+		/// <summary>
+		/// 右侧滑出动画：透明度 1→0 + 面板根从 x=0 滑到屏外右侧（+rect.width）。
+		/// 动画期间关掉交互防连点；onDone 回调里由调用方执行真正的关闭（CloseSelf / Hide / UIKit.ClosePanel）。
+		/// 用于"侧边抽屉式"面板的反向出场。
+		/// </summary>
+		public static void PlaySlideOut(this MonoBehaviour panel, Action onDone, float duration = 0.22f)
+		{
+			if (panel == null)
+			{
+				onDone?.Invoke();
+				return;
+			}
+			var root = (RectTransform)panel.transform;
+			var cg = GetOrAddCanvasGroup(panel.gameObject);
+
+			root.DOKill();
+			cg.DOKill();
+			cg.blocksRaycasts = false;
+			cg.interactable = false;
+
+			float offRight = root.rect.width;
+			cg.DOFade(0f, duration).SetUpdate(true).SetEase(Ease.InQuad);
+			root.DOLocalMoveX(offRight, duration).SetUpdate(true).SetEase(Ease.InCubic)
+				.OnComplete(() => onDone?.Invoke());
+		}
+
 		static CanvasGroup GetOrAddCanvasGroup(GameObject go)
 		{
 			var cg = go.GetComponent<CanvasGroup>();

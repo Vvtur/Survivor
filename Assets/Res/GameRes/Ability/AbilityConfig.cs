@@ -19,4 +19,5 @@ public enum AbilityEffect
     AttackSpeedUp, // 攻击速度提升（缩短攻击间隔）
     AttackRangeUp, // 攻击范围扩大
     MoreWeapon, 
+    PierceSword,   // 穿透剑：首次选中解锁，再次选中穿透 +1（等级存 GameModel.PierceSwordLevel）
 }

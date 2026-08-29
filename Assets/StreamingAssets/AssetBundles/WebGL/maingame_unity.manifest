@@ -7,10 +7,10 @@ Hashes:
     Hash: 3beee78eccdc26624ba604f627761bfc
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8db615abd70d5feb51c0728d6fec50ae
+    Hash: dcec4048262a1895d3e0ebe2c948ca72
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 54ceea24547d70e4f555532a03a8402f
+    Hash: 6cf628e3ac9b29898c46cf739ddbdd1d
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -106,6 +106,6 @@ Assets:
 - Assets/Scenes/MainGame.unity
 Dependencies:
 - E:/UN/Survivor/AssetBundles/WebGL/character_d64e45230ab55d92876065398a4bb6d6
-- E:/UN/Survivor/AssetBundles/WebGL/font_dc5faa7134f7028fb58a3cc0922e5642
-- E:/UN/Survivor/AssetBundles/WebGL/prefabs_1e02ef927dcd643c976fa1fccabb8f2c
-- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_ea6734c99d43dd45f8affc7451821984
+- E:/UN/Survivor/AssetBundles/WebGL/font_e2140674dd3c8cdb393a836672a042c6
+- E:/UN/Survivor/AssetBundles/WebGL/prefabs_126992025ebff0f0454c6fea8036e2c3
+- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_b02da9a6747434dbe502f5226e7c25ac

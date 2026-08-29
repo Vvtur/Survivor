@@ -1,23 +1,19 @@
-using UnityEngine;
 using QFramework;
+using UnityEngine;
 
 namespace QFramework.Gameplay
 {
-	public partial class Gem : ViewController, IController
+	/// <summary>
+	/// 经验宝石：拾取后经验 +1（升级判定由 LevelUpSystem 完成）。
+	/// 拾取流程（碰撞/音效/销毁/磁铁联动）由基类 PickupItem 统一处理。
+	/// </summary>
+	public partial class Gem : PickupItem
 	{
-		void Start()
-		{
-			// Code Here
-		}
+		public override bool CollectibleByMagnet => true;
 
-		private void OnTriggerEnter2D(Collider2D collision)
+		protected override void OnPickup()
 		{
-			if (collision.CompareTag("Player"))
-			{
-				this.SendCommand<PlayerGetGemCommand>(); // 经验 +1（写 Model）
-				AudioKit.PlaySound(AudioNames.Pickup);   // 拾取音效
-				Destroy(gameObject);                     // 宝石消失
-			}
+			this.SendCommand<PlayerGetGemCommand>(); // 经验 +1（写 Model）
 		}
 	}
 }

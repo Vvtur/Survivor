@@ -18,6 +18,12 @@ namespace QFramework.Gameplay
         // 玩家成长属性（供能力系统修改）
         public BindableProperty<int> Level { get; } = new(1);
         public BindableProperty<int> Exp { get; } = new(0);
+        /// <summary>
+        /// 待选升级次数：磁铁一次吸多颗宝石可能连升多级，LevelUpSystem 在 while 循环里
+        /// 每升一级 +1，表现层在 GameLevelUpPanel 关闭时 -1，直到 0 才真正恢复 timeScale。
+        /// 0 = 没有待选升级；N = 还有 N 次能力未选。
+        /// </summary>
+        public BindableProperty<int> PendingLevelUps { get; } = new(0);
 
         /// <summary>
         /// 升级所需经验（公式唯一出处）。
@@ -33,7 +39,9 @@ namespace QFramework.Gameplay
         public BindableProperty<float> AttackRadius { get; } = new(5f);   // 攻击范围半径，能力可扩大
         public BindableProperty<int> Money { get; } = new(0);   // 金币（跨局保留）
         public BindableProperty<float> Attack { get; } = new(0);
-        public BindableProperty<int> WeaponCount { get; } = new(1); // 同时生成的剑数（升级可加，默认 1）   
+        public BindableProperty<int> WeaponCount { get; } = new(1); // 同时生成的剑数（升级可加，默认 1）
+        /// <summary>穿透剑等级：0 = 未解锁；首次选中 = 解锁（等级 1），再次选中 = 穿透 +1</summary>
+        public BindableProperty<int> PierceSwordLevel { get; } = new(0);
 
         // 无限刷怪参数（从配置复制，运行中固定）
         public BindableProperty<float> SpawnInterval { get; } = new(3f);      // 生成间隔（秒）
@@ -57,6 +65,7 @@ namespace QFramework.Gameplay
         {
             Level.Value = 1;
             Exp.Value = 0;
+            PendingLevelUps.Value = 0; // 局内重置：清理可能残留的待选升级计数
             MaxHp.Value = mConfigMaxHp;
             HP.Value = mConfigMaxHp;
             AttackDamage.Value = mConfigAttackDamage;
@@ -64,6 +73,7 @@ namespace QFramework.Gameplay
             AttackInterval.Value = mConfigAttackInterval;
             AttackRadius.Value = mConfigAttackRadius;
             WeaponCount.Value = mConfigWeaponCount;
+            PierceSwordLevel.Value = 0; // 局内解锁的能力每局重置（重回未解锁）
             AliveEnemies.Value = 0;
             KillCount.Value = 0;
         }

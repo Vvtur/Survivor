@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 48710523
+CRC: 1212233793
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ea6734c99d43dd45f8affc7451821984
+    Hash: b02da9a6747434dbe502f5226e7c25ac
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 497ea2c18f3bab2e96e4c8c80548698d
+    Hash: 170bddd0c7df7100949bf9fbd8557f4f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d9a7da3721866c212cfe348431f18ac1
+    Hash: 72f4c97167a3604473fa381c8830b3f6
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -42,6 +42,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f62ca0f27612d334b9f9c01b8e812699, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: afda1f0d0f932d9ca4606d2a68fbc233, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 160076ae0a2b5804a89d5b679c9b13b0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 3d5905531f0827a4496b1650dbae7895, type: 3}
@@ -66,6 +68,10 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -76,6 +82,8 @@ ClassTypes:
 - Class: 223
   Script: {instanceID: 0}
 - Class: 224
+  Script: {instanceID: 0}
+- Class: 225
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: QFramework.CoreKit
@@ -99,9 +107,14 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
 - AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
+- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Toggle/ToggleEvent
 Assets:
 - Assets/Res/Art/UIPrefab/LeaderboardPanel.prefab
+- Assets/Res/Art/UIPrefab/SettingsPanel.prefab
 - Assets/Res/Art/UIPrefab/ShopPanel.prefab
 - Assets/Res/Art/UIPrefab/GameLevelUpPanel.prefab
 - Assets/Res/Art/UIPrefab/GameStartPanel.prefab
@@ -111,4 +124,4 @@ Assets:
 - Assets/Res/Art/UIPrefab/Cotent/Txt_Damage.prefab
 - Assets/Res/Art/UIPrefab/PlayerInfoPanel.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/font_dc5faa7134f7028fb58a3cc0922e5642
+- E:/UN/Survivor/AssetBundles/WebGL/font_fdd4fab6fb9a6ea42a6c4e4121865b89

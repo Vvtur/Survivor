@@ -18,6 +18,9 @@ namespace QFramework.UI
 		public UnityEngine.UI.Button Btn_Invite;
 		[SerializeField]
 		public UnityEngine.UI.Button Btn_Shop;
+		/// <summary>设置入口按钮（右上角齿轮），点击打开 SettingsPanel</summary>
+		[SerializeField]
+		public UnityEngine.UI.Button Btn_Settings;
 		[SerializeField]
 		public TMPro.TextMeshProUGUI Txt_Title;
 
@@ -29,6 +32,7 @@ namespace QFramework.UI
 			Btn_Board = null;
 			Btn_Invite = null;
 			Btn_Shop = null;
+			Btn_Settings = null;
 			Txt_Title = null;
 
 			mData = null;
