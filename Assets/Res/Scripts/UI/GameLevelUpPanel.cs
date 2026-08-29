@@ -7,7 +7,7 @@ namespace QFramework.UI
 {
 	public class GameLevelUpPanelData : UIPanelData
 	{
-		public AbilityConfig[] Options;   // 传入几个就生成几个
+		public AbilityConfig[] Options;   // 传入几个就生成几个（RollOptions 已过滤满级/前置，不会为空）
 	}
 	public partial class GameLevelUpPanel : UIPanel
 	{
@@ -26,7 +26,7 @@ namespace QFramework.UI
 			// 先清空容器（面板可能被复用）
 			foreach (Transform child in Panel.rectTransform) Destroy(child.gameObject);
 
-			// 没传能力就直接不显示
+			// 没传能力就不显示（上游 PlayerController/重开回调已兜底，此为防御路径）
 			if (mData.Options == null || mData.Options.Length == 0) return;
 
 			// 异步加载选项预制体（WebGL 平台不支持同步加载），加载完成后再生成按钮
@@ -40,7 +40,8 @@ namespace QFramework.UI
 
 				var itemPrefab = res.Asset.As<GameObject>();
 
-			// 传进来几个能力，就生成几个按钮
+			// 传进来几个能力，就生成几个按钮（当前等级用于"解锁/Lv n→n+1"角标显示）
+			var model = GameArchitecture.Interface.GetModel<GameModel>();
 			int optionIndex = 0;
 			foreach (var ability in mData.Options)
 			{
@@ -50,7 +51,7 @@ namespace QFramework.UI
 					Debug.LogError("Btn_Option 预制体根节点缺少 AbilityOptionItem 组件，请在预制体上手动添加");
 					continue;
 				}
-				item.SetData(ability);
+				item.SetData(ability, model.GetAbilityLevel(ability.AbilityId));
 				// 选项错峰弹出（动画内部 SetUpdate(true)，timeScale=0 也能播）
 				item.GetComponent<RectTransform>().PlayIntro(optionIndex * 0.06f);
 				optionIndex++;
@@ -79,7 +80,16 @@ namespace QFramework.UI
 						{
 							// 还有未选升级：保持暂停，重新打开本面板；PlayerController.OnLevelUp 那一帧
 							// 只能开一个面板实例，后续连选就由本回调接力。
-							var options = GameArchitecture.Interface.GetSystem<IAbilityPoolSystem>().RollOptions(3);
+							var options = GameArchitecture.Interface.GetSystem<IAbilitySystem>().RollOptions(3);
+							if (options.Length == 0)
+							{
+								// 无候选（全部满级/前置未满足）：消费剩余待选并恢复游戏，防卡死
+								while (model.PendingLevelUps.Value > 0)
+									GameArchitecture.Interface.SendCommand(new ConsumePendingLevelUpCommand());
+								Time.timeScale = 1f; // 恢复游戏
+								UIKit.ClosePanel<GameLevelUpPanel>();
+								return;
+							}
 							// 重新开本面板（单例），触发 OnOpen → 清空容器 + 重建按钮。
 							// 调用有 4 个同名重载，必须用位置参数 + 全部填齐才能消歧；走
 							// OpenPanel<T>(PanelOpenType, UILevel, IUIData, string, string) 全参版本。

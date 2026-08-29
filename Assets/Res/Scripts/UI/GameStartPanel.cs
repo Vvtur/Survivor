@@ -26,7 +26,7 @@ namespace QFramework.UI
 			{
 				if (Time.unscaledTime < clickableAt) return;
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-				AudioKit.PlaySound(AudioNames.GameStart, volume: 0.05f);  // 一半音量// 开始游戏音效
+				AudioKit.PlaySound(AudioNames.GameStart, volume: 0.1f);  // 一半音量// 开始游戏音效
 				// 场景切换统一走常驻 GameRoot 的 loader（单参写法，见 GameRoot.SwitchScene 注释）
 				// GameRoot.SwitchScene("MainGame");
 				mSceneLoader ??= ResLoader.Allocate();

@@ -34,7 +34,7 @@ namespace QFramework.Gameplay
     /// - 运行时乘区 mWeightMultipliers 支撑后续"掉率升级选项"：
     ///   未来升级卡 Command 内调 this.GetSystem&lt;IDropSystem&gt;().AddWeightMultiplier(...)
     ///   （ICommand : ICanGetSystem，写数据链路 Command → System 合规）；
-    /// - 加载范式与 AbilityPoolSystem 一致：异步加载 + ResLoader 长期持有，防止 SO 被卸载。
+    /// - 加载范式与 AbilitySystem 一致：异步加载 + ResLoader 长期持有，防止 SO 被卸载。
     /// </summary>
     public class DropSystem : AbstractSystem, IDropSystem
     {
@@ -87,11 +87,13 @@ namespace QFramework.Gameplay
         {
             if (mConfig == null || mConfig.Entries == null || mConfig.Entries.Count == 0) return null;
 
-            // 求总权重（跳过非正权重条目）
+            // 求总权重（跳过空条目与非正权重条目；EffectiveWeight 只算一次）
             float total = 0f;
             foreach (var entry in mConfig.Entries)
             {
-                if (entry != null && EffectiveWeight(entry) > 0f) total += EffectiveWeight(entry);
+                if (entry == null) continue;
+                var w = EffectiveWeight(entry);
+                if (w > 0f) total += w;
             }
             if (total <= 0f) return null;
 
@@ -99,8 +101,10 @@ namespace QFramework.Gameplay
             var roll = Random.value * total;
             foreach (var entry in mConfig.Entries)
             {
+                // 判空必须在取权重之前：entry 为 null 时读 entry.Type 会直接 NRE
+                if (entry == null) continue;
                 var weight = EffectiveWeight(entry);
-                if (entry == null || weight <= 0f) continue;
+                if (weight <= 0f) continue;
                 roll -= weight;
                 if (roll <= 0f)
                 {

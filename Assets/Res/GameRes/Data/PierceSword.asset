@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08afe00f82644e94ebd691f6e33d4008, type: 3}
   m_Name: PierceSword
   m_EditorClassIdentifier: Assembly-CSharp::AbilityConfig
+  AbilityId: pierce_sword
   AbilityName: 穿透剑术
-  Description: 首次选中解锁：朝最近的敌人发射穿透之剑；再次选中穿透 +1
+  Description: 解锁：朝最近的敌人发射穿透之剑；升级走分支卡（伤害/穿透强化）
   Icon: {fileID: 0}
-  Effect: 6
-  Value: 0
+  Category: 1
+  MaxLevel: 1
+  RollWeight: 1
+  ValuePerLevel: 0

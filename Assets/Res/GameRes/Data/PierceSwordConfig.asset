@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: PierceSwordConfig
   m_EditorClassIdentifier: Assembly-CSharp::PierceSwordConfig
   Damage: 1
-  DamagePerLevel: 0
-  BasePierce: 0
+  BasePierce: 1
   Speed: 12
   Lifetime: 2
   HitRadius: 0.4

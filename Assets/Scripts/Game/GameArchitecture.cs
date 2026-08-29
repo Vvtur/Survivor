@@ -10,8 +10,12 @@ namespace QFramework.Gameplay
     		// 面板加载已由 QFramework 的 UIKitWithResKitInit 自动配置为 ResLoader（AB 加载），无需手动设置
     		// 依赖倒置：注册时用接口，外部通过接口访问
     		RegisterSystem<ILevelUpSystem>(new LevelUpSystem());
-    		RegisterSystem<IAbilityPoolSystem>(new AbilityPoolSystem());
+    		RegisterSystem<IAbilitySystem>(new AbilitySystem());
     		RegisterSystem<IGameAssetsSystem>(new GameAssetsSystem());
+
+    		// 武器能力系统：玩家攻击节奏后统一齐发已解锁的武器能力（穿透剑等），
+    		// 生成投射物时惰性解析 GameAssetsSystem/AbilitySystem，注册顺序无硬性要求
+    		RegisterSystem<IWeaponAbilitySystem>(new WeaponAbilitySystem());
     		RegisterSystem<IWaveSystem>(new WaveSystem());
 
     		// 掉落系统：监听 EnemyKilledEvent 按权重掷点，依赖 GameAssetsSystem 生成掉落物（惰性解析）

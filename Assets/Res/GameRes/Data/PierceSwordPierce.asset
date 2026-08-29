@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08afe00f82644e94ebd691f6e33d4008, type: 3}
-  m_Name: MoreWeapon
+  m_Name: PierceSwordPierce
   m_EditorClassIdentifier: Assembly-CSharp::AbilityConfig
-  AbilityId: more_weapon
-  AbilityName: "\u66F4\u591A\u6B66\u5668"
-  Description: "\u540C\u65F6\u653B\u51FB\u7684\u5251\u6570\u91CF\u52A01"
+  AbilityId: pierce_sword_pierce
+  AbilityName: 穿透剑·穿透强化
+  Description: 穿透剑穿透数 +1/级（可无限升级）
   Icon: {fileID: 0}
-  Category: 0
+  Category: 2
   MaxLevel: 0
   RollWeight: 1
+  RequiresAbilityId: pierce_sword
+  LevelValues: []
   ValuePerLevel: 1
-  StatEffects:
-  - Stat: 5
-    Mode: 0
+  TargetAbilityId: pierce_sword
+  WeaponStatModifiers:
+  - Stat: 1

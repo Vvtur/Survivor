@@ -160,7 +160,7 @@ namespace QFramework.Gameplay
 
 			// 命中音效（至少命中一个敌人才播，避免空挥也有声）
 			if (mHitEnemies.Count > 0) AudioKit.PlaySound(AudioNames.Hit);
-			}
+		}
 
 		void OnDestroy()
 		{

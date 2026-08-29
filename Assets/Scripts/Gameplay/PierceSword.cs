@@ -108,6 +108,7 @@ namespace QFramework.Gameplay
 
 			// 无 GC 圆形检测：结算飞行路径上的敌人
 			var hitCount = Physics2D.OverlapCircle(transform.position, mHitRadius, mFilter, mHitBuffer);
+			var hitAny = false;
 			for (int i = 0; i < hitCount; i++)
 			{
 				if (!mHitBuffer[i].TryGetComponent<Enemy>(out var enemy)) continue;
@@ -116,15 +117,24 @@ namespace QFramework.Gameplay
 				mHitEnemies.Add(enemy);
 				enemy.TakeDamage(mDamage);
 				mHitCount++;
-				AudioKit.PlaySound(AudioNames.Hit);
+				hitAny = true;
 
 				// 穿透数用尽：就地消失
 				if (mHitCount >= mMaxHits)
 				{
+					PlayHitSound(hitAny);
 					Recycle2Cache();
 					return;
 				}
 			}
+
+			PlayHitSound(hitAny);
+		}
+
+		// 命中音效只播一次：一次挥砍穿透 N 个敌人时，避免同一帧叠 N 次音导致爆音
+		private static void PlayHitSound(bool hitAny)
+		{
+			if (hitAny) AudioKit.PlaySound(AudioNames.Hit);
 		}
 
 		void OnDestroy()

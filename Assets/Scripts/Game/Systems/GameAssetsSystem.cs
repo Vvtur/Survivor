@@ -12,8 +12,8 @@ namespace QFramework.Gameplay
         GameObject SpawnGold(Vector3 position);
         GameObject SpawnEnemy(Vector3 position);
         GameObject SpawnDrop(DropType type, Vector3 position);
-        /// <summary>向指定方向发射一把穿透剑（伤害/穿透数按等级从 PierceSwordConfig 换算）</summary>
-        PierceSword SpawnPierceSword(Vector3 position, Vector2 direction, int level);
+        /// <summary>向指定方向发射一把穿透剑（伤害/穿透数按能力分支卡从 AbilitySystem 聚合）</summary>
+        PierceSword SpawnPierceSword(Vector3 position, Vector2 direction);
         Weapon SpawnWeapon(Vector3 targetEnemyPos, float damage, Enemy target);
     }
 
@@ -32,7 +32,8 @@ namespace QFramework.Gameplay
         private GameObject mHealthPackPrefab;
         private GameObject mMagnetPrefab;
         private GameObject mPierceSwordPrefab;
-        private PierceSwordConfig mPierceSwordConfig; // 穿透剑数值配置（AB data，长期持有）
+        private PierceSwordConfig mPierceSwordConfig; // 穿透剑物理参数配置（AB data，长期持有）
+        private IAbilitySystem mAbilitySystem;        // 能力数值聚合（分支升级卡的加成出口，惰性解析规避注册顺序）
 
         protected override void OnInit()
         {
@@ -146,25 +147,33 @@ namespace QFramework.Gameplay
         }
 
         /// <summary>
-        /// 发射一把穿透剑：伤害/穿透数按等级从 PierceSwordConfig 换算（数据驱动，零硬编码）：
-        /// 伤害 = Damage + DamagePerLevel × (等级 - 1)；穿透数 = BasePierce + 等级。
+        /// 发射一把穿透剑：数值全部由能力等级驱动（分支卡加成由 AbilitySystem 聚合）：
+        /// 伤害 = 基础伤害 + Σ(伤害强化卡贡献)；穿透数 = 基础穿透 + Σ(穿透强化卡贡献)；
+        /// 命中半径/飞行速度/存活时间同理可被对应分支卡强化。解锁状态由能力等级表决定，本方法不感知等级。
         /// </summary>
-        public PierceSword SpawnPierceSword(Vector3 position, Vector2 direction, int level)
+        public PierceSword SpawnPierceSword(Vector3 position, Vector2 direction)
         {
             if (mPierceSwordPrefab == null || mPierceSwordConfig == null)
             {
                 LogKit.E("[GameAssetsSystem] PierceSword 预制体/配置未加载，无法发射穿透剑");
                 return null;
             }
-            if (level < 1) return null; // 未解锁
 
-            var damage = mPierceSwordConfig.Damage + mPierceSwordConfig.DamagePerLevel * (level - 1);
-            var maxHits = mPierceSwordConfig.BasePierce + level;
+            mAbilitySystem ??= this.GetSystem<IAbilitySystem>();
+            var damage = mPierceSwordConfig.Damage
+                + mAbilitySystem.GetWeaponStatTotal(AbilitySystem.PierceSwordId, WeaponStat.Damage);
+            var maxHits = mPierceSwordConfig.BasePierce
+                + Mathf.RoundToInt(mAbilitySystem.GetWeaponStatTotal(AbilitySystem.PierceSwordId, WeaponStat.PierceCount));
+            var hitRadius = mPierceSwordConfig.HitRadius
+                + mAbilitySystem.GetWeaponStatTotal(AbilitySystem.PierceSwordId, WeaponStat.Radius);
+            var speed = mPierceSwordConfig.Speed
+                + mAbilitySystem.GetWeaponStatTotal(AbilitySystem.PierceSwordId, WeaponStat.Speed);
+            var lifetime = mPierceSwordConfig.Lifetime
+                + mAbilitySystem.GetWeaponStatTotal(AbilitySystem.PierceSwordId, WeaponStat.Lifetime);
 
             var sword = PierceSword.Allocate();
             sword.Init(position, direction, damage, maxHits,
-                mPierceSwordConfig.Speed, mPierceSwordConfig.Lifetime, mPierceSwordConfig.HitRadius,
-                mPierceSwordConfig.SpriteRotationOffset);
+                speed, lifetime, hitRadius, mPierceSwordConfig.SpriteRotationOffset);
             return sword;
         }
 

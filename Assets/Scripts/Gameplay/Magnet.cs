@@ -13,9 +13,10 @@ namespace QFramework.Gameplay
 	{
 		protected override void OnPickup()
 		{
-			// 磁铁拾取是低频操作，FindObjectsOfType 的开销可接受；
+			// 磁铁拾取是低频操作，全场景查找的开销可接受；
 			// 若未来掉落物数量膨胀，可改为 GameAssetsSystem 维护生成登记表（O(1) 遍历）。
-			var items = FindObjectsOfType<PickupItem>();
+			// FindObjectsByType + None：省掉结果排序开销（我们只遍历，不关心顺序）
+			var items = FindObjectsByType<PickupItem>(FindObjectsSortMode.None);
 			foreach (var item in items)
 			{
 				if (item == this) continue;      // 不收集自己

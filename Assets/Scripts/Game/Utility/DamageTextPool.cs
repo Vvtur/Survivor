@@ -19,15 +19,21 @@ namespace QFramework.Gameplay
         private const float FloatHeight = 1f;
         private const int PreWarm = 8;
 
-        // 飘字实例缓存（等价 SimpleObjectPool 的手写版：栈 + OnDisable 复用）
-        private readonly Stack<Transform> mIdle = new Stack<Transform>(PreWarm);
+        // 飘字实例缓存（等价 SimpleObjectPool 的手写版：栈 + SetActive(false) 复用）
+        private readonly Stack<DamageText> mIdle = new Stack<DamageText>(PreWarm);
         private readonly List<ActiveText> mActive = new List<ActiveText>(16);
+
+        // 一个飘字实例：引用在创建时一次性取好，避免每次弹出都 GetComponentInChildren
+        private class DamageText
+        {
+            public Transform Root;
+            public TextMeshPro Tmp;
+        }
 
         // 用 class（引用类型）：Update 里直接改字段生效（struct 会拷贝导致 Elapsed 不增长）
         private class ActiveText
         {
-            public Transform Root;
-            public TextMeshPro Tmp;
+            public DamageText Item;
             public Vector3 StartPos;
             public float Elapsed;
         }
@@ -48,7 +54,11 @@ namespace QFramework.Gameplay
             });
             mResLoader.LoadAsync(() =>
             {
-                for (int i = 0; i < PreWarm; i++) mIdle.Push(CreateOne());
+                for (int i = 0; i < PreWarm; i++)
+                {
+                    var item = CreateOne();
+                    if (item != null) mIdle.Push(item);
+                }
             });
         }
 
@@ -61,12 +71,16 @@ namespace QFramework.Gameplay
             Instance = null;
         }
 
-        private Transform CreateOne()
+        private DamageText CreateOne()
         {
             if (mPrefab == null) return null;
             var go = Instantiate(mPrefab, transform);  // 挂在池物体下，位置跟随
             go.SetActive(false);
-            return go.transform;
+            return new DamageText
+            {
+                Root = go.transform,
+                Tmp = go.GetComponentInChildren<TextMeshPro>(),
+            };
         }
 
         /// <summary>在指定位置弹出伤害数字（Enemy 调用方式不变）</summary>
@@ -74,18 +88,18 @@ namespace QFramework.Gameplay
         {
             if (mPrefab == null) return; // 预制体还没加载好（战斗开始头几百毫秒）
 
-            var root = mIdle.Count > 0 ? mIdle.Pop() : CreateOne();
-            if (root == null) return;
+            var item = mIdle.Count > 0 ? mIdle.Pop() : CreateOne();
+            if (item == null) return;
 
-            root.gameObject.SetActive(true);
-            root.position = worldPos;
-            var tmp = root.GetComponentInChildren<TextMeshPro>();
+            item.Root.gameObject.SetActive(true);
+            item.Root.position = worldPos;
+            var tmp = item.Tmp;
             tmp.text = Mathf.RoundToInt(damage).ToString();
             tmp.color = color ?? Color.yellow;
 
             mActive.Add(new ActiveText
             {
-                Root = root, Tmp = tmp,
+                Item = item,
                 StartPos = worldPos, Elapsed = 0f
             });
         }
@@ -98,18 +112,24 @@ namespace QFramework.Gameplay
                 a.Elapsed += Time.unscaledDeltaTime; // 不受 timeScale=0 影响，暂停时飘字也能播完
                 var p = a.Elapsed / Duration;
 
-                if (p >= 1f || a.Root == null)
+                // 实例被外部销毁（场景卸载）时直接弃用，且**不能**压回空闲栈，
+                // 否则 null 会污染对象池，后续 Pop 出来的飘字永远显示不出来
+                if (a.Item.Root == null)
                 {
-                    if (a.Root != null) a.Root.gameObject.SetActive(false);
-                    mIdle.Push(a.Root);
+                    mActive.RemoveAt(i);
+                }
+                else if (p >= 1f)
+                {
+                    a.Item.Root.gameObject.SetActive(false);
+                    mIdle.Push(a.Item);
                     mActive.RemoveAt(i);
                 }
                 else
                 {
-                    a.Root.position = a.StartPos + Vector3.up * (p * FloatHeight);
-                    var c = a.Tmp.color;
+                    a.Item.Root.position = a.StartPos + Vector3.up * (p * FloatHeight);
+                    var c = a.Item.Tmp.color;
                     c.a = 1f - p;
-                    a.Tmp.color = c;
+                    a.Item.Tmp.color = c;
                 }
             }
         }

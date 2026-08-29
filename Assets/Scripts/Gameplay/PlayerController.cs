@@ -21,6 +21,8 @@ namespace QFramework.Gameplay
 		GameModel mModel;
 		// 缓存的资源系统引用（生成武器等）
 		IGameAssetsSystem mAssetsSystem;
+		// 武器能力系统：攻击节奏后齐发已解锁的武器能力（穿透剑等）
+		IWeaponAbilitySystem mWeaponSystem;
 
 		// 玩家属性统一从缓存的 GameModel 读取，能力系统通过 Command 修改后即时生效
 		float Speed => mModel.MoveSpeed.Value;
@@ -42,6 +44,7 @@ namespace QFramework.Gameplay
 		{
 			mModel = this.GetModel<GameModel>();   // 缓存 Model，避免每帧 GetModel
 			mAssetsSystem = this.GetSystem<IGameAssetsSystem>();   // 缓存资源系统，生成武器用
+			mWeaponSystem = this.GetSystem<IWeaponAbilitySystem>();   // 缓存武器能力系统，攻击后齐发
 			input = new();
 			this.RegisterEvent<GameWinEvent>(OnGameWin).UnRegisterWhenGameObjectDestroyed(this);   // 订阅胜利事件（架构事件系统）
 			this.RegisterEvent<LevelUpEvent>(OnLevelUp).UnRegisterWhenGameObjectDestroyed(this);  // 订阅升级事件
@@ -105,14 +108,22 @@ namespace QFramework.Gameplay
 				mMainCam.transform.position, targetPos, ref mCamVelocity, 0.2f);
 		}
 
-		// 升级：从能力池随机抽 3 个能力，打开选择面板
+		// 升级：从能力池抽 3 张升级卡（池内已过滤满级/前置未解锁），打开选择面板
 		private void OnLevelUp(LevelUpEvent e)
 		{
+			// 随机抽取 3 个不重复的能力
+			var options = this.GetSystem<IAbilitySystem>().RollOptions(3);
+			if (options.Length == 0)
+			{
+				// 全部能力已满级/无候选：直接消费掉本次升级，不暂停不开面板
+				//（防 PendingLevelUps 残留 + timeScale=0 卡死）
+				while (mModel.PendingLevelUps.Value > 0)
+					this.SendCommand(new ConsumePendingLevelUpCommand());
+				return;
+			}
+
 			AudioKit.PlaySound(AudioNames.LevelUp); // 升级音效
 			Time.timeScale = 0f; // 升级暂停游戏
-
-			// 随机抽取 3 个不重复的能力
-			var options = this.GetSystem<IAbilityPoolSystem>().RollOptions(3);
 
 			// 类名与预制体名一致（GameLevelUpPanel），无需传 prefabName
 			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync（同步 OpenPanel 首次加载 uiprefab 包必失败）
@@ -162,13 +173,13 @@ namespace QFramework.Gameplay
 			// 角色翻转：朝左翻转（scale.x 为负），朝右恢复
 			if (move.x < -0.01f)
 			{
-				var s = SelfRigidbody2D.transform.localScale;
-				if (s.x > 0) SelfRigidbody2D.transform.localScale = new Vector3(-s.x, s.y, s.z);
+				var s = transform.localScale;
+				if (s.x > 0) transform.localScale = new Vector3(-s.x, s.y, s.z);
 			}
 			else if (move.x > 0.01f)
 			{
-				var s = SelfRigidbody2D.transform.localScale;
-				if (s.x < 0) SelfRigidbody2D.transform.localScale = new Vector3(-s.x, s.y, s.z);
+				var s = transform.localScale;
+				if (s.x < 0) transform.localScale = new Vector3(-s.x, s.y, s.z);
 			}
 
 			// 根据是否有移动输入切换动画状态（QF FSM）
@@ -221,18 +232,9 @@ namespace QFramework.Gameplay
 				mAssetsSystem.SpawnWeapon(enemy.transform.position, AttackDamage, enemy);
 			}
 
-			// 穿透剑（解锁后随攻击齐发）：朝最近的敌人发射一把固定弹道的飞剑。
-			// 方向按发射瞬间锁定、飞行中不追踪（怪物可走位躲开）；穿透数随等级成长，
-			// 数值换算全部在 GameAssetsSystem 内按 PierceSwordConfig 完成。
-			var pierceLevel = mModel.PierceSwordLevel.Value;
-			if (pierceLevel > 0)
-			{
-				var toNearest = mAttackTargets[0].transform.position - transform.position; // 首个即最近
-				var dir = toNearest.sqrMagnitude > 0.0001f
-					? (Vector2)toNearest.normalized
-					: Vector2.right; // 敌人与玩家重叠时的退化保护
-				mAssetsSystem.SpawnPierceSword(transform.position, dir, pierceLevel);
-			}
+			// 武器能力齐发：穿透剑等已解锁的武器能力在此各自发射
+			//（分支升级数值由 AbilitySystem 按能力等级聚合，PlayerController 不感知具体武器）
+			mWeaponSystem.OnPlayerAttack(transform.position, mAttackTargets);
 		}
 
 		// 玩家被敌人碰到 → 扣血（固定 1 秒受击间隔）

@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08afe00f82644e94ebd691f6e33d4008, type: 3}
   m_Name: AttackSpeedUp
   m_EditorClassIdentifier: Assembly-CSharp::AbilityConfig
+  AbilityId: attack_speed_up
   AbilityName: 攻速提升
-  Description: 攻击速度提升
+  Description: 攻击间隔每级 ×0.9（可无限升级，下限 0.05 秒）
   Icon: {fileID: 0}
-  Effect: 3
-  Value: 0.9
+  Category: 0
+  MaxLevel: 0
+  RollWeight: 1
+  ValuePerLevel: 0.9
+  StatEffects:
+  - Stat: 3
+    Mode: 1

@@ -20,9 +20,15 @@ namespace QFramework.Gameplay
         /// <summary>能否被磁铁收集（金币/宝石为 true，功能道具为 false，防止磁铁连锁吞掉其他磁铁/血包）</summary>
         public virtual bool CollectibleByMagnet => false;
 
+        // 同帧去重：Destroy 是延迟到帧末生效的，玩家碰到该道具后，
+        // 磁铁在同一帧的 FindObjectsByType 里仍会扫到它 → 不加守卫会重复结算一次奖励。
+        private bool mCollected;
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (mCollected) return;
             if (!collision.CompareTag("Player")) return;
+            mCollected = true;
             OnPickup();
             OnPickedUp();
         }
@@ -43,7 +49,9 @@ namespace QFramework.Gameplay
         /// </summary>
         public void CollectByMagnet()
         {
-            if (!CollectibleByMagnet || this == null) return;
+            // this == null：本帧已被 Destroy（Unity 延迟销毁，查找仍能命中已标记对象），跳过
+            if (mCollected || !CollectibleByMagnet || this == null) return;
+            mCollected = true;
             OnPickup();
             Destroy(gameObject);
         }

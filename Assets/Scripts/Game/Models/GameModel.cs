@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using QFramework;
+using UnityEngine;
 
 namespace QFramework.Gameplay
 {
@@ -40,8 +42,32 @@ namespace QFramework.Gameplay
         public BindableProperty<int> Money { get; } = new(0);   // 金币（跨局保留）
         public BindableProperty<float> Attack { get; } = new(0);
         public BindableProperty<int> WeaponCount { get; } = new(1); // 同时生成的剑数（升级可加，默认 1）
-        /// <summary>穿透剑等级：0 = 未解锁；首次选中 = 解锁（等级 1），再次选中 = 穿透 +1</summary>
-        public BindableProperty<int> PierceSwordLevel { get; } = new(0);
+
+        // ---- 能力等级表：所有能力统一走"解锁(0→1) → 升级(1→N)"----
+        // key = AbilityConfig.AbilityId，value = 等级（0 = 未解锁）。
+        // 新增能力不再往 Model 加字段；数值成长由 AbilitySystem 按配置派生/聚合。
+        readonly Dictionary<string, int> mAbilityLevels = new Dictionary<string, int>();
+
+        /// <summary>能力当前等级（0 = 未解锁；1 = 已解锁；越高越强）</summary>
+        public int GetAbilityLevel(string abilityId)
+        {
+            return abilityId != null && mAbilityLevels.TryGetValue(abilityId, out var lv) ? lv : 0;
+        }
+
+        /// <summary>写入能力等级（仅 Command 调用，表现层禁写）</summary>
+        public void SetAbilityLevel(string abilityId, int level)
+        {
+            if (string.IsNullOrEmpty(abilityId)) return;
+            mAbilityLevels[abilityId] = Mathf.Max(0, level);
+        }
+
+        // ---- 配置基础值（AbilitySystem.RecalcStats 派生属性用；配置加载后固定）----
+        public float BaseAttackDamage => mConfigAttackDamage;
+        public float BaseMoveSpeed => mConfigMoveSpeed;
+        public int BaseMaxHp => mConfigMaxHp;
+        public float BaseAttackInterval => mConfigAttackInterval;
+        public float BaseAttackRadius => mConfigAttackRadius;
+        public int BaseWeaponCount => mConfigWeaponCount;
 
         // 无限刷怪参数（从配置复制，运行中固定）
         public BindableProperty<float> SpawnInterval { get; } = new(3f);      // 生成间隔（秒）
@@ -73,7 +99,7 @@ namespace QFramework.Gameplay
             AttackInterval.Value = mConfigAttackInterval;
             AttackRadius.Value = mConfigAttackRadius;
             WeaponCount.Value = mConfigWeaponCount;
-            PierceSwordLevel.Value = 0; // 局内解锁的能力每局重置（重回未解锁）
+            mAbilityLevels.Clear(); // 局内解锁的能力每局重置（等级表清空 = 全部重回未解锁）
             AliveEnemies.Value = 0;
             KillCount.Value = 0;
         }

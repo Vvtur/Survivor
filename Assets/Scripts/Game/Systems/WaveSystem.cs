@@ -29,6 +29,9 @@ namespace QFramework.Gameplay
         private float mElapsedTime;   // 本局已进行时间（秒），用于计算敌人强度和胜利判定
         private GameModel mModel;
         private float spawnInterval;
+        // 胜利只结算一次：达标后 Update 仍会继续跑（timeScale=0 不影响 Update 调用），
+        // 不设标志会每帧重复发 GameWinEvent（表现层每帧重播胜利音效）
+        private bool mWon;
 
         protected override void OnInit()
         {
@@ -49,12 +52,15 @@ namespace QFramework.Gameplay
         {
             mSpawnTimer = 0f;
             mElapsedTime = 0f;
+            mWon = false;
             mModel.AliveEnemies.Value = 0;
             spawnInterval = mModel.SpawnInterval.Value;
         }
 
         public void OnUpdate()
         {
+            if (mWon) return; // 已胜利：不再计时/刷怪/重复广播
+
             var maxAliveEnemies = mModel.MaxAliveEnemies.Value;
 
             mElapsedTime += Time.deltaTime;
@@ -64,6 +70,7 @@ namespace QFramework.Gameplay
             var winTime = mModel.SurviveTimeToWin.Value;
             if (winTime > 0f && mElapsedTime >= winTime)
             {
+                mWon = true;   // 先置位再广播：回调里即便再次触发 OnUpdate 也不会重复发事件
                 this.SendEvent(new GameWinEvent());
                 return;
             }
