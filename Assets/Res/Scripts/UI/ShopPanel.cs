@@ -25,7 +25,8 @@ namespace QFramework.UI
 			Btn_Close.onClick.AddListener(() =>
 			{
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-				Hide();
+				// 先播收缩动画，动画完成后 Hide（保持原生命周期：面板留在 UIKit 表中供 Single 复用）
+				this.PlayClose(Hide);
 			});
 
 			model.Money.RegisterWithInitValue(_ => RefreshMoney()).UnRegisterWhenGameObjectDestroyed(this);
@@ -38,6 +39,8 @@ namespace QFramework.UI
 		
 		protected override void OnShow()
 		{
+			// 弹窗打开动画（Single 模式复用重开时也会再次触发，PlayOpen 内部会先归位防残留）
+			this.PlayOpen();
 		}
 		
 		protected override void OnHide()

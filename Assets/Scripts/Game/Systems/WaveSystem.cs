@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using QFramework;
 using UnityEngine;
 
@@ -21,7 +22,8 @@ namespace QFramework.Gameplay
     /// <summary>
     /// 系统层：无限刷怪系统。
     /// 由 MainGame 场景中的 WaveDriver 每帧驱动，按固定间隔无限生成敌人；
-    /// 敌人强度（血量）随游戏时间递增——越到后面越强。
+    /// 敌人强度（血量）随游戏时间递增——越到后面越强；
+    /// 怪种按局内时间从分层表解锁（0 秒基础怪 → 后续新怪按权重混刷）。
     /// </summary>
     public class WaveSystem : AbstractSystem, IWaveSystem
     {
@@ -29,6 +31,14 @@ namespace QFramework.Gameplay
         private float mElapsedTime;   // 本局已进行时间（秒），用于计算敌人强度和胜利判定
         private GameModel mModel;
         private float spawnInterval;
+        // 胜利只结算一次：达标后 Update 仍会继续跑（timeScale=0 不影响 Update 调用），
+        // 不设标志会每帧重复发 GameWinEvent（表现层每帧重播胜利音效）
+        private bool mWon;
+
+        // 分层刷怪：已解锁怪种缓存（每次选怪前重建，避免每只怪都分配新列表）
+        private readonly List<EnemyTier> mUnlockedTiers = new List<EnemyTier>(8);
+        // 已播报过"新怪解锁"的怪种数（每局从 0 重新解锁、重新播报）
+        private int mAnnouncedTierCount;
 
         protected override void OnInit()
         {
@@ -49,12 +59,16 @@ namespace QFramework.Gameplay
         {
             mSpawnTimer = 0f;
             mElapsedTime = 0f;
+            mWon = false;
+            mAnnouncedTierCount = 0; // 分层怪每局从 0 秒重新解锁、重新播报
             mModel.AliveEnemies.Value = 0;
             spawnInterval = mModel.SpawnInterval.Value;
         }
 
         public void OnUpdate()
         {
+            if (mWon) return; // 已胜利：不再计时/刷怪/重复广播
+
             var maxAliveEnemies = mModel.MaxAliveEnemies.Value;
 
             mElapsedTime += Time.deltaTime;
@@ -64,6 +78,7 @@ namespace QFramework.Gameplay
             var winTime = mModel.SurviveTimeToWin.Value;
             if (winTime > 0f && mElapsedTime >= winTime)
             {
+                mWon = true;   // 先置位再广播：回调里即便再次触发 OnUpdate 也不会重复发事件
                 this.SendEvent(new GameWinEvent());
                 return;
             }
@@ -84,7 +99,8 @@ namespace QFramework.Gameplay
         }
 
         /// <summary>
-        /// 生成一个敌人，强度（血量）随游戏时间递增。
+        /// 生成一个敌人：怪种按局内时间解锁（分层表 + 权重随机），
+        /// 强度（血量）随游戏时间递增。
         /// QF 规范：System 不能 SendCommand（只有 IController 能），改为发送事件，
         /// 由 IController 层（WaveDriver）接收后用 Command 执行。
         /// </summary>
@@ -96,7 +112,52 @@ namespace QFramework.Gameplay
             {
                 SpawnPosition = GetSpawnPosition(),
                 Power = power,
+                Tier = PickEnemyTier(),
             });
+        }
+
+        /// <summary>
+        /// 选怪：把局内时间与分层表比对得到已解锁怪种，按 SpawnWeight 加权随机。
+        /// 首次解锁新怪时打一条日志（后续可在此发事件给表现层做横幅/音效播报）。
+        /// 分层表为空或没有已解锁项时返回 null = 基础怪。
+        /// </summary>
+        private EnemyTier PickEnemyTier()
+        {
+            var tiers = mModel.EnemyTiers;
+            if (tiers == null || tiers.Count == 0) return null;
+
+            mUnlockedTiers.Clear();
+            var newest = (EnemyTier)null; // 已解锁里 UnlockTime 最大者，用于解锁播报
+            for (var i = 0; i < tiers.Count; i++)
+            {
+                var tier = tiers[i];
+                if (tier == null || mElapsedTime < tier.UnlockTime) continue;
+                mUnlockedTiers.Add(tier);
+                if (newest == null || tier.UnlockTime > newest.UnlockTime) newest = tier;
+            }
+
+            if (mUnlockedTiers.Count == 0) return null;
+
+            // 解锁播报：按怪种计数播报一次（每局重置）
+            if (mUnlockedTiers.Count > mAnnouncedTierCount)
+            {
+                mAnnouncedTierCount = mUnlockedTiers.Count;
+                LogKit.I($"[WaveSystem] 新怪物解锁：{newest.TierName}（{mElapsedTime:F0} 秒）");
+            }
+
+            // 权重随机（权重 ≤ 0 的怪种等于不再刷出）
+            float totalWeight = 0f;
+            for (var i = 0; i < mUnlockedTiers.Count; i++) totalWeight += mUnlockedTiers[i].SpawnWeight;
+            if (totalWeight <= 0f) return mUnlockedTiers[mUnlockedTiers.Count - 1];
+
+            var roll = Random.Range(0f, totalWeight);
+            for (var i = 0; i < mUnlockedTiers.Count; i++)
+            {
+                roll -= mUnlockedTiers[i].SpawnWeight;
+                if (roll <= 0f) return mUnlockedTiers[i];
+            }
+
+            return mUnlockedTiers[mUnlockedTiers.Count - 1]; // 浮点兜底
         }
 
         private Vector3 GetSpawnPosition()

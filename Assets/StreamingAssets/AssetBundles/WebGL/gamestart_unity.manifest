@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 1910226636
+CRC: 3430487598
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2e21e406bd749168e5bdc2f87b2aebd7
+    Hash: fcf9a0e694fe2f1a42b269993e10feb5
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c406ce3395f0eac6b826078c25b03065
+    Hash: f2cff7b2f9621afc9841facedc77d3fe
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2ede61e34a766001fe23885cdf204248
+    Hash: 8f7952e2e1930717bee544d8ffe2b3d5
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -40,6 +40,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: d2e648c9b289e1d46b483526f2bd52d5, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 3d5905531f0827a4496b1650dbae7895, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -61,6 +63,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -84,5 +88,5 @@ Assets:
 - Assets/Scenes/GameStart.unity
 Dependencies:
 - E:/UN/Survivor/AssetBundles/WebGL/character_d64e45230ab55d92876065398a4bb6d6
-- E:/UN/Survivor/AssetBundles/WebGL/font_b4abd401755f1b5a4825b7bf8508ddea
-- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_fd23ab8284583c370a38fc902a08e590
+- E:/UN/Survivor/AssetBundles/WebGL/font_fdd4fab6fb9a6ea42a6c4e4121865b89
+- E:/UN/Survivor/AssetBundles/WebGL/uiprefab_b02da9a6747434dbe502f5226e7c25ac

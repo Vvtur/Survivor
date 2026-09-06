@@ -18,7 +18,7 @@ MonoBehaviour:
   AttackInterval: 1
   AttackRadius: 5
   WeaponCount: 1
-  SpawnInterval: 3
+  SpawnInterval: 1.5
   MaxAliveEnemies: 11111
   EnemyPowerPerSecond: 0.02
   SurviveTimeToWin: 0

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using QFramework;
+using UnityEngine;
 
 namespace QFramework.Gameplay
 {
@@ -13,9 +15,24 @@ namespace QFramework.Gameplay
         /// <summary>场上剩余敌人数</summary>
         public BindableProperty<int> AliveEnemies { get; } = new BindableProperty<int>();
         public BindableProperty<int> PlayerGem { get; } = new BindableProperty<int>();
+        /// <summary>本局击杀数（主游戏 HUD 显示用，每局重置）</summary>
+        public BindableProperty<int> KillCount { get; } = new(0);
         // 玩家成长属性（供能力系统修改）
         public BindableProperty<int> Level { get; } = new(1);
         public BindableProperty<int> Exp { get; } = new(0);
+        /// <summary>
+        /// 待选升级次数：磁铁一次吸多颗宝石可能连升多级，LevelUpSystem 在 while 循环里
+        /// 每升一级 +1，表现层在 GameLevelUpPanel 关闭时 -1，直到 0 才真正恢复 timeScale。
+        /// 0 = 没有待选升级；N = 还有 N 次能力未选。
+        /// </summary>
+        public BindableProperty<int> PendingLevelUps { get; } = new(0);
+
+        /// <summary>
+        /// 升级所需经验（公式唯一出处）。
+        /// LevelUpSystem 判断升级与 PlayerInfoPanel 显示经验条共用，
+        /// 勿在别处重写 "Level * 2 + 1"。
+        /// </summary>
+        public int ExpToNextLevel => Level.Value * 2 + 1;
         public BindableProperty<float> AttackDamage { get; } = new(1f);
         public BindableProperty<float> MoveSpeed { get; } = new(5f);
         public BindableProperty<int> MaxHp { get; } = new(3);
@@ -24,13 +41,44 @@ namespace QFramework.Gameplay
         public BindableProperty<float> AttackRadius { get; } = new(5f);   // 攻击范围半径，能力可扩大
         public BindableProperty<int> Money { get; } = new(0);   // 金币（跨局保留）
         public BindableProperty<float> Attack { get; } = new(0);
-        public BindableProperty<int> WeaponCount { get; } = new(1); // 同时生成的剑数（升级可加，默认 1）   
+        public BindableProperty<int> WeaponCount { get; } = new(1); // 同时生成的剑数（升级可加，默认 1）
+
+        // ---- 能力等级表：所有能力统一走"解锁(0→1) → 升级(1→N)"----
+        // key = AbilityConfig.AbilityId，value = 等级（0 = 未解锁）。
+        // 新增能力不再往 Model 加字段；数值成长由 AbilitySystem 按配置派生/聚合。
+        readonly Dictionary<string, int> mAbilityLevels = new Dictionary<string, int>();
+
+        /// <summary>能力当前等级（0 = 未解锁；1 = 已解锁；越高越强）</summary>
+        public int GetAbilityLevel(string abilityId)
+        {
+            return abilityId != null && mAbilityLevels.TryGetValue(abilityId, out var lv) ? lv : 0;
+        }
+
+        /// <summary>写入能力等级（仅 Command 调用，表现层禁写）</summary>
+        public void SetAbilityLevel(string abilityId, int level)
+        {
+            if (string.IsNullOrEmpty(abilityId)) return;
+            mAbilityLevels[abilityId] = Mathf.Max(0, level);
+        }
+
+        // ---- 配置基础值（AbilitySystem.RecalcStats 派生属性用；配置加载后固定）----
+        public float BaseAttackDamage => mConfigAttackDamage;
+        public float BaseMoveSpeed => mConfigMoveSpeed;
+        public int BaseMaxHp => mConfigMaxHp;
+        public float BaseAttackInterval => mConfigAttackInterval;
+        public float BaseAttackRadius => mConfigAttackRadius;
+        public int BaseWeaponCount => mConfigWeaponCount;
 
         // 无限刷怪参数（从配置复制，运行中固定）
         public BindableProperty<float> SpawnInterval { get; } = new(3f);      // 生成间隔（秒）
         public BindableProperty<int> MaxAliveEnemies { get; } = new(10);      // 场上敌人上限
         public BindableProperty<float> EnemyPowerPerSecond { get; } = new(0.02f); // 敌人强度增长系数
         public BindableProperty<float> SurviveTimeToWin { get; } = new(120f); // 存活胜利时间（0=不设胜利）
+        /// <summary>
+        /// 分层刷怪表（从配置复制，运行中固定；WaveSystem 按局内时间解锁 + 权重随机）。
+        /// 空表 = 全程只刷基础怪（配置加载失败的兜底行为）。
+        /// </summary>
+        public List<EnemyTier> EnemyTiers { get; } = new List<EnemyTier>();
 
         // 配置初始值缓存（配置读一次即回收，供每次开局 ResetRunData 使用）
         private int mConfigMaxHp;
@@ -48,6 +96,7 @@ namespace QFramework.Gameplay
         {
             Level.Value = 1;
             Exp.Value = 0;
+            PendingLevelUps.Value = 0; // 局内重置：清理可能残留的待选升级计数
             MaxHp.Value = mConfigMaxHp;
             HP.Value = mConfigMaxHp;
             AttackDamage.Value = mConfigAttackDamage;
@@ -55,7 +104,9 @@ namespace QFramework.Gameplay
             AttackInterval.Value = mConfigAttackInterval;
             AttackRadius.Value = mConfigAttackRadius;
             WeaponCount.Value = mConfigWeaponCount;
+            mAbilityLevels.Clear(); // 局内解锁的能力每局重置（等级表清空 = 全部重回未解锁）
             AliveEnemies.Value = 0;
+            KillCount.Value = 0;
         }
 
         /// <summary>
@@ -114,6 +165,12 @@ namespace QFramework.Gameplay
                 MaxAliveEnemies.Value = config.MaxAliveEnemies;
                 EnemyPowerPerSecond.Value = config.EnemyPowerPerSecond;
                 SurviveTimeToWin.Value = config.SurviveTimeToWin;
+                // 分层刷怪表：配置为空则保持空表（全程基础怪）
+                EnemyTiers.Clear();
+                if (config.EnemyTiers != null && config.EnemyTiers.Count > 0)
+                {
+                    EnemyTiers.AddRange(config.EnemyTiers);
+                }
 
                 // 首次开局也调用一次重置，确保局内数据为初始值
                 ResetRunData();

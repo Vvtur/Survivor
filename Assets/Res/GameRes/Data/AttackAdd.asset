@@ -12,8 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08afe00f82644e94ebd691f6e33d4008, type: 3}
   m_Name: AttackAdd
   m_EditorClassIdentifier: Assembly-CSharp::AbilityConfig
-  AbilityName: 攻击强化
-  Description: 攻击力 +1
+  AbilityId: attack_up
+  AbilityName: "\u666E\u901A\u653B\u51FB\u5F3A\u5316"
+  Description: "\u653B\u51FB\u529B +1\uFF08\u53EF\u65E0\u9650\u5347\u7EA7\uFF09"
   Icon: {fileID: 0}
-  Effect: 0
-  Value: 1
+  Category: 0
+  MaxLevel: 0
+  RollWeight: 1
+  RequiresAbilityId: 
+  LevelValues: []
+  ValuePerLevel: 1
+  StatEffects:
+  - Stat: 0
+    Mode: 0
+  TargetAbilityId: 
+  WeaponStatModifiers: []

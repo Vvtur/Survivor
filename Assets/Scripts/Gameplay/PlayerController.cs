@@ -21,6 +21,8 @@ namespace QFramework.Gameplay
 		GameModel mModel;
 		// 缓存的资源系统引用（生成武器等）
 		IGameAssetsSystem mAssetsSystem;
+		// 武器能力系统：攻击节奏后齐发已解锁的武器能力（穿透剑等）
+		IWeaponAbilitySystem mWeaponSystem;
 
 		// 玩家属性统一从缓存的 GameModel 读取，能力系统通过 Command 修改后即时生效
 		float Speed => mModel.MoveSpeed.Value;
@@ -42,6 +44,7 @@ namespace QFramework.Gameplay
 		{
 			mModel = this.GetModel<GameModel>();   // 缓存 Model，避免每帧 GetModel
 			mAssetsSystem = this.GetSystem<IGameAssetsSystem>();   // 缓存资源系统，生成武器用
+			mWeaponSystem = this.GetSystem<IWeaponAbilitySystem>();   // 缓存武器能力系统，攻击后齐发
 			input = new();
 			this.RegisterEvent<GameWinEvent>(OnGameWin).UnRegisterWhenGameObjectDestroyed(this);   // 订阅胜利事件（架构事件系统）
 			this.RegisterEvent<LevelUpEvent>(OnLevelUp).UnRegisterWhenGameObjectDestroyed(this);  // 订阅升级事件
@@ -74,6 +77,8 @@ namespace QFramework.Gameplay
 			// 刷怪系统局内状态归零（System 只初始化一次，不随场景重载重跑：
 			// 不重置则上一局的累计时间会带到下一局——敌人强度沿用、胜利判定提前）
 			this.GetSystem<IWaveSystem>().ResetRun();
+			// 掉落乘区归位重置（局内掉率升级不跨局残留，与 WaveSystem.ResetRun 同理）
+			this.GetSystem<IDropSystem>().ResetRun();
 
 			// 战斗 BGM（AudioKit 经 ResKit 从 AB 异步加载，进入战斗循环播放）
 			AudioKit.PlayMusic(AudioNames.BgmBattle);
@@ -103,14 +108,22 @@ namespace QFramework.Gameplay
 				mMainCam.transform.position, targetPos, ref mCamVelocity, 0.2f);
 		}
 
-		// 升级：从能力池随机抽 3 个能力，打开选择面板
+		// 升级：从能力池抽 3 张升级卡（池内已过滤满级/前置未解锁），打开选择面板
 		private void OnLevelUp(LevelUpEvent e)
 		{
+			// 随机抽取 3 个不重复的能力
+			var options = this.GetSystem<IAbilitySystem>().RollOptions(3);
+			if (options.Length == 0)
+			{
+				// 全部能力已满级/无候选：直接消费掉本次升级，不暂停不开面板
+				//（防 PendingLevelUps 残留 + timeScale=0 卡死）
+				while (mModel.PendingLevelUps.Value > 0)
+					this.SendCommand(new ConsumePendingLevelUpCommand());
+				return;
+			}
+
 			AudioKit.PlaySound(AudioNames.LevelUp); // 升级音效
 			Time.timeScale = 0f; // 升级暂停游戏
-
-			// 随机抽取 3 个不重复的能力
-			var options = this.GetSystem<IAbilityPoolSystem>().RollOptions(3);
 
 			// 类名与预制体名一致（GameLevelUpPanel），无需传 prefabName
 			// WebGL 下 AB 只能异步加载，用 OpenPanelAsync（同步 OpenPanel 首次加载 uiprefab 包必失败）
@@ -160,13 +173,13 @@ namespace QFramework.Gameplay
 			// 角色翻转：朝左翻转（scale.x 为负），朝右恢复
 			if (move.x < -0.01f)
 			{
-				var s = SelfRigidbody2D.transform.localScale;
-				if (s.x > 0) SelfRigidbody2D.transform.localScale = new Vector3(-s.x, s.y, s.z);
+				var s = transform.localScale;
+				if (s.x > 0) transform.localScale = new Vector3(-s.x, s.y, s.z);
 			}
 			else if (move.x > 0.01f)
 			{
-				var s = SelfRigidbody2D.transform.localScale;
-				if (s.x < 0) SelfRigidbody2D.transform.localScale = new Vector3(-s.x, s.y, s.z);
+				var s = transform.localScale;
+				if (s.x < 0) transform.localScale = new Vector3(-s.x, s.y, s.z);
 			}
 
 			// 根据是否有移动输入切换动画状态（QF FSM）
@@ -218,6 +231,10 @@ namespace QFramework.Gameplay
 				var enemy = mAttackTargets[i];
 				mAssetsSystem.SpawnWeapon(enemy.transform.position, AttackDamage, enemy);
 			}
+
+			// 武器能力齐发：穿透剑等已解锁的武器能力在此各自发射
+			//（分支升级数值由 AbilitySystem 按能力等级聚合，PlayerController 不感知具体武器）
+			mWeaponSystem.OnPlayerAttack(transform.position, mAttackTargets);
 		}
 
 		// 玩家被敌人碰到 → 扣血（固定 1 秒受击间隔）
@@ -230,7 +247,8 @@ namespace QFramework.Gameplay
 			if (Time.time - lastHitTime < 1f) return;
 			lastHitTime = Time.time;
 
-			mModel.HP.Value--;
+			// 扣血走 Command（QF 规范：改数据必须经过 Command，表现层不得直写 Model）
+			this.SendCommand(new DamagePlayerCommand());
 			AudioKit.PlaySound(AudioNames.PlayerHurt); // 受击音效
 			if (mModel.HP.Value <= 0)
 			{
@@ -249,7 +267,19 @@ namespace QFramework.Gameplay
 			AudioKit.StopMusic(); // 死亡/胜利结算，停止战斗 BGM
 			// 死亡/胜利结算：上报本局存活时间到微信好友排行榜（未破纪录时内部静默跳过）
 			this.GetSystem<IWXPlatformSystem>().ReportSurviveTime(Mathf.CeilToInt(this.GetSystem<IWaveSystem>().ElapsedTime));
-			StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
+			// 面板打开的协程必须挂在常驻 GameRoot 上：下面一行本对象就 SetActive(false)，
+			// 挂在自己身上的协程会被杀——首次死亡时 GameOverPanel 的 AB 还没缓存，
+			// OpenPanelAsync 还在异步等待 → 协程被杀后面板永远打不开（且 timeScale=0 卡死）。
+			// 第二次起 AB 已缓存、回调同步完成才"看起来正常"。
+			var host = FindFirstObjectByType<GameRoot>();
+			if (host != null)
+			{
+				host.StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>());
+			}
+			else
+			{
+				StartCoroutine(UIKit.OpenPanelAsync<GameOverPanel>()); // 兜底：找不到 GameRoot 只能挂自己
+			}
 			gameObject.SetActive(false); // 主角消失
 			Time.timeScale = 0f;         // 暂停
 		}

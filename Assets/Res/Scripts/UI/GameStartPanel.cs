@@ -14,27 +14,22 @@ namespace QFramework.UI
 		private void Awake()
 		{
 			// 防误触：从"游戏结束→重新开始"切回本场景时，点"重新开始"那一下的指针事件
-			// 可能被 EventSystem 重新派发到本场景按钮上（开始按钮铺满全屏，正好接住残留点击），
-			// 导致刚回到开始界面就误触发"开始游戏"直接进 MainGame。场景出现后 0.5 秒内忽略点击。
-			var clickableAt = Time.unscaledTime + 0.5f;
+			// 可能被 EventSystem 重新派发到本场景按钮上，导致刚回到开始界面就误触发。
+			// 场景出现后 0.75 秒内忽略点击（覆盖入场动画最长错峰时长 0.36+0.35≈0.71s，
+			// 否则残留点击会落在视觉还没弹出来的按钮上；残留点击本身由新增的
+			// Img_ClickBlocker 透明图整体接住，见预制体）。
+			var clickableAt = Time.unscaledTime + 0.75f;
 
 			// 注意：Btn_Start 的绑定只在 OnInit 做一次。
 			// （旧代码在 Awake 里也绑过一次 → 点击后 LoadSceneAsync 被调用两次，已移除）
 			Btn_Start.onClick.AddListener(() =>
 			{
 				if (Time.unscaledTime < clickableAt) return;
+				if (LoadingPanel.IsTransitioning) return; // 过场中防重入
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-				AudioKit.PlaySound(AudioNames.GameStart);   // 开始游戏音效
-				// 场景切换统一走常驻 GameRoot 的 loader（单参写法，见 GameRoot.SwitchScene 注释）
-				// GameRoot.SwitchScene("MainGame");
-				mSceneLoader ??= ResLoader.Allocate();
-				mSceneLoader.LoadSceneAsync("MainGame", LoadSceneMode.Single, LocalPhysicsMode.None, (op) =>
-				{
-					op.completed += (a) =>
-					{
-						// CloseSelf();
-					};
-				});
+				AudioKit.PlaySound(AudioNames.GameStart, volume: 0.1f);  // 一半音量// 开始游戏音效
+				// 带过场动画的异步切换（圆扩散切入 → 异步加载 → 圆收回），loader 仍由本面板持有
+				LoadingPanel.SwitchScene("MainGame", () => mSceneLoader ??= ResLoader.Allocate());
 			});
 
 			// 好友排行榜入口：打开面板（面板内部把开放数据域画布贴到 RawImage 上）
@@ -52,6 +47,28 @@ namespace QFramework.UI
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				StartCoroutine(UIKit.OpenPanelAsync<InvitePanel>());
 			});
+
+			// 设置入口（音乐/音效）：打开设置面板，数据源 AudioKit.Settings（自带 PlayerPrefs 持久化）
+			Btn_Settings.onClick.AddListener(() =>
+			{
+				if (Time.unscaledTime < clickableAt) return;
+				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
+				StartCoroutine(UIKit.OpenPanelAsync<SettingsPanel>());
+			});
+		}
+
+		private void Start()
+		{
+			// 首次进入开始界面的入场动效：标题 → 开始游戏 → 底部三按钮，错峰弹出。
+			// 本面板是场景直挂预制体（不走 UIKit.OpenPanel，OnShow/OnOpen 不会被调），
+			// 所以入场动画挂 Unity 的 Start()。
+			if (Txt_Title != null) Txt_Title.rectTransform.PlayIntro(0f);
+			if (Btn_Start != null) Btn_Start.GetComponent<RectTransform>().PlayIntro(0.12f);
+			if (Btn_Board != null) Btn_Board.GetComponent<RectTransform>().PlayIntro(0.24f);
+			if (Btn_Shop != null) Btn_Shop.GetComponent<RectTransform>().PlayIntro(0.30f);
+			if (Btn_Invite != null) Btn_Invite.GetComponent<RectTransform>().PlayIntro(0.36f);
+			// 设置按钮也加入错峰队列：齿轮通常在右上角，与底部按钮分组时序：标题之后最先
+			if (Btn_Settings != null) Btn_Settings.GetComponent<RectTransform>().PlayIntro(0.18f);
 		}
 
 		protected override void OnInit(IUIData uiData = null)

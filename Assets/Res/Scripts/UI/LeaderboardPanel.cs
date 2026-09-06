@@ -25,7 +25,7 @@ namespace QFramework.UI
 			Btn_Close.onClick.AddListener(() =>
 			{
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-				CloseSelf();
+				this.PlayClose(CloseSelf); // 先播收缩动画，动画完成后再真正关面板（OnClose 照常触发 HideOpenData）
 			});
 			// 分享按钮：统一走邀请链路（query 带 inviter）——所有分享入口都能带来邀请奖励，
 			// 避免玩家从排行榜分享导致好友进入后不计入 invite_events
@@ -74,6 +74,12 @@ namespace QFramework.UI
 
 			WeChatWASM.WX.GetOpenDataContext(); // 首次调用会初始化沙盒（可重复调，内部有缓存）
 			WeChatWASM.WX.ShowOpenData(mBoardTex, (int)x, (int)y, (int)w, (int)h);
+		}
+
+		protected override void OnShow()
+		{
+			// 弹窗打开动画（OnShow 时物体已 SetActive(true)，可安全启动 tween）
+			this.PlayOpen();
 		}
 
 		protected override void OnClose()

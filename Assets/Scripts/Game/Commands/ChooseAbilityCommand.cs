@@ -3,7 +3,10 @@ using QFramework;
 namespace QFramework.Gameplay
 {
     /// <summary>
-    /// 玩家选择能力：按能力效果修改 Model 中对应的属性值
+    /// 玩家选择能力卡：等级 +1（0→1 即解锁），被动属性随后统一派生重算。
+    /// 所有能力的数值成长都来自 AbilityConfig（LevelValues/ValuePerLevel + StatEffects/WeaponStatModifiers），
+    /// 本命令不再 switch 各效果——新增能力/分支升级卡只需建 SO 资产，零代码。
+    /// 武器卡（Weapon 类）只改等级，实际数值由 GameAssetsSystem 生成投射物时按 GetWeaponStatTotal 聚合。
     /// </summary>
     public class ChooseAbilityCommand : AbstractCommand
     {
@@ -18,42 +21,36 @@ namespace QFramework.Gameplay
         {
             if (mAbility == null) return;
 
-            var model = this.GetModel<GameModel>();
-            switch (mAbility.Effect)
+            // 配置错误防线：AbilityId 是等级表的 key，漏填则等级永远记不上（选了等于白选）
+            if (string.IsNullOrEmpty(mAbility.AbilityId))
             {
-                case AbilityEffect.AttackUp:
-                    model.AttackDamage.Value += mAbility.Value;
-                    break;
-
-                case AbilityEffect.SpeedUp:
-                    model.MoveSpeed.Value += mAbility.Value;
-                    break;
-
-                case AbilityEffect.MaxHpUp:
-                    model.MaxHp.Value += (int)mAbility.Value;
-                    model.HP.Value += (int)mAbility.Value; // 当前血量同步增加，立即生效
-                    break;
-
-                case AbilityEffect.AttackSpeedUp:
-                    // 攻击速度提升 = 攻击间隔缩短（下限保护，防止变成无限攻击）
-                    var interval = model.AttackInterval.Value * mAbility.Value;
-                    model.AttackInterval.Value = interval < 0.05f ? 0.05f : interval;
-                    break;
-
-                case AbilityEffect.AttackRangeUp:
-                    // 攻击范围扩大（加法累加，如每级 +1）
-                    model.AttackRadius.Value += mAbility.Value;
-                    break;
-
-                case AbilityEffect.MoreWeapon:
-                    // 攻击范围扩大（加法累加，如每级 +1）
-                    model.WeaponCount.Value += (int)mAbility.Value;
-                    break;
-
-                default:
-                    LogKit.E($"[ChooseAbilityCommand] 未处理的能力效果: {mAbility.Effect}");
-                    break;
+                LogKit.E($"[ChooseAbilityCommand] 能力卡 {mAbility.name} 缺少 AbilityId，无法记录等级！请在资产上补填唯一 ID");
+                return;
             }
+
+            var model = this.GetModel<GameModel>();
+            var abilitySystem = this.GetSystem<IAbilitySystem>();
+
+            // 满级兜底：正常流程 RollOptions 已过滤满级卡，这里防异常路径（连点/重复发命令）。
+            // MaxLevel <= 0 = 无限升级，永不拦截。
+            var level = model.GetAbilityLevel(mAbility.AbilityId);
+            if (mAbility.MaxLevel > 0 && level >= mAbility.MaxLevel) return;
+
+            model.SetAbilityLevel(mAbility.AbilityId, level + 1);
+
+            // 被动属性 = 基础值 + 能力贡献 的派生值，任何能力选择后统一重算
+            if (mAbility.Category == AbilityCategory.PassiveStat)
+            {
+                abilitySystem.RecalcStats();
+            }
+
+            // 广播等级变化。订阅点：需要"选中某能力后生效"的系统规则卡
+            //（如未来"掉率强化"卡，DropSystem 订阅此事件按 Id 调 AddWeightMultiplier）
+            this.SendEvent(new AbilityLeveledEvent
+            {
+                AbilityId = mAbility.AbilityId,
+                NewLevel = level + 1,
+            });
         }
     }
 }
