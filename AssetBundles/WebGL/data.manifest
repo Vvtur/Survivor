@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 82205307
+CRC: 746539589
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cddd514a05d85331bc55ff9ba27d12b3
+    Hash: 14a77409f1040cbf281a0555b8260dff
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 19f61df1a876a7ee5c5afa0e3a06b303
+    Hash: 338c669aa3af133d46c0875f4ccd350a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 50cf4461d87633c86a3a1341dfa18cb4
+    Hash: 20efcac299c49d04fd5ec7b05f880033
 HashAppended: 1
 ClassTypes:
 - Class: 114
@@ -28,13 +28,21 @@ ClassTypes:
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: DropConfig/DropEntry
+- AssemblyName: Assembly-CSharp
+  ClassName: EnemyTier
+- AssemblyName: Assembly-CSharp
+  ClassName: StatModifier
+- AssemblyName: Assembly-CSharp
+  ClassName: WeaponStatModifier
 Assets:
 - Assets/Res/GameRes/Data/AttackAdd.asset
+- Assets/Res/GameRes/Data/PierceSwordDamage.asset
 - Assets/Res/GameRes/Data/GameConfigDate.asset
 - Assets/Res/GameRes/Data/SpeedAdd.asset
 - Assets/Res/GameRes/Data/MoreWeapon.asset
 - Assets/Res/GameRes/Data/DropConfig.asset
 - Assets/Res/GameRes/Data/AbilityDatabase.asset
+- Assets/Res/GameRes/Data/PierceSwordPierce.asset
 - Assets/Res/GameRes/Data/MaxHpUp.asset
 - Assets/Res/GameRes/Data/PierceSwordConfig.asset
 - Assets/Res/GameRes/Data/AttackSpeedUp.asset

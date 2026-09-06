@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 2805097588
+CRC: 3587466484
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 80dc4df4a77c9cd03902b0d5cd61bf73
+    Hash: abec00cfb0de24b61d9eb5ecf6381b1c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e5690103f4955e3e43b799936637260d
+    Hash: 12771c53da89513909735f9b38804b1b
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b4274ed98dcf405baeb9271e5dbe2fce
+    Hash: 216343d8f67723ac84551b4b26fb5b4b
 HashAppended: 1
 ClassTypes:
 - Class: 1
@@ -20,6 +20,8 @@ ClassTypes:
 - Class: 23
   Script: {instanceID: 0}
 - Class: 28
+  Script: {instanceID: 0}
+- Class: 48
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: 0d51f3a7c41ab0346b49ae50d456bece, type: 3}
@@ -40,9 +42,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 3908063c435e8ff4c9711e9eae25fb46, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 2eebc448dc2dda348b645b7b46dc21e1, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: f62ca0f27612d334b9f9c01b8e812699, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: afda1f0d0f932d9ca4606d2a68fbc233, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 160076ae0a2b5804a89d5b679c9b13b0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3d5905531f0827a4496b1650dbae7895, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
@@ -62,24 +70,62 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 128
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
 - Class: 222
   Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
 - Class: 224
+  Script: {instanceID: 0}
+- Class: 225
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: QFramework.CoreKit
   ClassName: QFramework.OtherBind
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.LowLevel.GlyphAdjustmentRecord
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.LowLevel.GlyphPairAdjustmentRecord
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.LowLevel.GlyphValueRecord
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.AnimationTriggers
 - AssemblyName: UnityEngine.UI
@@ -93,9 +139,14 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
 - AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
+- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Toggle/ToggleEvent
 Assets:
 - Assets/Res/Art/UIPrefab/LeaderboardPanel.prefab
+- Assets/Res/Art/UIPrefab/SettingsPanel.prefab
 - Assets/Res/Art/UIPrefab/ShopPanel.prefab
 - Assets/Res/Art/UIPrefab/GameLevelUpPanel.prefab
 - Assets/Res/Art/UIPrefab/GameStartPanel.prefab
@@ -104,5 +155,6 @@ Assets:
 - Assets/Res/Art/UIPrefab/InvitePanel.prefab
 - Assets/Res/Art/UIPrefab/Cotent/Txt_Damage.prefab
 - Assets/Res/Art/UIPrefab/PlayerInfoPanel.prefab
+- Assets/Res/Art/UIPrefab/LoadingPanel.prefab
 Dependencies:
-- E:/UN/Survivor/AssetBundles/WebGL/font_7ba3665a6fbedfc26759edc077ede9c0
+- E:/UN/Survivor/AssetBundles/WebGL/font_964819dc294663a46ec197638ec873e5

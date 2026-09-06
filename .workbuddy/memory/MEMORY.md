@@ -9,6 +9,12 @@
 - WebGL 下 AB 不支持同步加载，一律用 `OpenPanelAsync` / `LoadSceneAsync` 等异步 API。
 
 ## 工具链：Unity MCP（CoplayDev/unity-mcp）
+- ~~已接入~~ **2026-09-07 起改用官方 Unity CLI + Pipeline 包操控编辑器**（unityMCP 在播放模式必掉线，弃用）：
+  - `unity` 命令（Unity CLI 1.0.0-beta.6）+ 项目内 Pipeline 包 0.6.0-exp.1，Survivor 编辑器服务端口 7801。
+  - 核心：`unity command <cmd> --key value --project-path E:\UN\Survivor`；`editor_play/stop/focus`、`console --level error`（游标式）、`eval_file`（Roslyn 方法体）、`capture_game_view --source screen`。
+  - **坑1**：编辑器失焦播放循环冻结，先 eval `Application.runInBackground=true`。
+  - **坑2**：编辑器加载 WebGL AB → shader 洋红、字体方块、音频 FMOD 报错，属平台差异勿修。
+  - 旧 unityMCP 备注（端口 7070、CodeDom 仅 C#6）留档：execute_code 未装 Roslyn，Unity 6 查 ScriptingDefine 要用 NamedBuildTarget。
 - 已接入，包 `com.coplaydev.unity-mcp@10.1.2`。Unity 端本地服务端口 **7070**（非 README 默认的 8080）。
 - 常用能力：`manage_editor`（编辑器状态 / 播放控制 / tag-layer）、`manage_scene`（层级 / 加载 / 构建设置）、`find_gameobjects`、`manage_script` / `apply_text_edits`、`read_console`（查编译错误首选）、`refresh_unity`（刷新 + 请求编译）、`execute_code`（在编辑器内跑 C# 片段）、`manage_build` / `run_tests` / `manage_camera`（截图）。
 - **重要约束**：`execute_code` 未装 Roslyn（Scripting Defines 无 `USE_ROSLYN`），回退 **CodeDom = 仅支持 C# 6 语法**。需要 C# 7+ 或严格类型检查时，得先装 NuGetForUnity + Microsoft.CodeAnalysis v5.0 + SQLitePCLRaw v3.0.2 并加 `USE_ROSLYN`。
@@ -37,6 +43,12 @@
   - `UICanvasAdapter`：挂在场景 Canvas 上，屏幕比 16:9 更窄时把 `matchWidthOrHeight` 从 0 切到 1，防横向裁切。
   - `UISafeAreaFitter`：挂在面板根节点上，按 `Screen.safeArea` 缩进内容，避让刘海/圆角/Home 指示条。PlayerInfoPanel 预制体已挂。
 - **踩坑备忘**：给预制体 AddComponent 时若目标脚本尚未编译完成，会生成 `m_Script: {fileID: 0}` 的 missing script，且 `SaveAsPrefabAsset` 会报错。必须等脚本编译通过后再加；修复时可用 `GameObjectUtility.RemoveMonoBehavioursWithMissingScript` 清理，必要时直接改 YAML 补 `m_Script` 的 guid。
+
+## 微信小游戏出包与 CDN 缓存（2026-09-07 定位）
+- 出包链路：Build WebGL → `Assets/WX-WASM-SDK-V2` 转换 → 输出到 `E:/UN/Survivor/WX/webgl`（含 StreamingAssets 拷贝）+ `WX/minigame`（devtools 打开的就是它）。`minigame-out/` 是更早期的旧产物，与 devtools 无关。
+- CDN 地址写在 `Assets/WX-WASM-SDK-V2/Editor/MiniGameConfig.asset` 的 `CDN` 字段，转换后写死进 `WX/minigame/game.js` 的 `DATA_CDN`。运行时 AB 走 CDN，不走包内文件。
+- **最大坑：devtools/真机有文件缓存** `.../微信开发者工具/User Data/<profile>/WeappSimulator/WeappFileSystem/<openid>/<appid>/usr/__GAME_FILE_CACHE/StreamingAssets/AssetBundles/WebGL/`，`asset_bundle_config.bin` 命中缓存就不会重新下载 → 表现为"UI 是旧的 + 新资源 Failed to Create Res"。重打 AB / 传 CDN 后必须清缓存（devtools：清缓存→清除数据缓存与文件系统缓存；真机：删小程序或清缓存），否则改多少都不生效。
+- 排查手法：`md5sum` 对比本地 AB、CDN `curl` 下来的文件、缓存目录里的文件；再用 `grep -a "资源名" asset_bundle_config.bin` 判断某资源是否在配置里。
 
 ## 过场加载动画（2026-08-31 简化重构后）
 - **全部逻辑在单文件** `Assets/Res/Scripts/UI/LoadingPanel.cs`。对外只有两个符号：`LoadingPanel.SwitchScene(sceneName, loaderFactory, onComplete)` 和 `LoadingPanel.IsTransitioning`（按钮防重入）。调用点：GameStartPanel / GameOverPanel / GameRoot。

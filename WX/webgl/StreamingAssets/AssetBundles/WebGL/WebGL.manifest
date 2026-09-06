@@ -1,6 +1,6 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.3.16f1
-CRC: 29481935
+CRC: 315127938
 HashAppended: 1
 AssetBundleManifest:
   AssetBundleInfos:
@@ -8,34 +8,34 @@ AssetBundleManifest:
       Name: unifiedraytracing_5a3c3f19b58e37ec7bc097628a36bd3f
       Dependencies: {}
     Info_1:
-      Name: maingame_unity_a1c3277d16e8c9884b963570ed55f35d
+      Name: maingame_unity_3beee78eccdc26624ba604f627761bfc
       Dependencies:
-        Dependency_0: prefabs_92684b9b6a5e32b4c7ca0e5054979cbd
-        Dependency_1: uiprefab_80dc4df4a77c9cd03902b0d5cd61bf73
-        Dependency_2: font_7ba3665a6fbedfc26759edc077ede9c0
-        Dependency_3: character_c8bfed174e1ebf59c14b5120288d8d63
+        Dependency_0: prefabs_408dd1ab9060e2161ebcb852db4f733e
+        Dependency_1: uiprefab_abec00cfb0de24b61d9eb5ecf6381b1c
+        Dependency_2: font_964819dc294663a46ec197638ec873e5
+        Dependency_3: character_3b2e9d8a40f4457ff4c19123d0c0f689
     Info_2:
-      Name: prefabs_92684b9b6a5e32b4c7ca0e5054979cbd
+      Name: prefabs_408dd1ab9060e2161ebcb852db4f733e
       Dependencies:
-        Dependency_0: character_c8bfed174e1ebf59c14b5120288d8d63
+        Dependency_0: character_3b2e9d8a40f4457ff4c19123d0c0f689
     Info_3:
-      Name: uiprefab_80dc4df4a77c9cd03902b0d5cd61bf73
+      Name: uiprefab_abec00cfb0de24b61d9eb5ecf6381b1c
       Dependencies:
-        Dependency_0: font_7ba3665a6fbedfc26759edc077ede9c0
+        Dependency_0: font_964819dc294663a46ec197638ec873e5
     Info_4:
-      Name: gamestart_unity_2e21e406bd749168e5bdc2f87b2aebd7
+      Name: gamestart_unity_fcf9a0e694fe2f1a42b269993e10feb5
       Dependencies:
-        Dependency_0: uiprefab_80dc4df4a77c9cd03902b0d5cd61bf73
-        Dependency_1: font_7ba3665a6fbedfc26759edc077ede9c0
-        Dependency_2: character_c8bfed174e1ebf59c14b5120288d8d63
+        Dependency_0: uiprefab_abec00cfb0de24b61d9eb5ecf6381b1c
+        Dependency_1: font_964819dc294663a46ec197638ec873e5
+        Dependency_2: character_3b2e9d8a40f4457ff4c19123d0c0f689
     Info_5:
-      Name: data_42e9cf2d9c4db69fd0186ae18f1f98a5
+      Name: data_14a77409f1040cbf281a0555b8260dff
       Dependencies: {}
     Info_6:
-      Name: font_7ba3665a6fbedfc26759edc077ede9c0
+      Name: font_964819dc294663a46ec197638ec873e5
       Dependencies: {}
     Info_7:
-      Name: character_c8bfed174e1ebf59c14b5120288d8d63
+      Name: character_3b2e9d8a40f4457ff4c19123d0c0f689
       Dependencies: {}
     Info_8:
       Name: audio_a692a86048356e6c8e7fafc6b39a7c93
