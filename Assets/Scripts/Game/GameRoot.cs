@@ -1,5 +1,6 @@
 using System.Collections;
 using QFramework;
+using QFramework.UI;
 using UnityEngine;
 
 namespace QFramework.Gameplay
@@ -16,10 +17,15 @@ namespace QFramework.Gameplay
 
         void Start()
         {
-            StartCoroutine(Boot());
+            StartCoroutine(BootRoutine());
         }
 
-        IEnumerator Boot()
+        /// <summary>
+        /// 冷启动:先完成 ResKit/架构初始化,再进统一过场。
+        /// 注意顺序——过场 UI 已改为 UIKit 正规面板(LoadingPanel,预制体走 AB),
+        /// 面板加载本身依赖 ResKit,所以初始化必须先行(这段期间是 Unity 自身启动画面)。
+        /// </summary>
+        IEnumerator BootRoutine()
         {
             // WebGL 平台只支持异步初始化
             yield return ResKit.InitAsync();
@@ -27,8 +33,9 @@ namespace QFramework.Gameplay
             // 初始化架构（触发各 System/Model 的 OnInit）
             _ = GameArchitecture.Interface;
             mSceneLoader = ResLoader.Allocate();
-            // 从 AB 进入开始场景（loader 与本对象同生命周期，切场景期间 AB 不卸载）
-            mSceneLoader.LoadSceneAsync("GameStart");
+
+            // 统一过场:圆形遮罩扩散切入 → 异步加载开始场景 → 圆收回
+            LoadingPanel.SwitchScene("GameStart", () => mSceneLoader);
         }
     }
 }

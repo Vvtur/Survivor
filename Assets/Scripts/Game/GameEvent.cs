@@ -32,5 +32,6 @@ namespace QFramework.Gameplay
     {
         public UnityEngine.Vector3 SpawnPosition;
         public float Power;   // 强度系数（≥1，随时间递增）
+        public EnemyTier Tier; // 分层（null = 基础怪）；决定预制体与数值/外观乘区
     }
 }

@@ -121,5 +121,17 @@ namespace QFramework.Gameplay
 			mOriginalColor = SelfSpriteRenderer.color;
 			mColorCached = true;
 		}
+
+		/// <summary>
+		/// 出生染色（分层怪用，SpawnEnemyCommand 在出生同帧调用）：把染色记为"原色"，
+		/// 闪红恢复时以染色为基准（Start 尚未跑也能正确缓存）。
+		/// </summary>
+		public void SetTint(Color tint)
+		{
+			if (SelfSpriteRenderer == null) return;
+			SelfSpriteRenderer.color = tint;
+			mOriginalColor = tint;
+			mColorCached = true;
+		}
     }
 }

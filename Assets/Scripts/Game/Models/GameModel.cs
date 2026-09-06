@@ -74,6 +74,11 @@ namespace QFramework.Gameplay
         public BindableProperty<int> MaxAliveEnemies { get; } = new(10);      // 场上敌人上限
         public BindableProperty<float> EnemyPowerPerSecond { get; } = new(0.02f); // 敌人强度增长系数
         public BindableProperty<float> SurviveTimeToWin { get; } = new(120f); // 存活胜利时间（0=不设胜利）
+        /// <summary>
+        /// 分层刷怪表（从配置复制，运行中固定；WaveSystem 按局内时间解锁 + 权重随机）。
+        /// 空表 = 全程只刷基础怪（配置加载失败的兜底行为）。
+        /// </summary>
+        public List<EnemyTier> EnemyTiers { get; } = new List<EnemyTier>();
 
         // 配置初始值缓存（配置读一次即回收，供每次开局 ResetRunData 使用）
         private int mConfigMaxHp;
@@ -160,6 +165,12 @@ namespace QFramework.Gameplay
                 MaxAliveEnemies.Value = config.MaxAliveEnemies;
                 EnemyPowerPerSecond.Value = config.EnemyPowerPerSecond;
                 SurviveTimeToWin.Value = config.SurviveTimeToWin;
+                // 分层刷怪表：配置为空则保持空表（全程基础怪）
+                EnemyTiers.Clear();
+                if (config.EnemyTiers != null && config.EnemyTiers.Count > 0)
+                {
+                    EnemyTiers.AddRange(config.EnemyTiers);
+                }
 
                 // 首次开局也调用一次重置，确保局内数据为初始值
                 ResetRunData();

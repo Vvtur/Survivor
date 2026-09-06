@@ -16,18 +16,12 @@ namespace QFramework.UI
 
 			Btn_ReStart.onClick.AddListener(() =>
 			{
+				if (LoadingPanel.IsTransitioning) return; // 过场中防重入
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
-				Time.timeScale = 1f; // 恢复时间缩放，否则刚体物理仍被暂停
+				Time.timeScale = 1f; // 恢复时间缩放，否则刚体物理仍被暂停（过场动画本身全程 unscaled，不受影响）
 
-				// 场景切换统一走常驻 GameRoot 的 loader（单参写法，见 GameRoot.SwitchScene 注释）
-				mSceneLoader ??= ResLoader.Allocate();
-				mSceneLoader.LoadSceneAsync("GameStart", onStartLoading:(op) =>
-				{
-					op.completed += (a) =>
-					{
-						CloseSelf();
-					};
-				});
+				// 带过场动画的异步切换（圆扩散切入 → 异步加载 → 圆收回），完成后关掉本弹窗
+				LoadingPanel.SwitchScene("GameStart", () => mSceneLoader ??= ResLoader.Allocate(), CloseSelf);
 			});
 		}
 

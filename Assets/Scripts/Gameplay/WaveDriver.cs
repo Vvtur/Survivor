@@ -29,7 +29,7 @@ namespace QFramework.Gameplay
 
         private void OnSpawnEnemyRequest(SpawnEnemyRequestEvent e)
         {
-            this.SendCommand(new SpawnEnemyCommand(e.SpawnPosition, e.Power));
+            this.SendCommand(new SpawnEnemyCommand(e.SpawnPosition, e.Power, e.Tier));
         }
 
         private void Update()

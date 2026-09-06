@@ -26,7 +26,7 @@
 ## UI 动效（2026-08-28 落地）
 - **DOTween 已在项目里**：`Assets/Plugins/Demigiant/DOTween/DOTween.dll`，UI 模块启用（无人定义 `DOTWEEN_NOUI`），`CanvasGroup.DOFade` / `Image.DOFillAmount` / `DOScale/DOPunchScale` 可直接用。动画统一放 `Assets/Res/Scripts/UI/UIPanelAnim.cs`（PlayOpen / PlayClose / PlayIntro 扩展，全部 `SetUpdate(true)`，CanvasGroup 运行时自动补挂）。
 - **UIKit 生命周期关键时序**：`UIPanel.Show()` 先 `SetActive(true)` 再调 `OnShow()` → 打开动画只能挂 `OnShow()`（OnOpen 在 SetActive 之前，禁启 tween）。UIKit 关闭是同步 Destroy → 关闭动画必须"先播 → onComplete 里再 CloseSelf/Hide/ClosePanel"。ShopPanel 的关闭语义是 `Hide()`（不是 CloseSelf，保持 Single 复用）。
-- 需要跨面板复用知道的事实：升级面板在 timeScale=0 时打开，恢复 timeScale=1 要放在关闭动画 onComplete 里；GameOver 面板打开协程必须挂常驻 GameRoot（PlayerController.GameOver 里本对象马上 SetActive(false)）。
+- 需要跨面板复用知道的事实：升级面板在 timeScale=0 时打开，恢复 timeScale=1 要放在关闭动画 onComplete 里；GameOver 面板打开协程需要常驻宿主（PlayerController.GameOver 里本对象马上 SetActive(false)）。**注意别挂 GameRoot——它没有 `DontDestroyOnLoad`，会随 Boot 场景销毁**，应挂 `UIKit.Root`（见下方过场章节）。
 - 预制体批量改版工作流（已验证）：先改 Designer.cs（手加 `[SerializeField] public` 字段 + ClearUIComponents 置空）→ refresh_unity 编译 → `execute_code` 里 `PrefabUtility.LoadPrefabContents` 建节点/摆 RectTransform（FZSTK SDF 字体在 `Assets/Res/Art/Font/FZSTK SDF.asset`）→ `SerializedObject.FindProperty("字段名").objectReferenceValue` 接线 → `SaveAsPrefabAsset` → 场景实例根 override 用 OpenScene(Additive)+改根 RectTransform+SaveScene+CloseScene 清理（注意 CloseScene 会销毁实例，先取 name）。新增贴图（如 `Assets/Res/Art/Graph/UI/ExpGradient.png` 渐变条）后**必须重打 AB**。
 
 ## UI 字号与手机适配（2026-08-29 落地）
@@ -37,3 +37,11 @@
   - `UICanvasAdapter`：挂在场景 Canvas 上，屏幕比 16:9 更窄时把 `matchWidthOrHeight` 从 0 切到 1，防横向裁切。
   - `UISafeAreaFitter`：挂在面板根节点上，按 `Screen.safeArea` 缩进内容，避让刘海/圆角/Home 指示条。PlayerInfoPanel 预制体已挂。
 - **踩坑备忘**：给预制体 AddComponent 时若目标脚本尚未编译完成，会生成 `m_Script: {fileID: 0}` 的 missing script，且 `SaveAsPrefabAsset` 会报错。必须等脚本编译通过后再加；修复时可用 `GameObjectUtility.RemoveMonoBehavioursWithMissingScript` 清理，必要时直接改 YAML 补 `m_Script` 的 guid。
+
+## 过场加载动画（2026-08-31 简化重构后）
+- **全部逻辑在单文件** `Assets/Res/Scripts/UI/LoadingPanel.cs`。对外只有两个符号：`LoadingPanel.SwitchScene(sceneName, loaderFactory, onComplete)` 和 `LoadingPanel.IsTransitioning`（按钮防重入）。调用点：GameStartPanel / GameOverPanel / GameRoot。
+- **跨场景协程一律挂 `UIKit.Root`**：`UIRoot.Instance` 在 `UIRoot.cs:43` 有 `DontDestroyOnLoad`，且 Boot/GameStart/MainGame 三个场景**都没有预置 UIRoot 实例**（必然走 Instantiate 分支）→ 是可靠的常驻宿主。原 `SceneTransition.cs` 已删除（双层协程 + 宿主中途切换的写法废止）。
+- **拿 UIKit 面板实例用 `UIManager.Instance.OpenUIAsync(keys, callback)`**（public，回调直接送 IPanel），**不要** `yield UIKit.OpenPanelAsync`（内部 `while(!loaded) yield WaitForEndOfFrame`，编辑器 Game View 停止渲染时永久挂死），也不要每帧 `FindFirstObjectByType` 扫描。资源加载失败时回调**不会**触发（`UIKitWithResKitInit.cs:53` 的 `if (success)`），所以必须配超时兜底。
+- **圆形遮罩是零 shader 方案**：运行时生成 1024² 抗锯齿圆 Sprite 挂到 `Img_Mask` 的 Image 上，靠 UGUI `Mask` 组件（stencil）裁剪子物体 `Img_Wipe`；动效只驱动 `Img_Mask.sizeDelta`（0 → 屏幕对角线+2，保证盖住四角）。圆 Sprite 用 static 缓存，只生成一次。
+- **进度必须分两段**：AB 模式下 `AsyncOperation` 要等场景 AB 加载完才在回调里创建（`IResLoaderExtensions.cs:296-305`），op 到手前只能假爬升（封顶 85%），到手后跟 `op.progress` 映射到 20%~100%。
+- **⚠️ LoadingPanel 未打进任何 AB**（所有 manifest 都搜不到）→ 真机/小游戏上每次过场先白等 10s 超时再无动画裸切，只有编辑器 SimulationMode 能正常看到动画。目录 meta `Assets/Res/Art/UIPrefab.meta` 已标记 `uiprefab`，**重打 AB 即可修复**（用户暂缓处理）。

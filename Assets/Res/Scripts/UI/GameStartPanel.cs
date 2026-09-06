@@ -25,18 +25,11 @@ namespace QFramework.UI
 			Btn_Start.onClick.AddListener(() =>
 			{
 				if (Time.unscaledTime < clickableAt) return;
+				if (LoadingPanel.IsTransitioning) return; // 过场中防重入
 				AudioKit.PlaySound(AudioNames.ButtonClick); // 按钮点击音效
 				AudioKit.PlaySound(AudioNames.GameStart, volume: 0.1f);  // 一半音量// 开始游戏音效
-				// 场景切换统一走常驻 GameRoot 的 loader（单参写法，见 GameRoot.SwitchScene 注释）
-				// GameRoot.SwitchScene("MainGame");
-				mSceneLoader ??= ResLoader.Allocate();
-				mSceneLoader.LoadSceneAsync("MainGame", LoadSceneMode.Single, LocalPhysicsMode.None, (op) =>
-				{
-					op.completed += (a) =>
-					{
-						// CloseSelf();
-					};
-				});
+				// 带过场动画的异步切换（圆扩散切入 → 异步加载 → 圆收回），loader 仍由本面板持有
+				LoadingPanel.SwitchScene("MainGame", () => mSceneLoader ??= ResLoader.Allocate());
 			});
 
 			// 好友排行榜入口：打开面板（面板内部把开放数据域画布贴到 RawImage 上）

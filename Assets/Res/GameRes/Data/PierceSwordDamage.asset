@@ -13,20 +13,16 @@ MonoBehaviour:
   m_Name: PierceSwordDamage
   m_EditorClassIdentifier: Assembly-CSharp::AbilityConfig
   AbilityId: pierce_sword_dmg
-  AbilityName: 穿透剑·伤害强化
-  Description: 穿透剑伤害 +0.5/级（满级 5）
+  AbilityName: "\u7A7F\u900F\u5251\xB7\u4F24\u5BB3\u5F3A\u5316"
+  Description: "\u7A7F\u900F\u5251\u4F24\u5BB3 +0.5/\u7EA7\uFF08\u6EE1\u7EA7 5\uFF09"
   Icon: {fileID: 0}
   Category: 2
   MaxLevel: 5
   RollWeight: 1
   RequiresAbilityId: pierce_sword
-  LevelValues:
-  - 0.5
-  - 0.5
-  - 0.5
-  - 0.5
-  - 0.5
-  ValuePerLevel: 0.5
+  LevelValues: []
+  ValuePerLevel: 1
+  StatEffects: []
   TargetAbilityId: pierce_sword
   WeaponStatModifiers:
   - Stat: 0
